@@ -30,4 +30,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Page1.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Page1Form.ui.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="qml.qrc">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="qtquickcontrols2.conf">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

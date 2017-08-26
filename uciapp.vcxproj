@@ -90,6 +90,13 @@
     </ClCompile>
     <ClCompile Include="uciapp.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="main.qml" />
+    <None Include="Page1.qml" />
+    <None Include="Page1Form.ui.qml" />
+    <None Include="qml.qrc" />
+    <None Include="qtquickcontrols2.conf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
