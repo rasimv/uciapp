@@ -38,6 +38,15 @@
     <ClCompile Include="Release\qrc_qml.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="enginecontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_enginecontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_enginecontroller.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.qml">
@@ -58,6 +67,9 @@
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="Release\moc_predefs.h.cbt">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enginecontroller.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
