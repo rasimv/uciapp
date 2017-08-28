@@ -55,6 +55,12 @@
     <None Include="qtquickcontrols2.conf">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Board.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SidePanel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">

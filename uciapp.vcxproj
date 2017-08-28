@@ -124,6 +124,7 @@
     <ClCompile Include="uciapp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Board.qml" />
     <None Include="main.qml" />
     <CustomBuild Include="qml.qrc">
       <FileType>Document</FileType>
@@ -148,6 +149,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\moc_predefs.h;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="SidePanel.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
