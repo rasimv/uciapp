@@ -9,7 +9,7 @@ class EngineController : public QObject
 
 public:
     EngineController(QObject *a = nullptr);
-    ~EngineController();
+    virtual ~EngineController();
 };
 
 #endif //__ENGINECONTROLLER_H
