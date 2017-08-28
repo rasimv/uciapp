@@ -131,11 +131,11 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Page1Form.ui.qml;Page1.qml;qtquickcontrols2.conf;main.qml;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Board.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Page1Form.ui.qml;Page1.qml;qtquickcontrols2.conf;main.qml;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Board.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="qtquickcontrols2.conf" />
     <CustomBuild Include="Release\moc_predefs.h.cbt">

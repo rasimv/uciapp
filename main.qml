@@ -8,4 +8,9 @@ ApplicationWindow
     width: 640
     height: 480
     title: qsTr("Uciapp")
+
+	Board
+	{
+        anchors.fill: parent
+	}
 }

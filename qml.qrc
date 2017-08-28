@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Board.qml</file>
+        <file>SidePanel.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>
