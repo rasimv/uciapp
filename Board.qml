@@ -15,11 +15,11 @@ Item
             id: id_repeater
             model: 64
 
-            Rectangle
+            Field
             {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: (Math.floor(index / 8) % 2 + index % 2) % 2 ? "yellow" : "brown"
+                m_color: (Math.floor(index / 8) % 2 + index % 2) % 2 ? "yellow" : "brown"
             }
         }
     }

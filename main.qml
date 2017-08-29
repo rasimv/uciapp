@@ -9,8 +9,72 @@ ApplicationWindow
     height: 480
     title: qsTr("Uciapp")
 
-    Board
+    RowLayout
     {
         anchors.fill: parent
+
+        ColumnLayout
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Board
+            {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            RowLayout
+            {
+                Layout.fillWidth: true
+                height: 50
+
+                Rectangle
+                {
+                    Layout.fillWidth: true
+                    height: 10
+                    color: "red"
+                }
+
+                Rectangle
+                {
+                    width: 60
+                    height: 40
+                    border.width: 1
+
+                    TextInput
+                    {
+                        width: 50
+                        height: 30
+                        anchors.centerIn: parent
+                    }
+                }
+
+                Rectangle
+                {
+                    width: 60
+                    height: 40
+                    border.width: 1
+
+                    TextInput
+                    {
+                        width: 50
+                        height: 30
+                        anchors.centerIn: parent
+                    }
+                }
+
+                Button
+                {
+                    text: "move"
+                }
+            }
+        }
+
+        SidePanel
+        {
+            width: 200
+            Layout.fillHeight: true
+        }
     }
 }
