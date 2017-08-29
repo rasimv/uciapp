@@ -6,26 +6,20 @@ Item
 {
     GridLayout
     {
-        anchors.fill: parent
         columns: 8
         rows: 8
+        anchors.fill: parent
 
         Repeater
         {
-            model: [0, 1, 0, 1, 0, 1, 0, 1,
-                    1, 0, 1, 0, 1, 0, 1, 0,
-                    0, 1, 0, 1, 0, 1, 0, 1,
-                    1, 0, 1, 0, 1, 0, 1, 0,
-                    0, 1, 0, 1, 0, 1, 0, 1,
-                    1, 0, 1, 0, 1, 0, 1, 0,
-                    0, 1, 0, 1, 0, 1, 0, 1,
-                    1, 0, 1, 0, 1, 0, 1, 0];
+            id: id_repeater
+            model: 64
 
             Rectangle
             {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: modelData ? "blue" : "green"
+                color: (Math.floor(index / 8) % 2 + index % 2) % 2 ? "yellow" : "brown"
             }
         }
     }
