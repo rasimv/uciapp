@@ -4,6 +4,13 @@ import QtQuick.Layouts 1.3
 
 ApplicationWindow
 {
+    function func()
+    {
+        var q = ["P", "R", "N", "B", "Q", "K",
+                 "p", "r", "n", "b", "q", "k"];
+        for (var i = 0; i < q.length; i++) id_board.set(i, q[i]);
+    }
+
     visible: true
     width: 1000
     height: 800
@@ -20,6 +27,8 @@ ApplicationWindow
 
             Board
             {
+                id: id_board
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
@@ -67,6 +76,11 @@ ApplicationWindow
                 Button
                 {
                     text: "move"
+
+                    onClicked:
+                    {
+                        func();
+                    }
                 }
             }
         }
