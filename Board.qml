@@ -12,9 +12,12 @@ Item
     GridLayout
     {
         id: id_boardLayout
+
         columns: 8
         rows: 8
         anchors.fill: parent
+        rowSpacing: 0
+        columnSpacing: 0
 
         Repeater
         {

@@ -11,6 +11,9 @@ ApplicationWindow
         for (var i = 0; i < q.length; i++) id_board.set(i, q[i]);
     }
 
+    Logic
+    {}
+
     visible: true
     width: 1000
     height: 800
@@ -80,6 +83,17 @@ ApplicationWindow
                     onClicked:
                     {
                         func();
+                    }
+                }
+
+                Button
+                {
+                    text: "start"
+
+                    onClicked:
+                    {
+                        var q = Qt.createQmlObject('import com.github.rasimv.uciapp 1.0; EngineController {}', parent);
+                        q.start();
                     }
                 }
             }

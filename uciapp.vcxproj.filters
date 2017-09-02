@@ -64,6 +64,9 @@
     <None Include="Field.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Logic.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">

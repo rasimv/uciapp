@@ -126,6 +126,7 @@
   <ItemGroup>
     <None Include="Board.qml" />
     <None Include="Field.qml" />
+    <None Include="Logic.qml" />
     <None Include="main.qml" />
     <CustomBuild Include="qml.qrc">
       <FileType>Document</FileType>

@@ -2,6 +2,7 @@
 #define __ENGINECONTROLLER_H
 
 #include <QObject>
+#include <QProcess>
 
 class EngineController : public QObject
 {
@@ -10,6 +11,11 @@ class EngineController : public QObject
 public:
     EngineController(QObject *a = nullptr);
     virtual ~EngineController();
+
+    Q_INVOKABLE void start();
+
+private:
+    QProcess m_p;
 };
 
 #endif //__ENGINECONTROLLER_H

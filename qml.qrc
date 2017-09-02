@@ -3,6 +3,7 @@
         <file>main.qml</file>
         <file>Field.qml</file>
         <file>Board.qml</file>
+        <file>Logic.qml</file>
         <file>SidePanel.qml</file>
         <file>qtquickcontrols2.conf</file>
     </qresource>
