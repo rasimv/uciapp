@@ -14,8 +14,14 @@ public:
 
     Q_INVOKABLE void start();
 
+private slots:
+    void onStarted();
+    void onError(QProcess::ProcessError a);
+    void onReadyRead();
+
 private:
     QProcess m_p;
+    QByteArray m_buf;
 };
 
 #endif //__ENGINECONTROLLER_H

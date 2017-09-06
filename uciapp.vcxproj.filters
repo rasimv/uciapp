@@ -67,6 +67,12 @@
     <None Include="Logic.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Comp.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Human.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">

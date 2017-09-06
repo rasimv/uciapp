@@ -4,15 +4,27 @@ import QtQuick.Layouts 1.3
 
 ApplicationWindow
 {
-    function func()
+    function func1()
     {
         var q = ["P", "R", "N", "B", "Q", "K",
                  "p", "r", "n", "b", "q", "k"];
-        for (var i = 0; i < q.length; i++) id_board.set(i, q[i]);
+        for (var i = 0; i < q.length; i++) id_board.set(i % 8, Math.floor(i / 8), q[i]);
+    }
+
+    function func2()
+    {
+        var l_pos = ["rnbqkbnr",
+                     "pppppppp",
+                     "00000000", "00000000", "00000000", "00000000",
+                     "PPPPPPPP",
+                     "RNBQKBNR"];
+        id_board.setFromArray(l_pos);
     }
 
     Logic
-    {}
+    {
+        id: id_logic
+    }
 
     visible: true
     width: 1000
@@ -82,7 +94,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        func();
+                        func2();
                     }
                 }
 
@@ -92,8 +104,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        var q = Qt.createQmlObject('import com.github.rasimv.uciapp 1.0; EngineController {}', parent);
-                        q.start();
+                        id_logic.start(l_pos);
                     }
                 }
             }
