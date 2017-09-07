@@ -7,8 +7,8 @@ ApplicationWindow
     function func1()
     {
         var q = ["P", "R", "N", "B", "Q", "K",
-                 "p", "r", "n", "b", "q", "k"];
-        for (var i = 0; i < q.length; i++) id_board.set(i % 8, Math.floor(i / 8), q[i]);
+                 "p", "r", "n", "b", "q", "k"]
+        for (var i = 0; i < q.length; i++) id_board.set(i % 8, Math.floor(i / 8), q[i])
     }
 
     function func2()
@@ -17,8 +17,8 @@ ApplicationWindow
                      "pppppppp",
                      "00000000", "00000000", "00000000", "00000000",
                      "PPPPPPPP",
-                     "RNBQKBNR"];
-        id_board.setFromArray(l_pos);
+                     "RNBQKBNR"]
+        id_board.setFromArray(l_pos)
     }
 
     Logic
@@ -94,7 +94,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        func2();
+                        func2()
                     }
                 }
 
@@ -104,7 +104,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_logic.start(id_logic);
+                        id_logic.start(id_logic)
                     }
                 }
             }

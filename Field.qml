@@ -4,23 +4,23 @@ import QtQuick.Controls 2.0
 
 Item
 {
-    property var m_color;
+    property var m_color
 
     function set(a)
     {
-        if (a == "P") { id_pieceText.text = "\u265f"; id_pieceText.color = "white"; }
-        else if (a == "p") { id_pieceText.text = "\u265f"; id_pieceText.color = "black"; }
-        else if (a == "R") { id_pieceText.text = "\u265c"; id_pieceText.color = "white"; }
-        else if (a == "r") { id_pieceText.text = "\u265c"; id_pieceText.color = "black"; }
-        else if (a == "N") { id_pieceText.text = "\u265e"; id_pieceText.color = "white"; }
-        else if (a == "n") { id_pieceText.text = "\u265e"; id_pieceText.color = "black"; }
-        else if (a == "B") { id_pieceText.text = "\u265d"; id_pieceText.color = "white"; }
-        else if (a == "b") { id_pieceText.text = "\u265d"; id_pieceText.color = "black"; }
-        else if (a == "Q") { id_pieceText.text = "\u265b"; id_pieceText.color = "white"; }
-        else if (a == "q") { id_pieceText.text = "\u265b"; id_pieceText.color = "black"; }
-        else if (a == "K") { id_pieceText.text = "\u265a"; id_pieceText.color = "white"; }
-        else if (a == "k") { id_pieceText.text = "\u265a"; id_pieceText.color = "black"; }
-        else id_pieceText.text = "";
+        if (a == "P") { id_pieceText.text = "\u265f"; id_pieceText.color = "white" }
+        else if (a == "p") { id_pieceText.text = "\u265f"; id_pieceText.color = "black" }
+        else if (a == "R") { id_pieceText.text = "\u265c"; id_pieceText.color = "white" }
+        else if (a == "r") { id_pieceText.text = "\u265c"; id_pieceText.color = "black" }
+        else if (a == "N") { id_pieceText.text = "\u265e"; id_pieceText.color = "white" }
+        else if (a == "n") { id_pieceText.text = "\u265e"; id_pieceText.color = "black" }
+        else if (a == "B") { id_pieceText.text = "\u265d"; id_pieceText.color = "white" }
+        else if (a == "b") { id_pieceText.text = "\u265d"; id_pieceText.color = "black" }
+        else if (a == "Q") { id_pieceText.text = "\u265b"; id_pieceText.color = "white" }
+        else if (a == "q") { id_pieceText.text = "\u265b"; id_pieceText.color = "black" }
+        else if (a == "K") { id_pieceText.text = "\u265a"; id_pieceText.color = "white" }
+        else if (a == "k") { id_pieceText.text = "\u265a"; id_pieceText.color = "black" }
+        else id_pieceText.text = ""
     }
 
     Rectangle

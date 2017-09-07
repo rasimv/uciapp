@@ -8,7 +8,7 @@ Item
     {
         for (var i = 0; i < 8; i++)
             for (var j = 0; j < 8; j++)
-                id_repeater.itemAt(8 * i + j).set(a_pos[i][j]);
+                id_repeater.itemAt(8 * i + j).set(a_pos[i][j])
     }
 
     GridLayout
