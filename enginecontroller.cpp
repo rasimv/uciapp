@@ -18,7 +18,12 @@ void EngineController::start()
 
 QString EngineController::read()
 {
-    return QString();
+    return QString::fromLatin1(m_p.readAll());
+}
+
+void EngineController::write(QString a)
+{
+    m_p.write(a.toLatin1());
 }
 
 void EngineController::onStarted() { emit started(); }

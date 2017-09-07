@@ -9,6 +9,7 @@ QtObject
     {
         m_this = a;
         m_engineControl = Qt.createQmlObject('import com.github.rasimv.uciapp 1.0; EngineController {}', m_this);
+        m_engineControl.started.connect(onStarted);
         m_engineControl.start();
     }
 
@@ -18,4 +19,9 @@ QtObject
     {}
 
     signal ply(int a_from, int a_to);
+
+    function onStarted()
+    {
+        console.log("started");
+    }
 }

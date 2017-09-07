@@ -14,6 +14,7 @@ public:
 
     Q_INVOKABLE void start();
     Q_INVOKABLE QString read();
+    Q_INVOKABLE void write(QString a);
 
 signals:
     void started();
