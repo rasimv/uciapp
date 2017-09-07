@@ -104,7 +104,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_logic.start(l_pos);
+                        id_logic.start(id_logic);
                     }
                 }
             }

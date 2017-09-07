@@ -21,7 +21,6 @@ private slots:
 
 private:
     QProcess m_p;
-    QByteArray m_buf;
 };
 
 #endif //__ENGINECONTROLLER_H

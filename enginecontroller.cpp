@@ -27,5 +27,5 @@ void EngineController::onError(QProcess::ProcessError a)
 
 void EngineController::onReadyRead()
 {
-    m_buf += m_p.readAllStandardOutput();
+    int k = 0;
 }
