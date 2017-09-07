@@ -2,30 +2,25 @@
 #include "enginecontroller.h"
 
 EngineController::EngineController(QObject *a)
-{}
+{
+    connect(&m_p, SIGNAL(started()), SLOT(onStarted()));
+    connect(&m_p, SIGNAL(errorOccurred(QProcess::ProcessError)), SLOT(onError(QProcess::ProcessError)));
+    connect(&m_p, SIGNAL(readyReadStandardOutput()), SLOT(onReadyRead()));
+}
 
 EngineController::~EngineController()
 {}
 
 void EngineController::start()
 {
-    connect(&m_p, SIGNAL(started()), SLOT(onStarted()));
-    connect(&m_p, SIGNAL(errorOccurred(QProcess::ProcessError)), SLOT(onError(QProcess::ProcessError)));
-    connect(&m_p, SIGNAL(readyReadStandardOutput()), SLOT(onReadyRead()));
     m_p.start("C:\\Users\\rasim\\deploy\\stockfish-8-win\\Windows\\stockfish_8_x64.exe");
 }
 
-void EngineController::onStarted()
+QString EngineController::read()
 {
-    int k = 0;
+    return QString();
 }
 
-void EngineController::onError(QProcess::ProcessError a)
-{
-    int k = 0;
-}
-
-void EngineController::onReadyRead()
-{
-    int k = 0;
-}
+void EngineController::onStarted() { emit started(); }
+void EngineController::onError(QProcess::ProcessError a) { emit error(); }
+void EngineController::onReadyRead() { emit readyRead(); }

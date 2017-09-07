@@ -13,6 +13,12 @@ public:
     virtual ~EngineController();
 
     Q_INVOKABLE void start();
+    Q_INVOKABLE QString read();
+
+signals:
+    void started();
+    void error();
+    void readyRead();
 
 private slots:
     void onStarted();
