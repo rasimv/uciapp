@@ -7,6 +7,7 @@ QtObject
 
     property int m_state: 0
     property string m_buf
+    property var m_sequence: []
 
     function start(a)
     {
@@ -42,16 +43,29 @@ QtObject
     {
         var i = 0
         for (; i < m_buf.length && m_buf[i] != '\n'; i++);
-        if (i >= m_buf.length) return
+        if (i >= m_buf.length) return ""
         var s = m_buf.slice(0, i)
         m_buf = m_buf.slice(i + 1)
+        return s
+    }
+
+    function parseSub(a)
+    {
+        if (a.length <= 0) return
+        var l_node = {}
+        if (a[0] == "uciok") l_node.type = "uciok";
+        else if (a[0] == "readyok") l_node.type = "readyok"
+        m_sequence.push(l_node)
+    }
+
+    function parse()
+    {
+        for (var s = line(); s; s = line()) parseSub(split(s))
+        console.log(m_sequence[0].type)
     }
 
     function process()
-    {
-        for (var s = line(); s; s = line())
-        {}
-    }
+    {}
 
     function onStarted()
     {
@@ -66,6 +80,7 @@ QtObject
     function onReadyRead()
     {
         m_buf += m_engineControl.read()
+        parse()
         process()
     }
 }
