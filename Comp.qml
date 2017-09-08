@@ -5,7 +5,7 @@ QtObject
     property var m_this
     property var m_engineControl
 
-    property int m_state: 0
+    property string m_state: "S_DEFAULT"
     property string m_buf
     property var m_sequence: []
 
@@ -19,7 +19,7 @@ QtObject
         m_engineControl.start()
     }
 
-    signal started()
+    signal started(var a)
 
     function turn(a)
     {}
@@ -35,7 +35,8 @@ QtObject
             for (; i < a.length && delim(a[i]); i++);
             j = i
             for (; j < a.length && !delim(a[j]); j++);
-            if (i < j) l_list.push(a.slice(i, j)); else return l_list
+            if (i < j) l_list.push(a.slice(i, j))
+            else return l_list
         }
     }
 
@@ -53,19 +54,52 @@ QtObject
     {
         if (a.length <= 0) return
         var l_node = {}
-        if (a[0] == "uciok") l_node.type = "uciok";
+        if (a[0] == "uciok") l_node.type = "uciok"
         else if (a[0] == "readyok") l_node.type = "readyok"
+        else return
         m_sequence.push(l_node)
     }
 
     function parse()
     {
         for (var s = line(); s; s = line()) parseSub(split(s))
-        console.log(m_sequence[0].type)
     }
 
+    function find(a_array, a_pred)
+    {
+        for (var i = 0; i < a_array.length; i++)
+            if (a_pred(a_array[i])) return i
+	}
+
     function process()
-    {}
+    {
+        if (m_state == "S_DEFAULT")
+        {
+            m_state = "S_WAIT_FOR_ICUOK"
+            m_sequence = []
+            m_engineControl.write("uci\n")
+        }
+        else if (m_state == "S_WAIT_FOR_ICUOK")
+        {
+            var q = find(m_sequence, function pred(a) { return a.type == "uciok" })
+            if (typeof q != "undefined")
+            {
+                m_state = "S_WAIT_FOR_READYOK"
+                m_sequence = []
+                m_engineControl.write("isready\n")
+            }
+        }
+        else if (m_state == "S_WAIT_FOR_READYOK")
+        {
+            var q = find(m_sequence, function pred(a) { return a.type == "readyok" })
+            if (typeof q != "undefined")
+            {
+                m_state = "S_WAIT_READY"
+                m_sequence = []
+				started(m_this)
+            }
+        }
+    }
 
     function onStarted()
     {
