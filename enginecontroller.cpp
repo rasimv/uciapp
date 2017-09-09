@@ -2,6 +2,7 @@
 #include "enginecontroller.h"
 
 EngineController::EngineController(QObject *a)
+    :QObject(a)
 {
     connect(&m_p, SIGNAL(started()), SLOT(onStarted()));
     connect(&m_p, SIGNAL(errorOccurred(QProcess::ProcessError)), SLOT(onError(QProcess::ProcessError)));
