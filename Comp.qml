@@ -19,7 +19,17 @@ QtObject
         m_engineControl.start()
     }
 
+    function startNewGame()
+    {
+        if (m_state != "S_READY") return false
+        m_state = "S_WAIT_FOR_NEWGAME"
+        m_engineControl.write("ucinewgame\n")
+        m_engineControl.write("isready\n")
+		return true
+    }
+
     signal started(var a)
+    signal newGameStarted(var a)
 
     function turn(a)
     {}
@@ -94,9 +104,19 @@ QtObject
             var q = find(m_sequence, function pred(a) { return a.type == "readyok" })
             if (typeof q != "undefined")
             {
-                m_state = "S_WAIT_READY"
+                m_state = "S_READY"
                 m_sequence = []
-				started(m_this)
+                started(m_this)
+            }
+        }
+        else if (m_state == "S_WAIT_FOR_NEWGAME")
+        {
+            var q = find(m_sequence, function pred(a) { return a.type == "readyok" })
+            if (typeof q != "undefined")
+            {
+                m_state = "S_NEWGAME"
+                m_sequence = []
+                newGameStarted(m_this)
             }
         }
     }

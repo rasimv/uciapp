@@ -17,10 +17,16 @@ QtObject
         m_player1.start(m_player1)
         m_player2.start(m_player2)
         m_player2.started.connect(onStarted)
+        m_player2.newGameStarted.connect(onNewGameStarted)
     }
 
     function onStarted(a)
     {
-        console.log(a == m_player2)
+        m_player2.startNewGame()
+    }
+
+    function onNewGameStarted(a)
+    {
+        console.log("onNewGameStarted")
     }
 }
