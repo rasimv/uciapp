@@ -3,15 +3,16 @@ import QtQuick 2.7
 QtObject
 {
     property var m_this
+    property var m_logic
     property var m_engineControl
 
     property string m_state: "S_DEFAULT"
     property string m_buf
     property var m_sequence: []
 
-    function start(a)
+    function start(a_this, a_logic)
     {
-        m_this = a
+        m_this = a_this; m_logic = a_logic
         m_engineControl = Qt.createQmlObject("import com.github.rasimv.uciapp 1.0; EngineController {}", m_this)
         m_engineControl.started.connect(onStarted)
         m_engineControl.error.connect(onError)
@@ -31,8 +32,12 @@ QtObject
     signal started(var a)
     signal newGameStarted(var a)
 
-    function turn(a)
-    {}
+    function turn()
+    {
+        if (m_state != "S_NEWGAME") return false
+        m_engineControl.write("position fen " + m_logic.fen() + "\n")
+        m_engineControl.write("go movetime 2500\n")
+    }
 
     signal ply(int a_from, int a_to)
 
@@ -66,6 +71,7 @@ QtObject
         var l_node = {}
         if (a[0] == "uciok") l_node.type = "uciok"
         else if (a[0] == "readyok") l_node.type = "readyok"
+        else if (a[0] == "bestmove") l_node.type = "bestmove"
         else return
         m_sequence.push(l_node)
     }
@@ -117,6 +123,15 @@ QtObject
                 m_state = "S_NEWGAME"
                 m_sequence = []
                 newGameStarted(m_this)
+            }
+        }
+        else if (m_state == "S_NEWGAME")
+        {
+            var q = find(m_sequence, function pred(a) { return a.type == "bestmove" })
+            if (typeof q != "undefined")
+            {
+                m_sequence = []
+                console.log("bestmove")
             }
         }
     }
