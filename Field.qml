@@ -6,6 +6,17 @@ Item
 {
     property var m_color
 
+    function get()
+    {
+        if (id_pieceText.text == "\u265f") return id_pieceText.color == "white" ? "P" : "p"
+        if (id_pieceText.text == "\u265c") return id_pieceText.color == "white" ? "R" : "r"
+        if (id_pieceText.text == "\u265e") return id_pieceText.color == "white" ? "N" : "n"
+        if (id_pieceText.text == "\u265d") return id_pieceText.color == "white" ? "B" : "b"
+        if (id_pieceText.text == "\u265b") return id_pieceText.color == "white" ? "Q" : "q"
+        if (id_pieceText.text == "\u265a") return id_pieceText.color == "white" ? "K" : "k"
+        return ""
+    }
+
     function set(a)
     {
         if (a == "P") { id_pieceText.text = "\u265f"; id_pieceText.color = "white" }

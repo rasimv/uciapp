@@ -11,6 +11,13 @@ Item
                 id_repeater.itemAt(8 * i + j).set(a_pos[i][j])
     }
 
+    function move(a_from, a_to)
+    {
+        var q = id_repeater.itemAt(8 * a_from.m_row + a_from.m_col).get()
+        id_repeater.itemAt(8 * a_to.m_row + a_to.m_col).set(q)
+        id_repeater.itemAt(8 * a_from.m_row + a_from.m_col).set("")
+    }
+
     GridLayout
     {
         id: id_boardLayout
