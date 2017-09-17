@@ -16,5 +16,5 @@ QtObject
     function turn(a)
     {}
 
-    signal ply(int a_from, int a_to)
+    signal ply(var a)
 }

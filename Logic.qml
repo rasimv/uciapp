@@ -14,7 +14,7 @@ QtObject
     property var m_castling: "KQkq"
     property var m_enPassant: ""
     property var m_pawnCaptCount: 0
-    property var m_turnCount: 2
+    property var m_turnCount: 0
 
     function pawnPiece(a)
     {
@@ -26,6 +26,7 @@ QtObject
 
     function fen()
     {
+        //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         var l_fen = ""
         for (var i = 0; i < 8; i++)
         {
@@ -49,7 +50,7 @@ QtObject
         l_fen += " " + m_castling
         l_fen += " " + (m_enPassant.length ? m_enPassant : "-")
         l_fen += " " + m_pawnCaptCount + " " + (Math.floor(m_turnCount / 2) + 1)
-        return l_fen; //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        return l_fen;
     }
 
     function start(a_this)
@@ -61,6 +62,7 @@ QtObject
         m_player2.start(m_player2, m_this)
         m_player2.started.connect(onStarted)
         m_player2.newGameStarted.connect(onNewGameStarted)
+        m_player2.ply.connect(onPly)
     }
 
     function onStarted(a)
@@ -72,6 +74,12 @@ QtObject
     {
         console.log("onNewGameStarted")
         console.log(fen())
-        //m_player2.turn()
+        m_player2.turn()
+    }
+
+    function onPly(a)
+    {
+        console.log("onPly")
+        console.log(a.last())
     }
 }

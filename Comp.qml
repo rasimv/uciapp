@@ -10,6 +10,8 @@ QtObject
     property string m_buf
     property var m_sequence: []
 
+    property string m_last
+
     function start(a_this, a_logic)
     {
         m_this = a_this; m_logic = a_logic
@@ -36,10 +38,12 @@ QtObject
     {
         if (m_state != "S_NEWGAME") return false
         m_engineControl.write("position fen " + m_logic.fen() + "\n")
-        m_engineControl.write("go movetime 2500\n")
+        m_engineControl.write("go movetime 2000\n")
     }
 
-    signal ply(int a_from, int a_to)
+    signal ply(var a)
+
+    function last() { return m_last }
 
     function delim(a) { return a == ' ' || a == '\t' || a == '\r' }
     function split(a)
@@ -69,9 +73,13 @@ QtObject
     {
         if (a.length <= 0) return
         var l_node = {}
-        if (a[0] == "uciok") l_node.type = "uciok"
-        else if (a[0] == "readyok") l_node.type = "readyok"
-        else if (a[0] == "bestmove") l_node.type = "bestmove"
+        if (a[0] == "uciok") l_node.m_type = "uciok"
+        else if (a[0] == "readyok") l_node.m_type = "readyok"
+        else if (a[0] == "bestmove")
+        {
+            l_node.m_type = "bestmove"
+            l_node.m_ply = a.length < 2 ? "" : a[1]
+        }
         else return
         m_sequence.push(l_node)
     }
@@ -97,7 +105,7 @@ QtObject
         }
         else if (m_state == "S_WAIT_FOR_ICUOK")
         {
-            var q = find(m_sequence, function pred(a) { return a.type == "uciok" })
+            var q = find(m_sequence, function pred(a) { return a.m_type == "uciok" })
             if (typeof q != "undefined")
             {
                 m_state = "S_WAIT_FOR_READYOK"
@@ -107,7 +115,7 @@ QtObject
         }
         else if (m_state == "S_WAIT_FOR_READYOK")
         {
-            var q = find(m_sequence, function pred(a) { return a.type == "readyok" })
+            var q = find(m_sequence, function pred(a) { return a.m_type == "readyok" })
             if (typeof q != "undefined")
             {
                 m_state = "S_READY"
@@ -117,7 +125,7 @@ QtObject
         }
         else if (m_state == "S_WAIT_FOR_NEWGAME")
         {
-            var q = find(m_sequence, function pred(a) { return a.type == "readyok" })
+            var q = find(m_sequence, function pred(a) { return a.m_type == "readyok" })
             if (typeof q != "undefined")
             {
                 m_state = "S_NEWGAME"
@@ -127,11 +135,12 @@ QtObject
         }
         else if (m_state == "S_NEWGAME")
         {
-            var q = find(m_sequence, function pred(a) { return a.type == "bestmove" })
+            var q = find(m_sequence, function pred(a) { return a.m_type == "bestmove" })
             if (typeof q != "undefined")
             {
+                m_last = m_sequence[q].m_ply
                 m_sequence = []
-                console.log("bestmove")
+                ply(m_this)
             }
         }
     }
