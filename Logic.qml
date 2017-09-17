@@ -128,12 +128,7 @@ QtObject
     {
         console.log("onPly")
         console.log(a.last())
-        //m_board.move()
-        var q = decodeTurn("0-0-0", "e1")
-        console.log("=================")
-        console.log(q.length)
-        console.log("=================")
-        for (var i = 0; i < q.length; i++)
-            console.log(q[i])
+        var q = decodeTurn(a.last(), "e1")
+        m_board.move(q)
     }
 }
