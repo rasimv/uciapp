@@ -63,8 +63,8 @@ Map.prototype.findFirst = function (a_pawnPiece)
 
 Map.prototype.direction = function (a_where, a_hInc, a_vInc)
 {
-    for (var i = new Coords(a_where.c + a_hInc, a_where.r + a_vInc); i.valid(); i.c += a_hInc, j.r += a_vInc)
-        if (pawnPiece(this.field(i))) return i
+    for (var i = new Coords(a_where.c + a_hInc, a_where.r + a_vInc); i.valid(); i.c += a_hInc, i.r += a_vInc)
+        if (pawnPiece(this.m[i.r][i.c])) return i
     return new Coords(-1, -1)
 }
 

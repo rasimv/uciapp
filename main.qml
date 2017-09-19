@@ -108,10 +108,10 @@ ApplicationWindow
                         //id_logic.start(id_logic, id_board)
                         var q = new ChessUtil.Map()
                         q.clear()
-                        q.fromFen("3r4/2kb3R/2p1p3/1p2P3/p3pP1B/P7/1PP2K2/3R4 b - - 5 40")
-                        var s = "\r\n"
-                        s += q.asText("\r\n")
-                        console.log(s)
+                        q.fromFen("rn2k2r/3bqn2/2p1p3/1p1pPp1p/p2P1N2/P2B1PpP/1PPB2P1/R2QRK2 w kq - 1 21")
+                        var u = q.findFirst("K")
+                        var v = q.direction(u, -1, 0)
+                        console.log("" + v.c + ", " + v.r)
                     }
                 }
             }
