@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>chessutil.js</file>
         <file>main.qml</file>
         <file>Field.qml</file>
         <file>Board.qml</file>

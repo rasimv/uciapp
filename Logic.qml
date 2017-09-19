@@ -17,14 +17,6 @@ QtObject
     property var m_pawnCaptCount: 0
     property var m_turnCount: 0
 
-    function pawnPiece(a)
-    {
-        var l_all = "rnbqkpPRNBQK"
-        for (var i = 0; i < l_all.length; i++)
-            if (a == l_all[i]) return true
-        return false
-    }
-
     function fen()
     {
         //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"

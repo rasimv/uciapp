@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import "chessutil.js" as ChessUtil
 
 ApplicationWindow
 {
@@ -104,7 +105,13 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_logic.start(id_logic, id_board)
+                        //id_logic.start(id_logic, id_board)
+                        var q = new ChessUtil.Map()
+                        q.clear()
+                        q.fromFen("6k1/1p3p2/p7/2p3p1/P1Pp2Pp/5Pq1/5RK1/4r3 w - - 1 36")
+                        var s = "\r\n"
+                        s += q.asText("\r\n")
+                        console.log(s)
                     }
                 }
             }
