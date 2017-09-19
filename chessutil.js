@@ -54,7 +54,7 @@ Map.prototype.field = function (a)
 
 Map.prototype.setField = function (a_where, a_value)
 {
-    this.m[where.r][where.c] = a_value
+    this.m[a_where.r][a_where.c] = a_value
 }
 
 Map.prototype.clear = function ()
@@ -72,30 +72,36 @@ Map.prototype.findFirst = function (a_pawnOrPiece)
     return new Coords(-1, -1)
 }
 
-Map.prototype.direction = function (a_from, a_hInc, a_vInc)
+Map.prototype.direction = function (a_from, a_hInc, a_vInc, a_test)
 {
     for (var i = new Coords(a_from.c + a_hInc, a_from.r + a_vInc); i.isValid(); i.c += a_hInc, i.r += a_vInc)
-        if (isPawnOrPiece(this.m[i.r][i.c])) return i
+    {
+        if (typeof a_test == "undefined") { if (isPawnOrPiece(this.m[i.r][i.c])) return i; continue }
+        if (i.isEqual(a_test)) return i
+        if (isPawnOrPiece(this.m[i.r][i.c])) break
+    }
     return new Coords(-1, -1)
 }
 
-Map.prototype.isBeating = function (a_attacker, a_field)
+Map.prototype.isBeatingDiag = function (a_attacker, a_test)
+{
+    return this.direction(a_attacker, 1, -1, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, -1, -1, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, -1, 1, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, 1, 1, a_test).isEqual(a_test)
+}
+
+Map.prototype.isBeating = function (a_attacker, a_test)
 {
     var l_attacker = this.m[a_attacker.r][a_attacker.c]
     if (l_attacker == "P")
-    {
-        var q = new Coords(a_attacker.c - 1, a_attacker.r - 1)
-        if (q.isValid() && q.isEqual(a_field)) return true
-        q = new Coords(a_attacker.c + 1, a_attacker.r - 1)
-        if (q.isValid() && q.isEqual(a_field)) return true
-    }
+        return (new Coords(a_attacker.c - 1, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r - 1)).isEqual(a_test)
     if (l_attacker == "p")
-    {
-        var q = new Coords(a_attacker.c - 1, a_attacker.r + 1)
-        if (q.isValid() && q.isEqual(a_field)) return true
-        q = new Coords(a_attacker.c + 1, a_attacker.r + 1)
-        if (q.isValid() && q.isEqual(a_field)) return true
-    }
+        return (new Coords(a_attacker.c - 1, a_attacker.r + 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r + 1)).isEqual(a_test)
+    if (l_attacker == "B" || l_attacker == "b")
+        return this.isBeatingDiag(a_attacker, a_test)
     return false
 }
 
