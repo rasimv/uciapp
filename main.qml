@@ -109,9 +109,14 @@ ApplicationWindow
                         var q = new ChessUtil.Map()
                         q.clear()
                         q.fromFen("rn2k2r/3bqn2/2p1p3/1p1pPp1p/p2P1N2/P2B1PpP/1PPB2P1/R2QRK2 w kq - 1 21")
-                        var u = q.findFirst("K")
-                        var v = q.direction(u, -1, 0)
-                        console.log("" + v.c + ", " + v.r)
+                        for (var i = 0; i < 8; i++)
+                            for (var j = 0; j < 8; j++)
+                            {
+                                if (q.isBeating(new ChessUtil.Coords(5, 3), new ChessUtil.Coords(j, i)))
+                                {
+                                    console.log("c=" + j + "; c=" + i)
+                                }
+                            }
                     }
                 }
             }
