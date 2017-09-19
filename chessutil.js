@@ -47,12 +47,12 @@ function Map()
               ["R","N","B","Q","K","B","N","R"]]
 }
 
-Map.prototype.field = function (a)
+Map.prototype.item = function (a)
 {
     return this.m[a.r][a.c]
 }
 
-Map.prototype.setField = function (a_where, a_value)
+Map.prototype.setItem = function (a_where, a_value)
 {
     this.m[a_where.r][a_where.c] = a_value
 }
@@ -91,6 +91,14 @@ Map.prototype.isBeatingDiag = function (a_attacker, a_test)
             this.direction(a_attacker, 1, 1, a_test).isEqual(a_test)
 }
 
+Map.prototype.isBeatingHorVert = function (a_attacker, a_test)
+{
+    return this.direction(a_attacker, 1, 0, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, 0, -1, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, -1, 0, a_test).isEqual(a_test) ||
+            this.direction(a_attacker, 0, 1, a_test).isEqual(a_test)
+}
+
 Map.prototype.isBeating = function (a_attacker, a_test)
 {
     var l_attacker = this.m[a_attacker.r][a_attacker.c]
@@ -102,6 +110,41 @@ Map.prototype.isBeating = function (a_attacker, a_test)
                 (new Coords(a_attacker.c + 1, a_attacker.r + 1)).isEqual(a_test)
     if (l_attacker == "B" || l_attacker == "b")
         return this.isBeatingDiag(a_attacker, a_test)
+    if (l_attacker == "R" || l_attacker == "r")
+        return this.isBeatingHorVert(a_attacker, a_test)
+    if (l_attacker == "Q" || l_attacker == "q")
+        return this.isBeatingDiag(a_attacker, a_test) || this.isBeatingHorVert(a_attacker, a_test)
+    if (l_attacker == "N" || l_attacker == "n")
+        return (new Coords(a_attacker.c + 2, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r - 2)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 1, a_attacker.r - 2)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 2, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 2, a_attacker.r + 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 1, a_attacker.r + 2)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r + 2)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 2, a_attacker.r + 1)).isEqual(a_test)
+    if (l_attacker == "K" || l_attacker == "k")
+        return (new Coords(a_attacker.c + 1, a_attacker.r)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 1, a_attacker.r - 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 1, a_attacker.r)).isEqual(a_test) ||
+                (new Coords(a_attacker.c - 1, a_attacker.r + 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c, a_attacker.r + 1)).isEqual(a_test) ||
+                (new Coords(a_attacker.c + 1, a_attacker.r + 1)).isEqual(a_test)
+   return false
+}
+
+Map.prototype.isCheck = function (a_king)
+{
+    var l_test = this.findFirst(a_king)
+    console.log("" + l_test.c + "; " + l_test.r)
+    for (var i = new Coords(0, 0); i.r < 8; i.r++)
+        for (i.c = 0; i.c < 8; i.c++)
+        {
+            if (!isOpp(a_king, this.m[i.r][i.c])) continue
+            if (this.isBeating(i, l_test)) return true
+        }
     return false
 }
 

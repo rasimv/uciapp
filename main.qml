@@ -108,17 +108,8 @@ ApplicationWindow
                         //id_logic.start(id_logic, id_board)
                         var q = new ChessUtil.Map()
                         q.clear()
-                        //q.fromFen("rn2k2r/3bqn2/2p1p3/1p1pPp1p/p2P1N2/P2B1PpP/1PPB2P1/R2QRK2 w kq - 1 21")
-						var u = new ChessUtil.Coords(3, 3)
-						q.setField(u, "B")
-						q.setField(new ChessUtil.Coords(5, 1), "p")
-                        for (var i = 0; i < 8; i++)
-						{
-							var s = ""
-                            for (var j = 0; j < 8; j++)
-								s += (q.isBeating(u, new ChessUtil.Coords(j, i)) ? " +" : " #")
-                            console.log(s)
-						}
+                        q.fromFen("8/8/8/7K/5n2/8/1k6/8 w - - 0 1")
+                        console.log(q.isCheck("K"))
                     }
                 }
             }
