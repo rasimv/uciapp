@@ -108,7 +108,7 @@ ApplicationWindow
                         //id_logic.start(id_logic, id_board)
                         var q = new ChessUtil.Map()
                         q.clear()
-                        q.fromFen("6k1/1p3p2/p7/2p3p1/P1Pp2Pp/5Pq1/5RK1/4r3 w - - 1 36")
+                        q.fromFen("3r4/2kb3R/2p1p3/1p2P3/p3pP1B/P7/1PP2K2/3R4 b - - 5 40")
                         var s = "\r\n"
                         s += q.asText("\r\n")
                         console.log(s)

@@ -70,12 +70,13 @@ Map.prototype.direction = function (a_where, a_hInc, a_vInc)
 
 Map.prototype.fromFen = function (a)
 {
-    for (var i = 0, k = 0; i < 8; i++)
+    var k = 0
+    for (var i = 0; i < 8; i++)
     {
         for (var j = 0; k < a.length; k++)
         {
+            if (sepChar(a[k])) return k
             if (a[k] == "/") { k++; break }
-            if (sepChar(a[k])) return k + 1
             if (j > 7) continue
             if (pawnPiece(a[k])) { this.m[i][j++] = a[k]; continue }
             var q = parseInt(a[k])
@@ -83,6 +84,7 @@ Map.prototype.fromFen = function (a)
             for (var l = 0; l < q && j < 8; l++) this.m[i][j++] = "0"
         }
     }
+    return k
 }
 
 Map.prototype.asText = function (a_newline)
