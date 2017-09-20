@@ -1,6 +1,58 @@
 .pragma library
 
+//------------------------------------------------------------------------------
+var s_horizontals = "abcdefgh"
+var s_verticals = "87654321"
+var s_pawnsAndPieces = "rnbqkpPRNBQK"
+
+//------------------------------------------------------------------------------
 function sepChar(a) { return a == " " || a == "\t" }
+
+function split_s(a_input, a_sepPred)
+{
+    var q = []
+    var j = 0
+    while (j < a_input.length)
+    {
+        for (; j < a_input.length && a_sepPred(a_input[j]); j++);
+        var i = j
+        for (; j < a_input.length && !a_sepPred(a_input[j]); j++);
+        if (i < j) q.push(a_input.substring(i, j))
+    }
+    return q
+}
+
+//------------------------------------------------------------------------------
+function indexToHorizontal(a)
+{
+    return a >= 0 && a < 8 ? s_horizontals[a] : ""
+}
+
+function indexToVertical(a)
+{
+    return a >= 0 && a < 8 ? s_verticals[a] : ""
+}
+
+function horizontalToIndex(a)
+{
+    return s_horizontals.indexOf(a)
+}
+
+function verticalToIndex(a)
+{
+    return s_verticals.indexOf(a)
+}
+
+function isPawnOrPiece(a)
+{
+    return s_pawnsAndPieces.indexOf(a) >= 0
+}
+
+function isOpp(a_one, a_another)
+{
+    if (!isPawnOrPiece(a_one) || !isPawnOrPiece(a_another)) return false
+    return (a_one == a_one.toLowerCase()) != (a_another == a_another.toLowerCase())
+}
 
 //------------------------------------------------------------------------------
 function Coords(a_col, a_row)
@@ -19,23 +71,32 @@ Coords.prototype.isEqual = function (a)
     return a.c == this.c && a.r == this.r
 }
 
-//------------------------------------------------------------------------------
-function isPawnOrPiece(a)
+Coords.prototype.clone = function ()
 {
-    var l_all = "rnbqkpPRNBQK"
-    for (var i = 0; i < l_all.length; i++)
-        if (a == l_all[i]) return true
-    return false
+    return new Coords(this.c, this.r)
 }
 
-function isOpp(a_one, a_another)
+Coords.prototype.notation = function ()
 {
-    if (!isPawnOrPiece(a_one) || !isPawnOrPiece(a_another)) return false
-    return (a_one == a_one.toLowerCase()) != (a_another == a_another.toLowerCase())
+    return indexToHorizontal(this.c) + indexToVertical(this.r)
+}
+
+Coords.prototype.fromNotation = function (a)
+{
+    this.c = -1; this.r = -1
+    if (a.length < 1) return
+    if (a.length == 1)
+    {
+        this.c = horizontalToIndex(a[0])
+        if (this.c < 0) this.r = verticalToIndex(a[0])
+        return
+    }
+    this.c = horizontalToIndex(a[0])
+    this.r = verticalToIndex(a[1])
 }
 
 //------------------------------------------------------------------------------
-function Map()
+function Layout()
 {
     this.m = [["r","n","b","q","k","b","n","r"],
               ["p","p","p","p","p","p","p","p"],
@@ -47,108 +108,43 @@ function Map()
               ["R","N","B","Q","K","B","N","R"]]
 }
 
-Map.prototype.item = function (a)
+Layout.prototype.item = function (a)
 {
     return this.m[a.r][a.c]
 }
 
-Map.prototype.setItem = function (a_where, a_value)
+Layout.prototype.setItem = function (a_where, a_value)
 {
     this.m[a_where.r][a_where.c] = a_value
 }
 
-Map.prototype.clear = function ()
+Layout.prototype.clear = function ()
 {
     for (var i = 0; i < 8; i++)
         for (var j = 0; j < 8; j++)
             this.m[i][j] = "0"
 }
 
-Map.prototype.findFirst = function (a_pawnOrPiece)
+Layout.prototype.fen = function ()
 {
+    var l_fen = ""
     for (var i = 0; i < 8; i++)
-        for (var j = 0; j < 8; j++)
-            if (this.m[i][j] == a_pawnOrPiece) return new Coords(j, i)
-    return new Coords(-1, -1)
-}
-
-Map.prototype.direction = function (a_from, a_hInc, a_vInc, a_test)
-{
-    for (var i = new Coords(a_from.c + a_hInc, a_from.r + a_vInc); i.isValid(); i.c += a_hInc, i.r += a_vInc)
     {
-        if (typeof a_test == "undefined") { if (isPawnOrPiece(this.m[i.r][i.c])) return i; continue }
-        if (i.isEqual(a_test)) return i
-        if (isPawnOrPiece(this.m[i.r][i.c])) break
-    }
-    return new Coords(-1, -1)
-}
-
-Map.prototype.isBeatingDiag = function (a_attacker, a_test)
-{
-    return this.direction(a_attacker, 1, -1, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, -1, -1, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, -1, 1, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, 1, 1, a_test).isEqual(a_test)
-}
-
-Map.prototype.isBeatingHorVert = function (a_attacker, a_test)
-{
-    return this.direction(a_attacker, 1, 0, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, 0, -1, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, -1, 0, a_test).isEqual(a_test) ||
-            this.direction(a_attacker, 0, 1, a_test).isEqual(a_test)
-}
-
-Map.prototype.isBeating = function (a_attacker, a_test)
-{
-    var l_attacker = this.m[a_attacker.r][a_attacker.c]
-    if (l_attacker == "P")
-        return (new Coords(a_attacker.c - 1, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r - 1)).isEqual(a_test)
-    if (l_attacker == "p")
-        return (new Coords(a_attacker.c - 1, a_attacker.r + 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r + 1)).isEqual(a_test)
-    if (l_attacker == "B" || l_attacker == "b")
-        return this.isBeatingDiag(a_attacker, a_test)
-    if (l_attacker == "R" || l_attacker == "r")
-        return this.isBeatingHorVert(a_attacker, a_test)
-    if (l_attacker == "Q" || l_attacker == "q")
-        return this.isBeatingDiag(a_attacker, a_test) || this.isBeatingHorVert(a_attacker, a_test)
-    if (l_attacker == "N" || l_attacker == "n")
-        return (new Coords(a_attacker.c + 2, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r - 2)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 1, a_attacker.r - 2)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 2, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 2, a_attacker.r + 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 1, a_attacker.r + 2)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r + 2)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 2, a_attacker.r + 1)).isEqual(a_test)
-    if (l_attacker == "K" || l_attacker == "k")
-        return (new Coords(a_attacker.c + 1, a_attacker.r)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 1, a_attacker.r - 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 1, a_attacker.r)).isEqual(a_test) ||
-                (new Coords(a_attacker.c - 1, a_attacker.r + 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c, a_attacker.r + 1)).isEqual(a_test) ||
-                (new Coords(a_attacker.c + 1, a_attacker.r + 1)).isEqual(a_test)
-   return false
-}
-
-Map.prototype.isCheck = function (a_king)
-{
-    var l_test = this.findFirst(a_king)
-    console.log("" + l_test.c + "; " + l_test.r)
-    for (var i = new Coords(0, 0); i.r < 8; i.r++)
-        for (i.c = 0; i.c < 8; i.c++)
+        if (i > 0) l_fen += "/"
+        var l_empyCount = 0
+        for (var j = 0; j < 8; j++)
         {
-            if (!isOpp(a_king, this.m[i.r][i.c])) continue
-            if (this.isBeating(i, l_test)) return true
+            if (!isPawnOrPiece(this.m[i][j])) { l_empyCount++; continue }
+            if (l_empyCount > 0) l_fen += l_empyCount
+            l_fen += this.m[i][j]
+            l_empyCount = 0
         }
-    return false
+        if (l_empyCount > 0) l_fen += l_empyCount
+    }
+    return l_fen
 }
 
-Map.prototype.fromFen = function (a)
+Layout.prototype.fromFen = function (a)
 {
     var k = 0
     for (var i = 0; i < 8; i++)
@@ -167,7 +163,7 @@ Map.prototype.fromFen = function (a)
     return k
 }
 
-Map.prototype.asText = function (a_newline)
+Layout.prototype.asText = function (a_newline)
 {
     var s = ""
     for (var i = 0; i < 8; i++)
@@ -176,5 +172,73 @@ Map.prototype.asText = function (a_newline)
         for (var j = 0; j < 8; j++)
             s += this.m[i][j]
     }
+    return s
+}
+
+//------------------------------------------------------------------------------
+function Position()
+{
+    this.m_layout = new Layout()
+    this.m_castling = ["K", "Q", "k", "q"]
+    this.m_enPassant = new Coords(-1, -1)
+    this.m_pawnCaptCount = 0
+    this.m_turnCount = 0
+}
+
+Position.prototype.fen = function ()
+{
+    //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    var l_fen = this.m_layout.fen()
+    l_fen += " " + (this.m_turnCount % 2 ? "b" : "w") + " "
+    var l_castling = ""
+    for (var i = 0; i < this.m_castling.length; i++)
+        if (this.m_castling[i] != "") l_castling += this.m_castling[i]
+    l_fen += (l_castling != "" ? l_castling : "-")
+    l_fen += " " + (this.m_enPassant.isValid() ? this.m_enPassant.notation() : "-")
+    l_fen += " " + this.m_pawnCaptCount + " " + (Math.floor(this.m_turnCount / 2) + 1)
+    return l_fen
+}
+
+Position.prototype.fromFen = function (a)
+{
+    var q = split_s(a, sepChar)
+    if (q.length > 0) this.m_layout.fromFen(q[0])
+    var b = 0
+    if (q.length > 1 && q[1].length > 0 && q[1][0] == "b")
+    {
+        b = 1
+        if (this.m_turnCount % 2 == 0) this.m_turnCount++
+    }
+    if (q.length > 2)
+    {
+        this.m_castling = ["", "", "", ""]
+        for (var i = 0; i < q[2].length; i++)
+        {
+            if (q[2][i] == "K") this.m_castling[0] = "K"
+            else if (q[2][i] == "Q") this.m_castling[1] = "Q"
+            else if (q[2][i] == "k") this.m_castling[2] = "k"
+            else if (q[2][i] == "q") this.m_castling[3] = "q"
+        }
+    }
+    if (q.length > 3) this.m_enPassant.fromNotation(q[3])
+    if (q.length > 4)
+    {
+        var n = Number(q[4])
+        this.m_pawnCaptCount = (isNaN(n) || n < 0 ? 0 : Math.round(n))
+    }
+    if (q.length > 5)
+    {
+        var n = Number(q[5])
+        this.m_turnCount = (isNaN(n) || n < 1 ? 0 : 2 * Math.round(n - 1)) + b
+    }
+}
+
+Position.prototype.asText = function (a_newline)
+{
+    var s = this.m_layout.asText(a_newline)
+    s += a_newline + "castling: |" + this.m_castling[0] + this.m_castling[1] + this.m_castling[2] + this.m_castling[3] + "|"
+    s += a_newline + "enpassant: |" + this.m_enPassant.c + "," + this.m_enPassant.r + "|"
+    s += a_newline + "pawn capt count: |" + this.m_pawnCaptCount + "|"
+    s += a_newline + "turn count: |" + this.m_turnCount + "|"
     return s
 }

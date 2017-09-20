@@ -105,11 +105,10 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        //id_logic.start(id_logic, id_board)
-                        var q = new ChessUtil.Map()
-                        q.clear()
-                        q.fromFen("8/8/8/7K/5n2/8/1k6/8 w - - 0 1")
-                        console.log(q.isCheck("K"))
+                        var q = new ChessUtil.Position()
+                        q.fromFen("r1bqkb1r/1pp1ppp1/p1n2n1p/3pP3/8/2N2N2/PPPP1PPP/R1BQKBR1 w Qkq d6 0 6")
+                        console.log("\r\n" + q.asText("\r\n"))
+                        console.log("\r\n" + q.fen())
                     }
                 }
             }
