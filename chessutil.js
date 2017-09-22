@@ -76,6 +76,12 @@ Coords.prototype.clone = function ()
     return new Coords(this.c, this.r)
 }
 
+Coords.prototype.add = function (a)
+{
+    this.c += a.c; this.r += a.r
+    return this
+}
+
 Coords.prototype.notation = function ()
 {
     return indexToHorizontal(this.c) + indexToVertical(this.r)
@@ -173,6 +179,100 @@ Layout.prototype.asText = function (a_newline)
             s += this.m[i][j]
     }
     return s
+}
+
+Layout.prototype.findFirst = function (a_pawnOrPiece)
+{
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+            if (this.m[i][j] == a_pawnOrPiece) return new Coords(j, i)
+    return new Coords(-1, -1)
+}
+
+Layout.prototype.direction = function (a_from, a_dir)
+{
+    var q = []
+    for (var i = a_from.clone().add(a_dir); i.isValid(); i.add(a_dir))
+    {
+        if (!isPawnOrPiece(this.m[i.r][i.c])) { q.push(i.clone()); continue }
+        if (isOpp(this.m[i.r][i.c], this.m[a_from.r][a_from.c])) q.push(i.clone())
+        break
+    }
+    return q
+}
+
+Layout.prototype.bishopScope = function (a_from)
+{
+    var q = []
+    q = q.concat(this.direction(a_from, new Coords(1, -1)))
+    q = q.concat(this.direction(a_from, new Coords(-1, -1)))
+    q = q.concat(this.direction(a_from, new Coords(-1, 1)))
+    q = q.concat(this.direction(a_from, new Coords(1, 1)))
+    return q
+}
+
+Layout.prototype.rookScope = function (a_from)
+{
+    var q = []
+    q = q.concat(this.direction(a_from, new Coords(1, 0)))
+    q = q.concat(this.direction(a_from, new Coords(0, -1)))
+    q = q.concat(this.direction(a_from, new Coords(-1, 0)))
+    q = q.concat(this.direction(a_from, new Coords(0, 1)))
+    return q
+}
+
+Layout.prototype.queenScope = function (a_from)
+{
+    var q = []
+    q = q.concat(bishopScope(a_from))
+    q = q.concat(rookScope(a_from))
+    return q
+}
+
+Layout.prototype.isPossible = function (a_from, a_to)
+{
+    return !isPawnOrPiece(this.m[a_to.r][a_to.c]) || isOpp(this.m[a_to.r][a_to.c], this.m[a_from.r][a_from.c])
+}
+
+Layout.prototype.specialScope = function (a_from, a_rel)
+{
+    var q = []
+    for (var i = 0; i < a_rel.length; i++)
+    {
+        var z = a_from.clone().add(new Coords(a_rel[i][0], a_rel[i][1]))
+        if (z.isValid() && this.isPossible(a_from, z)) q.push(z)
+    }
+    return q
+}
+
+Layout.prototype.knightScope = function (a_from)
+{
+    var v = [[2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2], [1, 2], [2, 1]]
+    return this.specialScope(a_from, v)
+}
+
+Layout.prototype.kingScope = function (a_from)
+{
+    var v = [[1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1]]
+    return this.specialScope(a_from, v)
+}
+
+Layout.prototype.pawnScope = function (a_from)
+{
+    var f = function (a_this, a_dir)
+    {
+        var q = []
+        var u = a_from.clone().add(new Coords(0, a_dir))
+        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
+        u = a_from.clone().add(new Coords(0, 2 * a_dir))
+        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
+        u = a_from.clone().add(new Coords(-1, a_dir))
+        if (u.isValid()) q.push(u)
+        u = a_from.clone().add(new Coords(1, a_dir))
+        if (u.isValid()) q.push(u)
+        return q
+    }
+    return this.m[a_from.r][a_from.c] == "P" ? f(this, -1) : f(this, 1)
 }
 
 //------------------------------------------------------------------------------

@@ -109,6 +109,20 @@ ApplicationWindow
                         q.fromFen("r1bqkb1r/1pp1ppp1/p1n2n1p/3pP3/8/2N2N2/PPPP1PPP/R1BQKBR1 w Qkq d6 0 6")
                         console.log("\r\n" + q.asText("\r\n"))
                         console.log("\r\n" + q.fen())
+                        console.log("\r\n=====================")
+						var u = new ChessUtil.Layout()
+						u.clear()
+						var z = new ChessUtil.Coords(7, 3)
+						u.fromFen("8/8/8/7K/8/8/8/8 w - - 0 1")
+						var v = u.kingScope(z)
+						console.log("$$$" + v.length + "$$$")
+						u.clear()
+						for (var i = 0; i < v.length; i++)
+						{
+							console.log("v[i].c=" + v[i].c + ";" + "v[i].r=" + v[i].r)
+							u.setItem(v[i], "B")
+						}
+						console.log("\r\n" + u.asText("\r\n"))
                     }
                 }
             }
