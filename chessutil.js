@@ -224,8 +224,8 @@ Layout.prototype.rookScope = function (a_from)
 Layout.prototype.queenScope = function (a_from)
 {
     var q = []
-    q = q.concat(bishopScope(a_from))
-    q = q.concat(rookScope(a_from))
+    q = q.concat(this.bishopScope(a_from))
+    q = q.concat(this.rookScope(a_from))
     return q
 }
 
@@ -273,6 +273,18 @@ Layout.prototype.pawnScope = function (a_from)
         return q
     }
     return this.m[a_from.r][a_from.c] == "P" ? f(this, -1) : f(this, 1)
+}
+
+Layout.prototype.pawnOrPieceScope = function (a_from)
+{
+    var x = this.m[a_from.r][a_from.c]
+    if (x == "P" || x == "p") return this.pawnScope(a_from)
+    if (x == "R" || x == "r") return this.rookScope(a_from)
+    if (x == "N" || x == "n") return this.knightScope(a_from)
+    if (x == "B" || x == "b") return this.bishopScope(a_from)
+    if (x == "Q" || x == "q") return this.queenScope(a_from)
+    if (x == "K" || x == "k") return this.kingScope(a_from)
+    return []
 }
 
 //------------------------------------------------------------------------------
