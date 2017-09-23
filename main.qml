@@ -107,7 +107,7 @@ ApplicationWindow
                     {
 						var u = new ChessUtil.Layout()
 						u.clear()
-						u.fromFen("8/4q3/5Rn1/8/7K/8/5P2/4b3 w - - 0 1")
+						u.fromFen("B7/4q3/4nRp1/3p1p2/5K2/8/5Pk1/4b3 w - - 0 1")
 						console.log(u.isCheck("K"))
                     }
                 }

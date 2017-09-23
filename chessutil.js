@@ -296,13 +296,9 @@ Layout.prototype.isCheck = function (a_king)
         {
             if (!isOpp(a_king, this.m[i][j])) continue
             var l_scope = this.pawnOrPieceScope(new Coords(j, i))
-            if (this.m[i][j] == "P" || this.m[i][j] == "p")
-            {}
-            else
-            {
-                var l_pred = function (v, i, o) { return l_place.isEqual(v) }
-                if (l_scope.findIndex(l_pred) >= 0) return true
-            }
+            var l_pawn = (this.m[i][j] == "P" || this.m[i][j] == "p")
+            var l_pred = function (v, x, o) { return l_place.isEqual(v) && (!l_pawn || j != l_place.c) }
+            if (l_scope.findIndex(l_pred) >= 0) return true
         }
     return false
 }
