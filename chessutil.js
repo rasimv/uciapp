@@ -263,13 +263,21 @@ Layout.prototype.pawnScope = function (a_from)
     {
         var q = []
         var u = a_from.clone().add(new Coords(0, a_dir))
-        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
-        u = a_from.clone().add(new Coords(0, 2 * a_dir))
-        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
+        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c]))
+        {
+            q.push(u)
+            if (a_dir < 0 && a_from.r == 6 || a_dir > 0 && a_from.r == 1)
+            {
+                u = a_from.clone().add(new Coords(0, 2 * a_dir))
+                if (!isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
+            }
+        }
         u = a_from.clone().add(new Coords(-1, a_dir))
-        if (u.isValid()) q.push(u)
+        if (u.isValid() && (!isPawnOrPiece(a_this.m[u.r][u.c]) ||
+            isOpp(a_this.m[u.r][u.c], a_this.m[a_from.r][a_from.c]))) q.push(u)
         u = a_from.clone().add(new Coords(1, a_dir))
-        if (u.isValid()) q.push(u)
+        if (u.isValid() && (!isPawnOrPiece(a_this.m[u.r][u.c]) ||
+            isOpp(a_this.m[u.r][u.c], a_this.m[a_from.r][a_from.c]))) q.push(u)
         return q
     }
     return this.m[a_from.r][a_from.c] == "P" ? f(this, -1) : f(this, 1)
@@ -301,6 +309,32 @@ Layout.prototype.isCheck = function (a_king)
             if (l_scope.findIndex(l_pred) >= 0) return true
         }
     return false
+}
+
+Layout.prototype.isUnderCheck = function (a_king, a_from, a_to)
+{
+    var l_save = this.m[a_to.r][a_to.c]
+    this.m[a_to.r][a_to.c] = this.m[a_from.r][a_from.c]
+    this.m[a_from.r][a_from.c] = "0"
+    var q = this.isCheck(a_king)
+    this.m[a_from.r][a_from.c] = this.m[a_to.r][a_to.c]
+    this.m[a_to.r][a_to.c] = l_save
+    return q
+}
+
+Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
+{
+    var q = []
+    var l_scope = this.pawnOrPieceScope(a_from)
+    for (var i = 0; i < l_scope.length; i++)
+    {
+        var l_to = l_scope[i]
+        if (this.m[a_from.r][a_from.c].toLowerCase() == "p" &&
+            l_to.c != a_from.c && !isPawnOrPiece(this.m[l_to.r][l_to.c])) continue;
+        if (this.isUnderCheck(a_king, a_from, l_to)) continue
+        q.push(l_to)
+    }
+    return q
 }
 
 //------------------------------------------------------------------------------
@@ -369,4 +403,14 @@ Position.prototype.asText = function (a_newline)
     s += a_newline + "pawn capt count: |" + this.m_pawnCaptCount + "|"
     s += a_newline + "turn count: |" + this.m_turnCount + "|"
     return s
+}
+
+Position.prototype.turn = function (a_notation)
+{
+    if (a_notation == "0-0")
+    {}
+    else if (a_notation == "0-0-0")
+    {}
+    else
+    {}
 }

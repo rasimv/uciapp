@@ -107,8 +107,16 @@ ApplicationWindow
                     {
 						var u = new ChessUtil.Layout()
 						u.clear()
-						u.fromFen("B7/4q3/4nRp1/3p1p2/5K2/8/5Pk1/4b3 w - - 0 1")
-						console.log(u.isCheck("K"))
+						u.fromFen("4k3/8/8/8/8/8/5p2/4BRQ1 w - - 0 1")
+						var q = u.legalTurnsOfPawnOrPiece("k", new ChessUtil.Coords(5, 6))
+						u.clear()
+						console.log("#" + q.length + "#")
+						for (var i = 0; i < q.length; i++)
+						{
+							console.log("i: " + q[i].c + " " + q[i].r)
+							u.setItem(q[i], "P")
+						}
+						console.log("\r\n=============\r\n" + u.asText("\r\n"))
                     }
                 }
             }
