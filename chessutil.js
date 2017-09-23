@@ -287,6 +287,26 @@ Layout.prototype.pawnOrPieceScope = function (a_from)
     return []
 }
 
+Layout.prototype.isCheck = function (a_king)
+{
+    var l_place = this.findFirst(a_king)
+    if (!l_place.isValid()) return false
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+        {
+            if (!isOpp(a_king, this.m[i][j])) continue
+            var l_scope = this.pawnOrPieceScope(new Coords(j, i))
+            if (this.m[i][j] == "P" || this.m[i][j] == "p")
+            {}
+            else
+            {
+                var l_pred = function (v, i, o) { return l_place.isEqual(v) }
+                if (l_scope.findIndex(l_pred) >= 0) return true
+            }
+        }
+    return false
+}
+
 //------------------------------------------------------------------------------
 function Position()
 {
