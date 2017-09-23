@@ -194,8 +194,8 @@ Layout.prototype.direction = function (a_from, a_dir)
     var q = []
     for (var i = a_from.clone().add(a_dir); i.isValid(); i.add(a_dir))
     {
-        if (!isPawnOrPiece(this.m[i.r][i.c])) { q.push(i.clone()); continue }
-        if (isOpp(this.m[i.r][i.c], this.m[a_from.r][a_from.c])) q.push(i.clone())
+        if (!isPawnOrPiece(this.item(i))) { q.push(i.clone()); continue }
+        if (isOpp(this.item(i), this.item(a_from))) q.push(i.clone())
         break
     }
     return q
@@ -231,7 +231,7 @@ Layout.prototype.queenScope = function (a_from)
 
 Layout.prototype.isPossible = function (a_from, a_to)
 {
-    return !isPawnOrPiece(this.m[a_to.r][a_to.c]) || isOpp(this.m[a_to.r][a_to.c], this.m[a_from.r][a_from.c])
+    return !isPawnOrPiece(this.item(a_to)) || isOpp(this.item(a_to), this.item(a_from))
 }
 
 Layout.prototype.specialScope = function (a_from, a_rel)
@@ -263,29 +263,29 @@ Layout.prototype.pawnScope = function (a_from)
     {
         var q = []
         var u = a_from.clone().add(new Coords(0, a_dir))
-        if (u.isValid() && !isPawnOrPiece(a_this.m[u.r][u.c]))
+        if (u.isValid() && !isPawnOrPiece(a_this.item(u)))
         {
             q.push(u)
             if (a_dir < 0 && a_from.r == 6 || a_dir > 0 && a_from.r == 1)
             {
                 u = a_from.clone().add(new Coords(0, 2 * a_dir))
-                if (!isPawnOrPiece(a_this.m[u.r][u.c])) q.push(u)
+                if (!isPawnOrPiece(a_this.item(u))) q.push(u)
             }
         }
         u = a_from.clone().add(new Coords(-1, a_dir))
-        if (u.isValid() && (!isPawnOrPiece(a_this.m[u.r][u.c]) ||
-            isOpp(a_this.m[u.r][u.c], a_this.m[a_from.r][a_from.c]))) q.push(u)
+        if (u.isValid() && (!isPawnOrPiece(a_this.item(u)) ||
+            isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u)
         u = a_from.clone().add(new Coords(1, a_dir))
-        if (u.isValid() && (!isPawnOrPiece(a_this.m[u.r][u.c]) ||
-            isOpp(a_this.m[u.r][u.c], a_this.m[a_from.r][a_from.c]))) q.push(u)
+        if (u.isValid() && (!isPawnOrPiece(a_this.item(u)) ||
+            isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u)
         return q
     }
-    return this.m[a_from.r][a_from.c] == "P" ? f(this, -1) : f(this, 1)
+    return this.item(a_from) == "P" ? f(this, -1) : f(this, 1)
 }
 
 Layout.prototype.pawnOrPieceScope = function (a_from)
 {
-    var x = this.m[a_from.r][a_from.c]
+    var x = this.item(a_from)
     if (x == "P" || x == "p") return this.pawnScope(a_from)
     if (x == "R" || x == "r") return this.rookScope(a_from)
     if (x == "N" || x == "n") return this.knightScope(a_from)
@@ -313,12 +313,12 @@ Layout.prototype.isCheck = function (a_king)
 
 Layout.prototype.isUnderCheck = function (a_king, a_from, a_to)
 {
-    var l_save = this.m[a_to.r][a_to.c]
-    this.m[a_to.r][a_to.c] = this.m[a_from.r][a_from.c]
-    this.m[a_from.r][a_from.c] = "0"
+    var l_save = this.item(a_to)
+    this.setItem(a_to, this.item(a_from))
+    this.setItem(a_from, "0")
     var q = this.isCheck(a_king)
-    this.m[a_from.r][a_from.c] = this.m[a_to.r][a_to.c]
-    this.m[a_to.r][a_to.c] = l_save
+    this.setItem(a_from, this.item(a_to))
+    this.setItem(a_to, l_save)
     return q
 }
 
@@ -329,8 +329,8 @@ Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
     for (var i = 0; i < l_scope.length; i++)
     {
         var l_to = l_scope[i]
-        if (this.m[a_from.r][a_from.c].toLowerCase() == "p" &&
-            l_to.c != a_from.c && !isPawnOrPiece(this.m[l_to.r][l_to.c])) continue;
+        if (this.item(a_from).toLowerCase() == "p" &&
+            l_to.c != a_from.c && !isPawnOrPiece(this.item(l_to))) continue;
         if (this.isUnderCheck(a_king, a_from, l_to)) continue
         q.push(l_to)
     }
