@@ -102,6 +102,12 @@ Coords.prototype.fromNotation = function (a)
 }
 
 //------------------------------------------------------------------------------
+function notatePair(a_from, a_to)
+{
+    return a_from.notation() + a_to.notation()
+}
+
+//------------------------------------------------------------------------------
 function Layout()
 {
     this.m = [["r","n","b","q","k","b","n","r"],
@@ -329,11 +335,26 @@ Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
     for (var i = 0; i < l_scope.length; i++)
     {
         var l_to = l_scope[i]
-        if (this.item(a_from).toLowerCase() == "p" &&
-            l_to.c != a_from.c && !isPawnOrPiece(this.item(l_to))) continue;
+        if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
+            l_to.c != a_from.c && !isPawnOrPiece(this.item(l_to))) continue
         if (this.isUnderCheck(a_king, a_from, l_to)) continue
         q.push(l_to)
     }
+    return q
+}
+
+Layout.prototype.legalTurns = function (a_king)
+{
+    var q = []
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+        {
+            var y = new Coords(j, i)
+            if (isOpp(a_king, this.item(y))) continue
+            var v = this.legalTurnsOfPawnOrPiece(a_king, y)
+            for (var k = 0; k < v.length; k++)
+                q.push([y, v[k]])
+        }
     return q
 }
 

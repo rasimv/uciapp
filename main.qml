@@ -107,16 +107,16 @@ ApplicationWindow
                     {
 						var u = new ChessUtil.Layout()
 						u.clear()
-						u.fromFen("4k3/8/8/8/8/8/5p2/4BRQ1 w - - 0 1")
-						var q = u.legalTurnsOfPawnOrPiece("k", new ChessUtil.Coords(5, 6))
-						u.clear()
+						u.fromFen("8/7k/8/8/8/8/2p5/1Q1NK3 w - - 0 1")
+						var q = u.legalTurns("k")
+						//u.clear()
 						console.log("#" + q.length + "#")
 						for (var i = 0; i < q.length; i++)
 						{
-							console.log("i: " + q[i].c + " " + q[i].r)
-							u.setItem(q[i], "P")
+							var z = q[i]
+							console.log(ChessUtil.notatePair(z[0], z[1]))
 						}
-						console.log("\r\n=============\r\n" + u.asText("\r\n"))
+						//console.log("\r\n=============\r\n" + u.asText("\r\n"))
                     }
                 }
             }
