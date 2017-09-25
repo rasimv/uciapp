@@ -321,7 +321,6 @@ Layout.prototype.isCheck = function (a_king)
     return this.isAttacked(a_king, l_place)
 }
 
-//---------------------------------
 Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
 {
     var l_save = this.item(a_to)
