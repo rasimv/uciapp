@@ -390,16 +390,17 @@ Layout.prototype.castling = function (a_king, a_castling)
 {
     var q = []
     var i = new Coords(4, a_king == "K" ? 7 : 0)
+    if (this.isAttacked(a_king, i)) return []
     var l_startIndex = (a_king == "K" ? 0 : 2)
     if (a_castling[l_startIndex] != "")
     {
-        for (; i.c < 7 && !this.isAttacked(a_king, i); i.c++);
+        for (i.c = 5; i.c < 7 && !isPawnOrPiece(this.item(i)) && !this.isAttacked(a_king, i); i.c++);
         if (i.c >= 7) q.push("0-0")
     }
     if (a_castling[l_startIndex + 1] != "")
     {
-        for (i.c = 4; i.c > 1 && !this.isAttacked(a_king, i); i.c--);
-        if (i.c <= 1) q.push("0-0-0")
+        for (i.c = 3; i.c > 0 && !isPawnOrPiece(this.item(i)) && (i.c < 2 || !this.isAttacked(a_king, i)); i.c--);
+        if (i.c <= 0) q.push("0-0-0")
     }
     return q
 }
