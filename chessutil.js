@@ -301,23 +301,27 @@ Layout.prototype.pawnOrPieceScope = function (a_from)
     return []
 }
 
-Layout.prototype.isCheck = function (a_king)
+Layout.prototype.isAttacked = function (a_king, a_place)
 {
-    var l_place = this.findFirst(a_king)
-    if (!l_place.isValid()) return false
     for (var i = 0; i < 8; i++)
         for (var j = 0; j < 8; j++)
         {
             if (!isOpp(a_king, this.m[i][j])) continue
             var l_scope = this.pawnOrPieceScope(new Coords(j, i))
-            var l_pawn = (this.m[i][j] == "P" || this.m[i][j] == "p")
-            var l_pred = function (v, x, o) { return l_place.isEqual(v) && (!l_pawn || j != l_place.c) }
+            var l_pawn = this.m[i][j] == "P" || this.m[i][j] == "p"
+            var l_pred = function (v, x, o) { return a_place.isEqual(v) && (!l_pawn || j != a_place.c) }
             if (l_scope.findIndex(l_pred) >= 0) return true
         }
     return false
 }
 
-Layout.prototype.isUnderCheck = function (a_king, a_from, a_to)
+Layout.prototype.isCheck = function (a_king)
+{
+    var l_place = this.findFirst(a_king)
+    return this.isAttacked(a_king, l_place)
+}
+
+Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
 {
     var l_save = this.item(a_to)
     this.setItem(a_to, this.item(a_from))
@@ -337,7 +341,7 @@ Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
         var l_to = l_scope[i]
         if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
             l_to.c != a_from.c && !isPawnOrPiece(this.item(l_to))) continue
-        if (this.isUnderCheck(a_king, a_from, l_to)) continue
+        if (this.isCheckTurn(a_king, a_from, l_to)) continue
         q.push(l_to)
     }
     return q

@@ -107,7 +107,7 @@ ApplicationWindow
                     {
 						var u = new ChessUtil.Layout()
 						u.clear()
-						u.fromFen("8/7k/8/8/8/8/2p5/1Q1NK3 w - - 0 1")
+						u.fromFen("8/7k/8/8/8/8/2p5/1R1NK3 w - - 0 1")
 						var q = u.legalTurns("k")
 						//u.clear()
 						console.log("#" + q.length + "#")
