@@ -43,14 +43,14 @@ function verticalToIndex(a)
     return s_verticals.indexOf(a)
 }
 
-function isPawnOrPiece(a)
+function isOcc(a)
 {
-    return s_pawnsAndPieces.indexOf(a) >= 0
+    return a != "0"
 }
 
 function isOpp(a_one, a_another)
 {
-    if (!isPawnOrPiece(a_one) || !isPawnOrPiece(a_another)) return false
+    if (!isOcc(a_one) || !isOcc(a_another)) return false
     return (a_one == a_one.toLowerCase()) != (a_another == a_another.toLowerCase())
 }
 
@@ -153,7 +153,7 @@ Layout.prototype.fen = function ()
         var l_empyCount = 0
         for (var j = 0; j < 8; j++)
         {
-            if (!isPawnOrPiece(this.m[i][j])) { l_empyCount++; continue }
+            if (!isOcc(this.m[i][j])) { l_empyCount++; continue }
             if (l_empyCount > 0) l_fen += l_empyCount
             l_fen += this.m[i][j]
             l_empyCount = 0
@@ -173,7 +173,7 @@ Layout.prototype.fromFen = function (a)
             if (sepChar(a[k])) return k
             if (a[k] == "/") { k++; break }
             if (j > 7) continue
-            if (isPawnOrPiece(a[k])) { this.m[i][j++] = a[k]; continue }
+            if (s_pawnsAndPieces.indexOf(a[k]) >= 0) { this.m[i][j++] = a[k]; continue }
             var q = parseInt(a[k])
             if (isNaN(q)) { this.m[i][j++] = "0"; continue }
             for (var l = 0; l < q && j < 8; l++) this.m[i][j++] = "0"
@@ -207,7 +207,7 @@ Layout.prototype.direction = function (a_from, a_dir)
     var q = []
     for (var i = a_from.clone().add(a_dir); i.isValid(); i.add(a_dir))
     {
-        if (!isPawnOrPiece(this.item(i))) { q.push(i.clone()); continue }
+        if (!isOcc(this.item(i))) { q.push(i.clone()); continue }
         if (isOpp(this.item(i), this.item(a_from))) q.push(i.clone())
         break
     }
@@ -244,7 +244,7 @@ Layout.prototype.queenScope = function (a_from)
 
 Layout.prototype.isPossible = function (a_from, a_to)
 {
-    return !isPawnOrPiece(this.item(a_to)) || isOpp(this.item(a_to), this.item(a_from))
+    return !isOcc(this.item(a_to)) || isOpp(this.item(a_to), this.item(a_from))
 }
 
 Layout.prototype.specialScope = function (a_from, a_rel)
@@ -276,20 +276,20 @@ Layout.prototype.pawnScope = function (a_from)
     {
         var q = []
         var u = a_from.clone().add(new Coords(0, a_dir))
-        if (u.isValid() && !isPawnOrPiece(a_this.item(u)))
+        if (u.isValid() && !isOcc(a_this.item(u)))
         {
             q.push(u)
             if (a_dir < 0 && a_from.r == 6 || a_dir > 0 && a_from.r == 1)
             {
                 u = a_from.clone().add(new Coords(0, 2 * a_dir))
-                if (!isPawnOrPiece(a_this.item(u))) q.push(u)
+                if (!isOcc(a_this.item(u))) q.push(u)
             }
         }
         u = a_from.clone().add(new Coords(-1, a_dir))
-        if (u.isValid() && (!isPawnOrPiece(a_this.item(u)) ||
+        if (u.isValid() && (!isOcc(a_this.item(u)) ||
             isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u)
         u = a_from.clone().add(new Coords(1, a_dir))
-        if (u.isValid() && (!isPawnOrPiece(a_this.item(u)) ||
+        if (u.isValid() && (!isOcc(a_this.item(u)) ||
             isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u)
         return q
     }
@@ -347,7 +347,7 @@ Layout.prototype.regularTurns = function (a_king, a_from)
     {
         var l_to = l_scope[i]
         if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
-            l_to.c != a_from.c && !isPawnOrPiece(this.item(l_to))) continue
+            l_to.c != a_from.c && !isOcc(this.item(l_to))) continue
         if (this.isCheckTurn(a_king, a_from, l_to)) continue
         q.push(l_to)
     }
@@ -394,12 +394,12 @@ Layout.prototype.castling = function (a_king, a_castling)
     var l_startIndex = (a_king == "K" ? 0 : 2)
     if (a_castling[l_startIndex] != "")
     {
-        for (i.c = 5; i.c < 7 && !isPawnOrPiece(this.item(i)) && !this.isAttacked(a_king, i); i.c++);
+        for (i.c = 5; i.c < 7 && !isOcc(this.item(i)) && !this.isAttacked(a_king, i); i.c++);
         if (i.c >= 7) q.push("0-0")
     }
     if (a_castling[l_startIndex + 1] != "")
     {
-        for (i.c = 3; i.c > 0 && !isPawnOrPiece(this.item(i)) && (i.c < 2 || !this.isAttacked(a_king, i)); i.c--);
+        for (i.c = 3; i.c > 0 && !isOcc(this.item(i)) && (i.c < 2 || !this.isAttacked(a_king, i)); i.c--);
         if (i.c <= 0) q.push("0-0-0")
     }
     return q
@@ -412,7 +412,7 @@ Layout.prototype.legalTurns = function (a_king, a_enPas, a_castling)
         for (var j = 0; j < 8; j++)
         {
             var y = new Coords(j, i)
-            if (!isPawnOrPiece(this.item(y)) || isOpp(a_king, this.item(y))) continue
+            if (!isOcc(this.item(y)) || isOpp(a_king, this.item(y))) continue
             q = q.concat(this.notationsAndPromotions(a_king, y))
         }
     if (typeof a_enPas != "undefined") q = q.concat(this.enPassant(a_king, a_enPas))

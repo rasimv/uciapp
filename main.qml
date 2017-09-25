@@ -7,8 +7,8 @@ ApplicationWindow
 {
     function func1()
     {
-        var q = ["P", "R", "N", "B", "Q", "K",
-                 "p", "r", "n", "b", "q", "k"]
+        var q = [1, 2, 3, 4, 5, 6,
+                 11, 12, 13, 14, 15, 16]
         for (var i = 0; i < q.length; i++) id_board.set(i % 8, Math.floor(i / 8), q[i])
     }
 
@@ -109,6 +109,7 @@ ApplicationWindow
 						var w = new ChessUtil.Position()
 						w.m_layout.clear()
 						w.fromFen(l_fen)
+						console.log("\r\n========================\r\n" + w.asText("\r\n"))
 
 						var l_start = new Date().getTime()
 
