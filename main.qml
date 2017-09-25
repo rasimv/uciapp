@@ -105,15 +105,22 @@ ApplicationWindow
 
                     onClicked:
                     {
+						var l_fen = "8/8/8/7k/3pPp2/8/8/3Q4 b - e3 0 1"
 						var u = new ChessUtil.Layout()
 						u.clear()
-						u.fromFen("8/7k/8/8/8/8/2p5/1B1NK3 w - - 0 1")
-						var q = u.legalTurns("k")
-						//u.clear()
+						u.fromFen(l_fen)
+
+						var w = new ChessUtil.Position()
+						w.m_layout.clear()
+						w.fromFen(l_fen)
+
+						var l_enPassant = w.m_enPassant.clone()
+						console.log("EnPassant: " + l_enPassant.c + ";" + l_enPassant.r)
+
+						var q = u.enPassant("k", l_enPassant)
 						console.log("#" + q.length + "#")
 						for (var i = 0; i < q.length; i++)
 							console.log(q[i])
-						//console.log("\r\n=============\r\n" + u.asText("\r\n"))
                     }
                 }
             }
