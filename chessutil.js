@@ -398,8 +398,7 @@ Layout.prototype.enPassant = function (a_king, a_enPas)
         var x = this.item(l_lr[i])
         if (x != "P" && x != "p" || isOpp(x, a_king)) continue
         this.swap(a_enPas, l_long)
-        if (!this.isCheckTurn(a_king, l_lr[i], a_enPas))
-            q.push(notatePair(l_lr[i], a_enPas))
+        if (!this.isCheckTurn(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
         this.swap(a_enPas, l_long)
     }
     return q
