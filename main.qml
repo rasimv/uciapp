@@ -112,7 +112,6 @@ ApplicationWindow
 						console.log("\r\n========================\r\n" + w.asText("\r\n"))
 
 						var l_start = new Date().getTime()
-
 						var q = w.m_layout.legalTurns("K", w.m_enPassant, w.m_castling)
 
 						var l_finish = new Date().getTime()
