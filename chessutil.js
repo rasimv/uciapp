@@ -339,7 +339,7 @@ Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
     return q
 }
 
-Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
+Layout.prototype.regularTurns = function (a_king, a_from)
 {
     var q = []
     var l_scope = this.pawnOrPieceScope(a_from)
@@ -357,7 +357,7 @@ Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
 Layout.prototype.notationsAndPromotions = function (a_king, a_from)
 {
     var q = []
-    var v = this.legalTurnsOfPawnOrPiece(a_king, a_from)
+    var v = this.regularTurns(a_king, a_from)
     for (var k = 0; k < v.length; k++)
     {
         var s = notatePair(a_from, v[k])
