@@ -369,6 +369,23 @@ Layout.prototype.notationsAndPromotions = function (a_king, a_from)
     return q
 }
 
+Layout.prototype.enPassant = function (a_king, a_enPas)
+{
+    var q = []
+    var l_long = new Coords(a_enPas.c, a_enPas.r + (a_king == "K" ? 1 : -1))
+    var l_lr = [new Coords(l_long.c - 1, l_long.r), new Coords(l_long.c + 1, l_long.r)]
+    for (var i = 0; i < l_lr.length; i++)
+    {
+        if (!l_lr[i].isValid()) continue
+        var x = this.item(l_lr[i])
+        if (x != "P" && x != "p" || isOpp(x, a_king)) continue
+        this.swap(a_enPas, l_long)
+        if (!this.isCheckTurn(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
+        this.swap(a_enPas, l_long)
+    }
+    return q
+}
+
 Layout.prototype.castling = function (a_king, a_castling)
 {
     var q = []
@@ -383,23 +400,6 @@ Layout.prototype.castling = function (a_king, a_castling)
     {
         for (i.c = 4; i.c > 1 && !this.isAttacked(a_king, i); i.c--);
         if (i.c <= 1) q.push("0-0-0")
-    }
-    return q
-}
-
-Layout.prototype.enPassant = function (a_king, a_enPas)
-{
-    var q = []
-    var l_long = new Coords(a_enPas.c, a_enPas.r + (a_king == "K" ? 1 : -1))
-    var l_lr = [new Coords(l_long.c - 1, l_long.r), new Coords(l_long.c + 1, l_long.r)]
-    for (var i = 0; i < l_lr.length; i++)
-    {
-        if (!l_lr[i].isValid()) continue
-        var x = this.item(l_lr[i])
-        if (x != "P" && x != "p" || isOpp(x, a_king)) continue
-        this.swap(a_enPas, l_long)
-        if (!this.isCheckTurn(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
-        this.swap(a_enPas, l_long)
     }
     return q
 }
