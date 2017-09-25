@@ -105,19 +105,15 @@ ApplicationWindow
 
                     onClicked:
                     {
-						var l_fen = "8/8/8/7k/3pPp2/8/8/3Q4 b - e3 0 1"
-						var u = new ChessUtil.Layout()
-						u.clear()
-						u.fromFen(l_fen)
-
+						var l_fen = "r1bqk2r/pppp1pp1/2n2n2/1Bb1p1Pp/4P3/5N2/PPPP1P1P/RNBQK2R w KQkq h6 0 6"
 						var w = new ChessUtil.Position()
 						w.m_layout.clear()
 						w.fromFen(l_fen)
 
-						var l_enPassant = w.m_enPassant.clone()
-						console.log("EnPassant: " + l_enPassant.c + ";" + l_enPassant.r)
-
-						var q = u.enPassant("k", l_enPassant)
+						var l_start = new Date().getTime()
+						var q = w.m_layout.legalTurns("K", w.m_enPassant, w.m_castling)
+						var l_finish = new Date().getTime()
+						console.log("time: " + (l_finish - l_start))
 						console.log("#" + q.length + "#")
 						for (var i = 0; i < q.length; i++)
 							console.log(q[i])

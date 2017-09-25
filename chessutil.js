@@ -404,7 +404,7 @@ Layout.prototype.castling = function (a_king, a_castling)
     return q
 }
 
-Layout.prototype.legalTurns = function (a_king)
+Layout.prototype.legalTurns = function (a_king, a_enPas, a_castling)
 {
     var q = []
     for (var i = 0; i < 8; i++)
@@ -414,6 +414,8 @@ Layout.prototype.legalTurns = function (a_king)
             if (!isPawnOrPiece(this.item(y)) || isOpp(a_king, this.item(y))) continue
             q = q.concat(this.notationsAndPromotions(a_king, y))
         }
+    if (typeof a_enPas != "undefined") q = q.concat(this.enPassant(a_king, a_enPas))
+    if (typeof a_castling != "undefined") q = q.concat(this.castling(a_king, a_castling))
     return q
 }
 
@@ -421,8 +423,8 @@ Layout.prototype.legalTurns = function (a_king)
 function Position()
 {
     this.m_layout = new Layout()
-    this.m_castling = ["K", "Q", "k", "q"]
     this.m_enPassant = new Coords(-1, -1)
+    this.m_castling = ["K", "Q", "k", "q"]
     this.m_pawnCaptCount = 0
     this.m_turnCount = 0
 }
