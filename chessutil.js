@@ -321,6 +321,7 @@ Layout.prototype.isCheck = function (a_king)
     return this.isAttacked(a_king, l_place)
 }
 
+//---------------------------------
 Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
 {
     var l_save = this.item(a_to)
@@ -347,6 +348,21 @@ Layout.prototype.legalTurnsOfPawnOrPiece = function (a_king, a_from)
     return q
 }
 
+Layout.prototype.notationsAndPromotions = function (a_king, a_from)
+{
+    var q = []
+    var v = this.legalTurnsOfPawnOrPiece(a_king, a_from)
+    for (var k = 0; k < v.length; k++)
+    {
+        var s = notatePair(a_from, v[k])
+        if (this.item(a_from) == "P" && v[k].r == 0 || this.item(a_from) == "p" && v[k].r == 7)
+            for (var l = 0; l < 4; l++) q.push(s + s_pawnsAndPieces[l])
+        else
+            q.push(s)
+    }
+    return q
+}
+
 Layout.prototype.legalTurns = function (a_king)
 {
     var q = []
@@ -354,10 +370,8 @@ Layout.prototype.legalTurns = function (a_king)
         for (var j = 0; j < 8; j++)
         {
             var y = new Coords(j, i)
-            if (isOpp(a_king, this.item(y))) continue
-            var v = this.legalTurnsOfPawnOrPiece(a_king, y)
-            for (var k = 0; k < v.length; k++)
-                q.push([y, v[k]])
+            if (!isPawnOrPiece(this.item(y)) || isOpp(a_king, this.item(y))) continue
+            q = q.concat(this.notationsAndPromotions(a_king, y))
         }
     return q
 }
