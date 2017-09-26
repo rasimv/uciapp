@@ -112,7 +112,7 @@ ApplicationWindow
 						console.log("\r\n========================\r\n" + w.asText("\r\n"))
 
 						var l_start = new Date().getTime()
-						var q = w.legalTurns()
+						var q = w.legalPlies()
 
 						var l_finish = new Date().getTime()
 
