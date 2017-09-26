@@ -106,10 +106,60 @@ Coords.prototype.fromNotation = function (a)
     this.r = verticalToIndex(a[1])
 }
 
+Coords.prototype.asText = function ()
+{
+    return "(" + this.c + ";" + this.r + ")"
+}
+
 //------------------------------------------------------------------------------
 function notatePair(a_from, a_to)
 {
     return a_from.notation() + a_to.notation()
+}
+
+function coordsFromNotation(a)
+{
+    var l = new Coords(-1, -1);
+    l.fromNotation(a)
+    return l
+}
+
+//------------------------------------------------------------------------------
+function PlyInfo(a_notat, a_king, a_enPas)
+{
+    this.m_transp = []
+    this.m_promotion = ""
+    if (a_notat == "0-0")
+    {
+        var r = a_king == "K" ? 7 : 0
+        this.m_transp.push([new Coords(4, r), new Coords(6, r)])
+        this.m_transp.push([new Coords(7, r), new Coords(5, r)])
+        return
+    }
+    if (a_notat == "0-0-0")
+    {
+        var r = a_king == "K" ? 7 : 0
+        this.m_transp.push([new Coords(4, r), new Coords(2, r)])
+        this.m_transp.push([new Coords(0, r), new Coords(3, r)])
+        return
+    }
+    var l_from = coordsFromNotation(a_notat)
+    var l_to = coordsFromNotation(a_notat.substring(2))
+    this.m_transp.push([l_from, l_to])
+    if (a_notat.length > 4)
+        this.m_promotion = a_king == "K" ? a_notat[4].toUpperCase() : a_notat[4].toLowerCase()
+    if (a_enPas) this.m_transp.push([new Coords(l_to.c, l_from.r), new Coords(-1, -1)])
+}
+
+PlyInfo.prototype.asText = function ()
+{
+    var s = ""
+    for (var i = 0; i < this.m_transp.length; i++)
+    {
+        if (i > 0) s += ","
+        s += this.m_transp[i][0].asText() + this.m_transp[i][1].asText()
+    }
+    return "{" + s + this.m_promotion + "}"
 }
 
 //------------------------------------------------------------------------------
@@ -406,7 +456,7 @@ Layout.prototype.castling = function (a_king, a_castling)
     var q = []
     var i = new Coords(4, a_king == "K" ? 7 : 0)
     if (this.isAttacked(a_king, i)) return []
-    var l_startIndex = (a_king == "K" ? 0 : 2)
+    var l_startIndex = a_king == "K" ? 0 : 2
     if (a_castling[l_startIndex] != "")
     {
         for (i.c = 5; i.c < 7 && !isOcc(this.item(i)) && !this.isAttacked(a_king, i); i.c++);
@@ -508,7 +558,7 @@ Position.prototype.fen = function ()
     var l_castling = ""
     for (var i = 0; i < this.m_castling.length; i++)
         if (this.m_castling[i] != "") l_castling += this.m_castling[i]
-    l_fen += (l_castling != "" ? l_castling : "-")
+    l_fen += l_castling != "" ? l_castling : "-"
     l_fen += " " + (this.m_enPassant.isValid() ? this.m_enPassant.notation() : "-")
     l_fen += " " + this.m_pawnCaptCount + " " + (Math.floor(this.m_turnCount / 2) + 1)
     return l_fen
@@ -539,7 +589,7 @@ Position.prototype.fromFen = function (a)
     if (q.length > 4)
     {
         var n = Number(q[4])
-        this.m_pawnCaptCount = (isNaN(n) || n < 0 ? 0 : Math.round(n))
+        this.m_pawnCaptCount = isNaN(n) || n < 0 ? 0 : Math.round(n)
     }
     if (q.length > 5)
     {
