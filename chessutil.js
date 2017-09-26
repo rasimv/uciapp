@@ -480,8 +480,8 @@ Layout.prototype.legalTurns = function (a_king, a_enPas, a_castling)
             if (!isOcc(this.item(y)) || isOpp(a_king, this.item(y))) continue
             q = q.concat(this.notationsAndPromotions(a_king, y))
         }
-    if (typeof a_enPas != "undefined") q = q.concat(this.enPassant(a_king, a_enPas))
-    if (typeof a_castling != "undefined") q = q.concat(this.castling(a_king, a_castling))
+    q = q.concat(this.enPassant(a_king, a_enPas))
+    q = q.concat(this.castling(a_king, a_castling))
     return q
 }
 
