@@ -125,30 +125,20 @@ function coordsFromNotation(a)
 }
 
 //------------------------------------------------------------------------------
-function PlyInfo(a_notat, a_king, a_enPas)
+function PlyInfo()
 {
     this.m_transp = []
     this.m_promotion = ""
-    if (a_notat == "0-0")
-    {
-        var r = a_king == "K" ? 7 : 0
-        this.m_transp.push([new Coords(4, r), new Coords(6, r)])
-        this.m_transp.push([new Coords(7, r), new Coords(5, r)])
-        return
-    }
-    if (a_notat == "0-0-0")
-    {
-        var r = a_king == "K" ? 7 : 0
-        this.m_transp.push([new Coords(4, r), new Coords(2, r)])
-        this.m_transp.push([new Coords(0, r), new Coords(3, r)])
-        return
-    }
-    var l_from = coordsFromNotation(a_notat)
-    var l_to = coordsFromNotation(a_notat.substring(2))
-    this.m_transp.push([l_from, l_to])
-    if (a_notat.length > 4)
-        this.m_promotion = a_king == "K" ? a_notat[4].toUpperCase() : a_notat[4].toLowerCase()
-    if (a_enPas) this.m_transp.push([new Coords(l_to.c, l_from.r), new Coords(-1, -1)])
+}
+
+PlyInfo.prototype.pushPair = function (a_from, a_to)
+{
+    this.m_transp.push([a_from, a_to])
+}
+
+PlyInfo.prototype.setPromotion = function (a)
+{
+    this.m_promotion = a
 }
 
 PlyInfo.prototype.asText = function ()
@@ -485,6 +475,38 @@ Layout.prototype.legalPlies = function (a_king, a_enPas, a_castling)
     return q
 }
 
+Layout.prototype.isEnPassant = function (a_from, a_to)
+{
+    return this.item(a_from).toLowerCase() == "p" && a_to.c != a_from.c && !isOcc(this.item(a_to))
+}
+
+Layout.prototype.decodePly = function (a_notat, a_king)
+{
+    var g = new PlyInfo()
+    if (a_notat == "0-0")
+    {
+        var r = a_king == "K" ? 7 : 0
+        g.pushPair(new Coords(4, r), new Coords(6, r))
+        g.pushPair(new Coords(7, r), new Coords(5, r))
+        return g
+    }
+    if (a_notat == "0-0-0")
+    {
+        var r = a_king == "K" ? 7 : 0
+        g.pushPair(new Coords(4, r), new Coords(2, r))
+        g.pushPair(new Coords(0, r), new Coords(3, r))
+        return g
+    }
+    var l_from = coordsFromNotation(a_notat)
+    var l_to = coordsFromNotation(a_notat.substring(2))
+    g.pushPair(l_from, l_to)
+    if (a_notat.length > 4)
+        g.setPromotion(a_king == "K" ? a_notat[4].toUpperCase() : a_notat[4].toLowerCase())
+    if (this.isEnPassant(l_from, l_to))
+        g.pushPair(new Coords(l_to.c, l_from.r), new Coords(-1, -1))
+    return g
+}
+
 Layout.prototype.fen = function ()
 {
     var l_fen = ""
@@ -548,6 +570,12 @@ Position.prototype.legalPlies = function ()
 {
     var l_king = this.m_turnCount % 2 ? "k" : "K"
     return this.m_layout.legalPlies(l_king, this.m_enPassant, this.m_castling)
+}
+
+Position.prototype.decodePly = function (a_notation)
+{
+    var l_king = this.m_turnCount % 2 ? "k" : "K"
+    return this.m_layout.decodePly(a_notation, l_king)
 }
 
 Position.prototype.fen = function ()
