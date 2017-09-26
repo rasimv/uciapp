@@ -343,7 +343,7 @@ Layout.prototype.isCheck = function (a_king)
     return this.isAttacked(a_king, l_place)
 }
 
-Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
+Layout.prototype.isCheckPly = function (a_king, a_from, a_to)
 {
     var l_save = this.item(a_to)
     this.setItem(a_to, this.item(a_from))
@@ -354,7 +354,7 @@ Layout.prototype.isCheckTurn = function (a_king, a_from, a_to)
     return q
 }
 
-Layout.prototype.regularTurns = function (a_king, a_from)
+Layout.prototype.basicPlies = function (a_king, a_from)
 {
     var q = []
     var l_scope = this.pawnOrPieceScope(a_from)
@@ -363,7 +363,7 @@ Layout.prototype.regularTurns = function (a_king, a_from)
         var l_to = l_scope[i]
         if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
             l_to.c != a_from.c && !isOcc(this.item(l_to))) continue
-        if (this.isCheckTurn(a_king, a_from, l_to)) continue
+        if (this.isCheckPly(a_king, a_from, l_to)) continue
         q.push(l_to)
     }
     return q
@@ -372,7 +372,7 @@ Layout.prototype.regularTurns = function (a_king, a_from)
 Layout.prototype.notationsAndPromotions = function (a_king, a_from)
 {
     var q = []
-    var v = this.regularTurns(a_king, a_from)
+    var v = this.basicPlies(a_king, a_from)
     for (var k = 0; k < v.length; k++)
     {
         var s = notatePair(a_from, v[k])
@@ -395,7 +395,7 @@ Layout.prototype.enPassant = function (a_king, a_enPas)
         var x = this.item(l_lr[i])
         if (x != "P" && x != "p" || isOpp(x, a_king)) continue
         this.swap(a_enPas, l_long)
-        if (!this.isCheckTurn(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
+        if (!this.isCheckPly(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
         this.swap(a_enPas, l_long)
     }
     return q
@@ -420,7 +420,7 @@ Layout.prototype.castling = function (a_king, a_castling)
     return q
 }
 
-Layout.prototype.legalTurns = function (a_king, a_enPas, a_castling)
+Layout.prototype.legalPlies = function (a_king, a_enPas, a_castling)
 {
     var q = []
     for (var i = 0; i < 8; i++)
@@ -494,10 +494,10 @@ function Position()
     this.m_turnCount = 0
 }
 
-Position.prototype.legalTurns = function ()
+Position.prototype.legalPlies = function ()
 {
     var l_king = this.m_turnCount % 2 ? "k" : "K"
-    return this.m_layout.legalTurns(l_king, this.m_enPassant, this.m_castling)
+    return this.m_layout.legalPlies(l_king, this.m_enPassant, this.m_castling)
 }
 
 Position.prototype.fen = function ()
