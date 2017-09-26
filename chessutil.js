@@ -149,56 +149,6 @@ Layout.prototype.clear = function ()
             this.m[i][j] = "0"
 }
 
-Layout.prototype.fen = function ()
-{
-    var l_fen = ""
-    for (var i = 0; i < 8; i++)
-    {
-        if (i > 0) l_fen += "/"
-        var l_empyCount = 0
-        for (var j = 0; j < 8; j++)
-        {
-            if (!isOcc(this.m[i][j])) { l_empyCount++; continue }
-            if (l_empyCount > 0) l_fen += l_empyCount
-            l_fen += this.m[i][j]
-            l_empyCount = 0
-        }
-        if (l_empyCount > 0) l_fen += l_empyCount
-    }
-    return l_fen
-}
-
-Layout.prototype.fromFen = function (a)
-{
-    var k = 0
-    for (var i = 0; i < 8; i++)
-    {
-        for (var j = 0; k < a.length; k++)
-        {
-            if (sepChar(a[k])) return k
-            if (a[k] == "/") { k++; break }
-            if (j > 7) continue
-            if (s_pawnsAndPieces.indexOf(a[k]) >= 0) { this.m[i][j++] = a[k]; continue }
-            var q = parseInt(a[k])
-            if (isNaN(q)) { this.m[i][j++] = "0"; continue }
-            for (var l = 0; l < q && j < 8; l++) this.m[i][j++] = "0"
-        }
-    }
-    return k
-}
-
-Layout.prototype.asText = function (a_newline)
-{
-    var s = ""
-    for (var i = 0; i < 8; i++)
-    {
-        if (i > 0) s += a_newline
-        for (var j = 0; j < 8; j++)
-            s += this.m[i][j]
-    }
-    return s
-}
-
 Layout.prototype.findFirst = function (a_pawnOrPiece)
 {
     for (var i = 0; i < 8; i++)
@@ -485,6 +435,55 @@ Layout.prototype.legalTurns = function (a_king, a_enPas, a_castling)
     return q
 }
 
+Layout.prototype.fen = function ()
+{
+    var l_fen = ""
+    for (var i = 0; i < 8; i++)
+    {
+        if (i > 0) l_fen += "/"
+        var l_empyCount = 0
+        for (var j = 0; j < 8; j++)
+        {
+            if (!isOcc(this.m[i][j])) { l_empyCount++; continue }
+            if (l_empyCount > 0) l_fen += l_empyCount
+            l_fen += this.m[i][j]
+            l_empyCount = 0
+        }
+        if (l_empyCount > 0) l_fen += l_empyCount
+    }
+    return l_fen
+}
+
+Layout.prototype.fromFen = function (a)
+{
+    var k = 0
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; k < a.length; k++)
+        {
+            if (sepChar(a[k])) return k
+            if (a[k] == "/") { k++; break }
+            if (j > 7) continue
+            if (s_pawnsAndPieces.indexOf(a[k]) >= 0) { this.m[i][j++] = a[k]; continue }
+            var q = parseInt(a[k])
+            if (isNaN(q)) { this.m[i][j++] = "0"; continue }
+            for (var l = 0; l < q && j < 8; l++) this.m[i][j++] = "0"
+        }
+    }
+    return k
+}
+
+Layout.prototype.asText = function (a_newline)
+{
+    var s = ""
+    for (var i = 0; i < 8; i++)
+    {
+        if (i > 0) s += a_newline
+        for (var j = 0; j < 8; j++)
+            s += this.m[i][j]
+    }
+    return s
+}
+
 //------------------------------------------------------------------------------
 function Position()
 {
@@ -551,14 +550,4 @@ Position.prototype.asText = function (a_newline)
     s += a_newline + "pawn capt count: |" + this.m_pawnCaptCount + "|"
     s += a_newline + "turn count: |" + this.m_turnCount + "|"
     return s
-}
-
-Position.prototype.turn = function (a_notation)
-{
-    if (a_notation == "0-0")
-    {}
-    else if (a_notation == "0-0-0")
-    {}
-    else
-    {}
 }
