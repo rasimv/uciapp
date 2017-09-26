@@ -494,6 +494,12 @@ function Position()
     this.m_turnCount = 0
 }
 
+Position.prototype.legalTurns = function ()
+{
+    var l_king = this.m_turnCount % 2 ? "k" : "K"
+    return this.m_layout.legalTurns(l_king, this.m_enPassant, this.m_castling)
+}
+
 Position.prototype.fen = function ()
 {
     //"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
