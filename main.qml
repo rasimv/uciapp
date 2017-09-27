@@ -105,8 +105,8 @@ ApplicationWindow
 
                     onClicked:
                     {
-						var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6"
-						//var l_fen = "3n1b1r/p1P1pkp1/5p1p/5b2/5N1P/R1B3n1/5PP1/1N3RK1 w - - 16 27"
+						//var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6"
+						var l_fen = "r1bqkb1r/pPpp2pp/8/1B2ppP1/1n2P2n/5N2/PP1P1P1P/RNBQK2R w KQkq - 1 10"
 						var w = new ChessUtil.Position()
 						w.m_layout.clear()
 						w.fromFen(l_fen)

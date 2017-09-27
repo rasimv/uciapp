@@ -517,10 +517,55 @@ function Position()
     this.m_turnCount = 0
 }
 
+Position.prototype.enPassant = function ()
+{
+    var q = []
+    var l_king = this.m_turnCount % 2 ? "k" : "K"
+    var l_long = new Coords(this.m_enPassant.c, this.m_enPassant.r + (l_king == "K" ? 1 : -1))
+    var l_lr = [new Coords(l_long.c - 1, l_long.r), new Coords(l_long.c + 1, l_long.r)]
+    for (var i = 0; i < l_lr.length; i++)
+    {
+        if (!l_lr[i].isValid()) continue
+        var x = this.m_layout.item(l_lr[i])
+        if (x != "P" && x != "p" || isOpp(x, l_king)) continue
+        this.m_layout.swap(l_long, this.m_enPassant)
+        if (!this.m_layout.isCheckPly(l_king, l_lr[i], this.m_enPassant))
+            q.push(notatePair(l_lr[i], this.m_enPassant))
+        this.m_layout.swap(l_long, this.m_enPassant)
+    }
+    return q
+}
+
+Position.prototype.castling = function ()
+{
+    var q = []
+    var l_king = this.m_turnCount % 2 ? "k" : "K"
+    var i = new Coords(4, l_king == "K" ? 7 : 0)
+    if (this.m_layout.isAttacked(l_king, i)) return []
+    var l_startIndex = l_king == "K" ? 0 : 2
+    if (this.m_castling[l_startIndex] != "")
+    {
+        for (i.c = 5; i.c < 7 && !isOcc(this.m_layout.item(i)) &&
+            !this.m_layout.isAttacked(l_king, i); i.c++);
+        if (i.c >= 7) q.push("0-0")
+    }
+    if (this.m_castling[l_startIndex + 1] != "")
+    {
+        for (i.c = 3; i.c > 0 && !isOcc(this.m_layout.item(i)) &&
+            (i.c < 2 || !this.m_layout.isAttacked(l_king, i)); i.c--);
+        if (i.c <= 0) q.push("0-0-0")
+    }
+    return q
+}
+
 Position.prototype.legalPlies = function ()
 {
+    var q = []
     var l_king = this.m_turnCount % 2 ? "k" : "K"
-    return this.m_layout.basicPlies(l_king)
+    q = q.concat(this.m_layout.basicPlies(l_king))
+    q = q.concat(this.enPassant())
+    q = q.concat(this.castling())
+    return q
 }
 
 Position.prototype.decodePly = function (a_notation)
