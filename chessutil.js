@@ -394,7 +394,7 @@ Layout.prototype.isCheckPly = function (a_king, a_from, a_to)
     return q
 }
 
-Layout.prototype.basicPlies = function (a_king, a_from)
+Layout.prototype.pawnOrPiecePlies = function (a_king, a_from)
 {
     var q = []
     var l_scope = this.pawnOrPieceScope(a_from)
@@ -404,19 +404,8 @@ Layout.prototype.basicPlies = function (a_king, a_from)
         if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
             l_to.c != a_from.c && !isOcc(this.item(l_to))) continue
         if (this.isCheckPly(a_king, a_from, l_to)) continue
-        q.push(l_to)
-    }
-    return q
-}
-
-Layout.prototype.notationsAndPromotions = function (a_king, a_from)
-{
-    var q = []
-    var v = this.basicPlies(a_king, a_from)
-    for (var k = 0; k < v.length; k++)
-    {
-        var s = notatePair(a_from, v[k])
-        if (this.item(a_from) == "P" && v[k].r == 0 || this.item(a_from) == "p" && v[k].r == 7)
+        var s = notatePair(a_from, l_to)
+        if (this.item(a_from) == "P" && l_to.r == 0 || this.item(a_from) == "p" && l_to.r == 7)
             for (var l = 0; l < 4; l++) q.push(s + s_pawnsAndPieces[l])
         else
             q.push(s)
@@ -424,54 +413,16 @@ Layout.prototype.notationsAndPromotions = function (a_king, a_from)
     return q
 }
 
-Layout.prototype.enPassant = function (a_king, a_enPas)
-{
-    var q = []
-    var l_long = new Coords(a_enPas.c, a_enPas.r + (a_king == "K" ? 1 : -1))
-    var l_lr = [new Coords(l_long.c - 1, l_long.r), new Coords(l_long.c + 1, l_long.r)]
-    for (var i = 0; i < l_lr.length; i++)
-    {
-        if (!l_lr[i].isValid()) continue
-        var x = this.item(l_lr[i])
-        if (x != "P" && x != "p" || isOpp(x, a_king)) continue
-        this.swap(a_enPas, l_long)
-        if (!this.isCheckPly(a_king, l_lr[i], a_enPas)) q.push(notatePair(l_lr[i], a_enPas))
-        this.swap(a_enPas, l_long)
-    }
-    return q
-}
-
-Layout.prototype.castling = function (a_king, a_castling)
-{
-    var q = []
-    var i = new Coords(4, a_king == "K" ? 7 : 0)
-    if (this.isAttacked(a_king, i)) return []
-    var l_startIndex = a_king == "K" ? 0 : 2
-    if (a_castling[l_startIndex] != "")
-    {
-        for (i.c = 5; i.c < 7 && !isOcc(this.item(i)) && !this.isAttacked(a_king, i); i.c++);
-        if (i.c >= 7) q.push("0-0")
-    }
-    if (a_castling[l_startIndex + 1] != "")
-    {
-        for (i.c = 3; i.c > 0 && !isOcc(this.item(i)) && (i.c < 2 || !this.isAttacked(a_king, i)); i.c--);
-        if (i.c <= 0) q.push("0-0-0")
-    }
-    return q
-}
-
-Layout.prototype.legalPlies = function (a_king, a_enPas, a_castling)
+Layout.prototype.basicPlies = function (a_king)
 {
     var q = []
     for (var i = 0; i < 8; i++)
         for (var j = 0; j < 8; j++)
         {
-            var y = new Coords(j, i)
-            if (!isOcc(this.item(y)) || isOpp(a_king, this.item(y))) continue
-            q = q.concat(this.notationsAndPromotions(a_king, y))
+            var l_from = new Coords(j, i)
+            if (!isOcc(this.item(l_from)) || isOpp(a_king, this.item(l_from))) continue
+            q = q.concat(this.pawnOrPiecePlies(a_king, l_from))
         }
-    q = q.concat(this.enPassant(a_king, a_enPas))
-    q = q.concat(this.castling(a_king, a_castling))
     return q
 }
 
@@ -569,7 +520,7 @@ function Position()
 Position.prototype.legalPlies = function ()
 {
     var l_king = this.m_turnCount % 2 ? "k" : "K"
-    return this.m_layout.legalPlies(l_king, this.m_enPassant, this.m_castling)
+    return this.m_layout.basicPlies(l_king)
 }
 
 Position.prototype.decodePly = function (a_notation)
