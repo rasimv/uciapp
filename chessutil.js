@@ -127,32 +127,24 @@ function coordsFromNotation(a)
 //------------------------------------------------------------------------------
 function PlyInfo()
 {
-    this.m_transp = []
-    this.m_promotion = ""
+    this.transp = []
+    this.promotion = ""
 }
-
-PlyInfo.prototype.transp = function () { return this.m_transp }
-PlyInfo.prototype.promotion = function () { return this.m_promotion }
 
 PlyInfo.prototype.pushPair = function (a_from, a_to)
 {
-    this.m_transp.push([a_from, a_to])
-}
-
-PlyInfo.prototype.setPromotion = function (a)
-{
-    this.m_promotion = a
+    this.transp.push([a_from, a_to])
 }
 
 PlyInfo.prototype.asText = function ()
 {
     var s = ""
-    for (var i = 0; i < this.m_transp.length; i++)
+    for (var i = 0; i < this.transp.length; i++)
     {
         if (i > 0) s += ","
-        s += this.m_transp[i][0].asText() + this.m_transp[i][1].asText()
+        s += this.transp[i][0].asText() + this.transp[i][1].asText()
     }
-    return "{" + s + this.m_promotion + "}"
+    return "{" + s + this.promotion + "}"
 }
 
 //------------------------------------------------------------------------------
@@ -461,18 +453,18 @@ Layout.prototype.decodePly = function (a_notat, a_king)
     return g
 }
 
-Layout.prototype.makePly = function (a_notation, a_king)
+Layout.prototype.makePly = function (a_notation, a_king, a_isCapture)
 {
     var g = this.decodePly(a_notation, a_king)
-    var t = g.transp()
-    for (var k = 0; k < t.length; k++)
+    if (typeof a_isCapture != "undefined") g.isCapture = isOcc(this.item(g.transp[0][1])) ||
+        this.item(g.transp[0][0]).toLowerCase() == "p" && g.transp[0][0].c != g.transp[0][1].c
+    for (var k = 0; k < g.transp.length; k++)
     {
-        if (!t[k][1].isValid()) { this.setItem(t[k][0], "0"); continue }
-        this.setItem(t[k][1], this.item(t[k][0]))
-        this.setItem(t[k][0], "0")
+        if (!g.transp[k][1].isValid()) { this.setItem(g.transp[k][0], "0"); continue }
+        this.setItem(g.transp[k][1], this.item(g.transp[k][0]))
+        this.setItem(g.transp[k][0], "0")
     }
-    var p = g.promotion()
-    if (p != "") this.setItem(t[0][1], p)
+    if (g.promotion != "") this.setItem(g.transp[0][1], g.promotion)
     return g
 }
 
@@ -595,23 +587,19 @@ Position.prototype.decodePly = function (a_notation)
 Position.prototype.makePly = function (a_notation)
 {
     var l_king = this.m_turnCount % 2 ? "k" : "K"
-    var g = this.m_layout.makePly(a_notation, l_king)
-
-    var t = g.transp()
+    var g = this.m_layout.makePly(a_notation, l_king, 1)
+    var t = g.transp
     var x = this.m_layout.item(t[0][1])
-
     if (x == "P" && t[0][0].r > t[0][1].r + 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r + 1)
     else if (x == "p" && t[0][0].r < t[0][1].r - 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r - 1)
     else if (this.m_enPassant.isValid()) this.m_enPassant = new Coords(-1, -1)
-
-    //todo: castling
     if (this.m_castling[0] != "" && (x == "K" || t[0][0].isEqual(new Coords(7, 7)))) this.m_castling[0] = ""
     if (this.m_castling[1] != "" && (x == "K" || t[0][0].isEqual(new Coords(0, 7)))) this.m_castling[1] = ""
     if (this.m_castling[2] != "" && (x == "k" || t[0][0].isEqual(new Coords(7, 0)))) this.m_castling[2] = ""
     if (this.m_castling[3] != "" && (x == "k" || t[0][0].isEqual(new Coords(0, 0)))) this.m_castling[3] = ""
-
+    if (x == "P" || x == "p" || g.isCapture) this.m_pawnCaptCount = 0
+    else this.m_pawnCaptCount++
     this.m_turnCount++
-
     return g
 }
 
