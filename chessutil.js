@@ -131,6 +131,9 @@ function PlyInfo()
     this.m_promotion = ""
 }
 
+PlyInfo.prototype.transp = function () { return this.m_transp }
+PlyInfo.prototype.promotion = function () { return this.m_promotion }
+
 PlyInfo.prototype.pushPair = function (a_from, a_to)
 {
     this.m_transp.push([a_from, a_to])
@@ -458,6 +461,21 @@ Layout.prototype.decodePly = function (a_notat, a_king)
     return g
 }
 
+Layout.prototype.makePly = function (a_notation, a_king)
+{
+    var g = this.decodePly(a_notation, a_king)
+    var t = g.transp()
+    for (var k = 0; k < t.length; k++)
+    {
+        if (!t[k][1].isValid()) { this.setItem(t[k][0], "0"); continue }
+        this.setItem(t[k][1], this.item(t[k][0]))
+        this.setItem(t[k][0], "0")
+    }
+    var p = g.promotion()
+    if (p != "") this.setItem(t[0][1], p)
+    return g
+}
+
 Layout.prototype.fen = function ()
 {
     var l_fen = ""
@@ -572,6 +590,29 @@ Position.prototype.decodePly = function (a_notation)
 {
     var l_king = this.m_turnCount % 2 ? "k" : "K"
     return this.m_layout.decodePly(a_notation, l_king)
+}
+
+Position.prototype.makePly = function (a_notation)
+{
+    var l_king = this.m_turnCount % 2 ? "k" : "K"
+    var g = this.m_layout.makePly(a_notation, l_king)
+
+    var t = g.transp()
+    var x = this.m_layout.item(t[0][1])
+
+    if (x == "P" && t[0][0].r > t[0][1].r + 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r + 1)
+    else if (x == "p" && t[0][0].r < t[0][1].r - 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r - 1)
+    else if (this.m_enPassant.isValid()) this.m_enPassant = new Coords(-1, -1)
+
+    //todo: castling
+    if (this.m_castling[0] != "" && (x == "K" || t[0][0].isEqual(new Coords(7, 7)))) this.m_castling[0] = ""
+    if (this.m_castling[1] != "" && (x == "K" || t[0][0].isEqual(new Coords(0, 7)))) this.m_castling[1] = ""
+    if (this.m_castling[2] != "" && (x == "k" || t[0][0].isEqual(new Coords(7, 0)))) this.m_castling[2] = ""
+    if (this.m_castling[3] != "" && (x == "k" || t[0][0].isEqual(new Coords(0, 0)))) this.m_castling[3] = ""
+
+    this.m_turnCount++
+
+    return g
 }
 
 Position.prototype.fen = function ()
