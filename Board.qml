@@ -4,6 +4,8 @@ import QtQuick.Controls 2.0
 
 Item
 {
+    property var m_colors: ["#707070", "#909090"]
+
     GridLayout
     {
         columns: 8
@@ -17,9 +19,10 @@ Item
             model: 64
             Field
             {
+                m_color: m_colors[(Math.floor(index / 8) % 2 + index % 2) % 2]
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                m_color: (Math.floor(index / 8) % 2 + index % 2) % 2 ? "#707070" : "#909090"
             }
         }
     }
