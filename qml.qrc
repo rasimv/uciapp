@@ -1,13 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>chessutil.js</file>
-        <file>main.qml</file>
+        <file>field.js</file>
         <file>Field.qml</file>
         <file>Board.qml</file>
         <file>Human.qml</file>
         <file>Comp.qml</file>
         <file>Logic.qml</file>
         <file>SidePanel.qml</file>
+        <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>images/Chess_pdt45.svg</file>
     </qresource>
 </RCC>

@@ -4,7 +4,13 @@ import QtQuick.Controls 2.0
 
 Item
 {
+    id: id_board
     property var m_colors: ["#707070", "#909090"]
+
+    function qqq()
+    {
+        id_repeater.itemAt(5).set("P");
+    }
 
     GridLayout
     {
@@ -16,9 +22,12 @@ Item
 
         Repeater
         {
+            id: id_repeater
             model: 64
+
             Field
             {
+                m_index: index
                 m_color: m_colors[(Math.floor(index / 8) % 2 + index % 2) % 2]
 
                 Layout.fillWidth: true

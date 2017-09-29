@@ -5,21 +5,9 @@ import "chessutil.js" as ChessUtil
 
 ApplicationWindow
 {
-    function func1()
-    {
-        var q = [1, 2, 3, 4, 5, 6,
-                 11, 12, 13, 14, 15, 16]
-        for (var i = 0; i < q.length; i++) id_board.set(i % 8, Math.floor(i / 8), q[i])
-    }
-
     function func2()
     {
-        var l_pos = ["rnbqkbnr",
-                     "pppppppp",
-                     "00000000", "00000000", "00000000", "00000000",
-                     "PPPPPPPP",
-                     "RNBQKBNR"]
-        id_board.setFromArray(l_pos)
+        id_board.qqq()
     }
 
     Logic
@@ -95,7 +83,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        func2()
+                        func2();
                     }
                 }
 
@@ -105,29 +93,29 @@ ApplicationWindow
 
                     onClicked:
                     {
-						//var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6"
-						var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6"
-						var w = new ChessUtil.Position()
-						w.m_layout.clear()
-						w.fromFen(l_fen)
-						console.log("========================\r\n" + w.asText("\r\n"))
+                        //var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
+                        var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
+                        var w = new ChessUtil.Position();
+                        w.m_layout.clear();
+                        w.fromFen(l_fen);
+                        console.log("========================\r\n" + w.asText("\r\n"));
 
-						var l_start = new Date().getTime()
-						var q = w.legalPlies()
+                        var l_start = new Date().getTime();
+                        var q = w.legalPlies();
 
-						var l_finish = new Date().getTime()
+                        var l_finish = new Date().getTime();
 
-						console.log("time: " + (l_finish - l_start))
-						console.log("#" + q.length + "#")
-						for (var i = 0; i < q.length; i++)
-						{
-							var z = w.decodePly(q[i])
-							console.log(q[i] + "->" + z.asText())
-						}
+                        console.log("time: " + (l_finish - l_start));
+                        console.log("#" + q.length + "#");
+                        for (var i = 0; i < q.length; i++)
+                        {
+                            var z = w.decodePly(q[i]);
+                            console.log(q[i] + "->" + z.asText());
+                        }
 
-						w.makePly("f3e5")
-						console.log("========================\r\n" + w.asText("\r\n"))
-						console.log(w.fen())
+                        w.makePly("f3e5");
+                        console.log("========================\r\n" + w.asText("\r\n"));
+                        console.log(w.fen());
                     }
                 }
             }

@@ -76,6 +76,9 @@
     <None Include="chessutil.js">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="field.js">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">
