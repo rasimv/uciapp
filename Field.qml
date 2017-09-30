@@ -32,4 +32,21 @@ Item
             Qt.createQmlObject(FieldJS.imageQML("images/Chess_pdt45.svg"), id_cell, "Field.qml");
         }
     }
+
+    property int m_z
+    property bool dragActive: id_mouseArea.drag.active
+
+    onDragActiveChanged:
+    {
+        if (dragActive) { m_z = z; z = 1; }
+        else z = m_z;
+    }
+
+    MouseArea
+    {
+        id: id_mouseArea
+        anchors.fill: parent
+
+        drag.target: id_cell
+    }
 }
