@@ -76,7 +76,7 @@
     <None Include="chessutil.js">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="field.js">
+    <None Include="board.js">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
