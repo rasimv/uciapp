@@ -19,9 +19,7 @@ function imageQML(a_filename)
             "import QtQuick.Controls 2.0\n" +
             "Image\n" +
             "{\n" +
-                "x: 0; y: 0\n" +
-                "width: parent.width\n" +
-                "height: parent.height\n" +
+                "anchors.fill: parent\n" +
                 "sourceSize.width: 256\n" +
                 "sourceSize.height: 256\n" +
                 "source: \"%1\"\n" +

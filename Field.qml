@@ -19,7 +19,9 @@ Item
     Item
     {
         id: id_cell
-        anchors.fill: parent
+        x: 0; y: 0
+        width: parent.width
+        height: parent.height
 
         function set(a)
         {
