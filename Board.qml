@@ -51,10 +51,7 @@ Item
 
         Placeholder
         {
-            width: 70
-            height: 70
-            x: 80 * index
-
+            visible: false
             filepath: modelData
         }
     }
@@ -91,13 +88,16 @@ Item
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
         m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.value));
+        m_placeholder.width = m_dragged.width; m_placeholder.height = m_dragged.height;
+        m_placeholder.setCenter(a_pos);
+        m_placeholder.visible = true;
+        m_dragged.mask = true;
     }
 
     function dragging(a_pos)
     {
         console.log("dragging");
-        m_placeholder.x = a_pos.x;
-        m_placeholder.y = a_pos.y;
+        m_placeholder.setCenter(a_pos);
     }
 
     function drop(a_pos)

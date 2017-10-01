@@ -57,11 +57,7 @@ BoardData.prototype.transition = function (a_sig)
             this.m_state = this.m_board.isDraggable(this.m_pressedPos) ? BD_S_MOUSE_PRESSED_2 : BD_S_DEFAULT;
             break;
         case BD_S_MOUSE_PRESSED_2:
-            if (a_sig == BD_SIG_MOUSE_RELEASED)
-            {
-                this.m_state = BD_S_MOUSE_DROP;
-                return true;
-            }
+            if (a_sig == BD_SIG_MOUSE_RELEASED) this.m_state = BD_S_DEFAULT;
             else if (Math.abs(this.m_pos.x - this.m_pressedPos.x) > s_dragTolerance ||
                 Math.abs(this.m_pos.y - this.m_pressedPos.y) > s_dragTolerance)
             {

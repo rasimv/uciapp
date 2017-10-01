@@ -6,14 +6,8 @@ import "board.js" as BoardJS
 Item
 {
     property color magicColor
+    property bool mask: false
     property string value: "0"
-
-    onValueChanged:
-    {
-        var l_filepath = BoardJS.imageFilepath(value);
-        id_image.source = l_filepath;
-        id_image.visible = l_filepath != "";
-    }
 
     Rectangle
     {
@@ -27,5 +21,17 @@ Item
         anchors.fill: parent
         sourceSize.width: 256
         sourceSize.height: 256
+    }
+
+    onMaskChanged:
+    {
+        id_image.visible = !mask;
+    }
+
+    onValueChanged:
+    {
+        var l_filepath = BoardJS.imageFilepath(value);
+        id_image.source = l_filepath;
+        id_image.visible = l_filepath != "";
     }
 }
