@@ -61,19 +61,34 @@ Item
     {
         anchors.fill: parent
 
-        onPositionChanged:
-        {
-            m_data.mousePosChanged(Qt.point(mouse.x, mouse.y))
-        }
-
         onPressed:
         {
-            m_data.mousePressed(Qt.point(mouse.x, mouse.y))
+            m_data.mousePressed(Qt.point(mouse.x, mouse.y));
+        }
+
+        onPositionChanged:
+        {
+            m_data.mousePosChanged(Qt.point(mouse.x, mouse.y));
         }
 
         onReleased:
         {
-            m_data.mouseReleased(Qt.point(mouse.x, mouse.y))
+            m_data.mouseReleased(Qt.point(mouse.x, mouse.y));
         }
+    }
+
+    function dragStarted()
+    {
+        console.log("drag started");
+    }
+
+    function dragging()
+    {
+        console.log("dragging");
+    }
+
+    function drop()
+    {
+        console.log("drop");
     }
 }
