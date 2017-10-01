@@ -38,4 +38,19 @@ Item
             }
         }
     }
+
+    Repeater
+    {
+        id: id_placeholders
+        model: BoardJS.s_imageFilepaths
+
+        Placeholder
+        {
+            width: 70
+            height: 70
+            x: 80 * index
+
+            filepath: modelData
+        }
+    }
 }

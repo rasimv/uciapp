@@ -3,6 +3,7 @@
         <file>chessutil.js</file>
         <file>board.js</file>
         <file>Field.qml</file>
+        <file>Placeholder.qml</file>
         <file>Board.qml</file>
         <file>Human.qml</file>
         <file>Comp.qml</file>

@@ -2,15 +2,15 @@
 
 .import "chessutil.js" as ChessUtil
 
-var s_imageFilenames = ["images/Chess_pdg45.svg", "images/Chess_pdg45.svg", "images/Chess_pdg45.svg",
-                        "images/Chess_pdg45.svg", "images/Chess_pdg45.svg", "images/Chess_pdg45.svg",
-                        "images/Chess_pdg45.svg", "images/Chess_pdg45.svg", "images/Chess_pdg45.svg",
-                        "images/Chess_pdg45.svg", "images/Chess_pdg45.svg", "images/Chess_pdg45.svg"];
+var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
+                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
+                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
+                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg"];
 
 function imageFilename(a)
 {
     var l_found = ChessUtil.s_pawnsAndPieces.indexOf(a);
-    return l_found < 0 ? "" : s_imageFilenames[l_found];
+    return l_found < 0 ? "" : s_imageFilepaths[l_found];
 }
 
 function imageQML(a_filename)

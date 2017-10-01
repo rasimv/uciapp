@@ -79,6 +79,9 @@
     <None Include="board.js">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Placeholder.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">
