@@ -10,6 +10,8 @@ Item
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
 
+    property var m_data: new BoardJS.BoardData(this)
+
     function qqq()
     {
         flip = !flip;
@@ -52,6 +54,26 @@ Item
             x: 80 * index
 
             filepath: modelData
+        }
+    }
+
+    MouseArea
+    {
+        anchors.fill: parent
+
+        onPositionChanged:
+        {
+            m_data.mousePosChanged(Qt.point(mouse.x, mouse.y))
+        }
+
+        onPressed:
+        {
+            m_data.mousePressed(Qt.point(mouse.x, mouse.y))
+        }
+
+        onReleased:
+        {
+            m_data.mouseReleased(Qt.point(mouse.x, mouse.y))
         }
     }
 }
