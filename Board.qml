@@ -13,6 +13,7 @@ Item
     function qqq()
     {
         flip = !flip;
+        id_repeater.itemAt(5).set(flip ? "0" : "P");
     }
 
     GridLayout

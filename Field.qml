@@ -1,10 +1,18 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
+import "board.js" as BoardJS
 
 Item
 {
     property color magicColor
+
+    function set(a)
+    {
+        var l_filepath = BoardJS.imageFilepath(a);
+        id_image.source = l_filepath;
+        id_image.visible = l_filepath != "";
+    }
 
     Rectangle
     {
@@ -12,9 +20,11 @@ Item
         color: magicColor
     }
 
-    Item
+    Image
     {
-        id: id_cell
+        id: id_image
         anchors.fill: parent
+        sourceSize.width: 256
+        sourceSize.height: 256
     }
 }
