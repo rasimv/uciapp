@@ -6,10 +6,11 @@ import "board.js" as BoardJS
 Item
 {
     property color magicColor
+    property string value: "0"
 
-    function set(a)
+    onValueChanged:
     {
-        var l_filepath = BoardJS.imageFilepath(a);
+        var l_filepath = BoardJS.imageFilepath(value);
         id_image.source = l_filepath;
         id_image.visible = l_filepath != "";
     }

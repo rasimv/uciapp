@@ -8,10 +8,15 @@ var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "ima
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg"];
 
+function pawnOrPieceIndex(a)
+{
+   return ChessUtil.s_pawnsAndPieces.indexOf(a);
+}
+
 function imageFilepath(a)
 {
-    var l_found = ChessUtil.s_pawnsAndPieces.indexOf(a);
-    return l_found < 0 ? "" : s_imageFilepaths[l_found];
+    var l_index = pawnOrPieceIndex(a);
+    return l_index < 0 ? "" : s_imageFilepaths[l_index];
 }
 
 //------------------------------------------------------------------------------
@@ -42,10 +47,14 @@ BoardData.prototype.transition = function (a_sig)
     switch (this.m_state)
     {
         case BD_S_DEFAULT:
-            if (a_sig == BD_SIG_MOUSE_PRESSED) this.m_state = BD_S_MOUSE_PRESSED_1;
-            return true;
+            if (a_sig == BD_SIG_MOUSE_PRESSED)
+            {
+                this.m_state = BD_S_MOUSE_PRESSED_1;
+                return true;
+            }
+            break;
         case BD_S_MOUSE_PRESSED_1:
-            this.m_state = BD_S_MOUSE_PRESSED_2;
+            this.m_state = this.m_board.isDraggable(this.m_pressedPos) ? BD_S_MOUSE_PRESSED_2 : BD_S_DEFAULT;
             break;
         case BD_S_MOUSE_PRESSED_2:
             if (a_sig == BD_SIG_MOUSE_RELEASED)
@@ -89,13 +98,13 @@ BoardData.prototype.action = function (a_sig)
         case BD_S_MOUSE_PRESSED_2:
             break;
         case BD_S_MOUSE_DRAG_STARTED:
-            this.m_board.dragStarted();
+            this.m_board.dragStarted(this.m_pressedPos);
             break;
         case BD_S_MOUSE_DRAGGING:
-            this.m_board.dragging();
+            this.m_board.dragging(this.m_pos);
             break;
         case BD_S_MOUSE_DROP:
-            this.m_board.drop();
+            this.m_board.drop(this.m_pos);
             break;
     }
 }

@@ -10,13 +10,15 @@ Item
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
 
-    property var m_data: new BoardJS.BoardData(this)
-
     function qqq()
     {
         flip = !flip;
-        id_repeater.itemAt(5).set(flip ? "0" : "P");
+        id_repeater.itemAt(5).value = flip ? "0" : "P";
     }
+
+    property var m_data: new BoardJS.BoardData(this)
+    property var m_dragged
+    property var m_placeholder
 
     GridLayout
     {
@@ -77,17 +79,28 @@ Item
         }
     }
 
-    function dragStarted()
+    function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
+    function isDraggable(a_pos)
+    {
+        var l_field = fieldAt(a_pos);
+        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.value) >= 0;
+    }
+
+    function dragStarted(a_pos)
     {
         console.log("drag started");
+        m_dragged = fieldAt(a_pos);
+        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.value));
     }
 
-    function dragging()
+    function dragging(a_pos)
     {
         console.log("dragging");
+        m_placeholder.x = a_pos.x;
+        m_placeholder.y = a_pos.y;
     }
 
-    function drop()
+    function drop(a_pos)
     {
         console.log("drop");
     }
