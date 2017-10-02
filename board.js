@@ -3,10 +3,10 @@
 //------------------------------------------------------------------------------
 var s_pawnsAndPieces = "rnbqkpPRNBQK";
 
-var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
-                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
-                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
-                        "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg"];
+var s_imageFilepaths = ["images/Chess_rdt45.svg", "images/Chess_ndt45.svg", "images/Chess_bdt45.svg",
+                        "images/Chess_qdt45.svg", "images/Chess_kdt45.svg", "images/Chess_pdt45.svg",
+                        "images/Chess_plt45.svg", "images/Chess_rlt45.svg", "images/Chess_nlt45.svg",
+                        "images/Chess_blt45.svg", "images/Chess_qlt45.svg", "images/Chess_klt45.svg"];
 
 function pawnOrPieceIndex(a) { return s_pawnsAndPieces.indexOf(a); }
 
