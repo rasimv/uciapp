@@ -136,6 +136,15 @@ PlyInfo.prototype.pushPair = function (a_from, a_to)
     this.transp.push([a_from, a_to]);
 }
 
+PlyInfo.prototype.clone = function ()
+{
+    var w = new PlyInfo();
+    for (var i = 0; i < this.transp.length; i++)
+        w.pushPair(this.transp[i][0].clone(), this.transp[i][1].clone());
+    w.promotion = this.promotion;
+    return w;
+}
+
 PlyInfo.prototype.asText = function ()
 {
     var s = "";
@@ -282,9 +291,9 @@ Layout.prototype.pawnScope = function (a_from)
             }
         }
         u = a_from.clone().add(new Coords(-1, a_dir));
-        if (u.isValid() && (!isOcc(a_this.item(u)) || isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u);
+        if (u.isValid() && isOpp(a_this.item(u), a_this.item(a_from))) q.push(u);
         u = a_from.clone().add(new Coords(1, a_dir));
-        if (u.isValid() && (!isOcc(a_this.item(u)) || isOpp(a_this.item(u), a_this.item(a_from)))) q.push(u);
+        if (u.isValid() && isOpp(a_this.item(u), a_this.item(a_from))) q.push(u);
         return q;
     };
     return this.item(a_from) == "P" ? f(this, -1) : f(this, 1);
@@ -396,13 +405,17 @@ Layout.prototype.pawnOrPiecePlies = function (a_king, a_from)
     for (var i = 0; i < l_scope.length; i++)
     {
         var l_to = l_scope[i];
-        if ((this.item(a_from) == "P" || this.item(a_from) == "p") &&
-            l_to.c != a_from.c && !isOcc(this.item(l_to))) continue;
         if (this.isCheckPly(a_king, a_from, l_to)) continue;
-        var s = notatePair(a_from, l_to);
-        if (this.item(a_from) == "P" && l_to.r == 0 || this.item(a_from) == "p" && l_to.r == 7)
-            for (var l = 0; l < 4; l++) q.push(s + s_pawnsAndPieces[l]);
-        else q.push(s);
+        var w = new PlyInfo();
+        w.pushPair(a_from, l_to);
+        var l_prom = this.item(a_from) == "P" && l_to.r == 0 || this.item(a_from) == "p" && l_to.r == 7;
+        if (!l_prom) { q.push(w); continue; }
+        for (var l = 0; l < 4; l++)
+        {
+            var y = w.clone();
+            y.promotion = s_pawnsAndPieces[l];
+            q.push(y);
+        }
     }
     return q;
 }
@@ -544,7 +557,12 @@ Position.prototype.enPassant = function ()
         if (x != "P" && x != "p" || isOpp(x, l_king)) continue;
         this.m_layout.swap(l_long, this.m_enPassant);
         if (!this.m_layout.isCheckPly(l_king, l_lr[i], this.m_enPassant))
-            q.push(notatePair(l_lr[i], this.m_enPassant));
+        {
+            var w = new PlyInfo();
+            w.pushPair(l_lr[i], this.m_enPassant);
+            w.pushPair(l_long, new Coords(-1, -1));
+            q.push(w);
+        }
         this.m_layout.swap(l_long, this.m_enPassant);
     }
     return q;
@@ -561,13 +579,25 @@ Position.prototype.castling = function ()
     {
         for (i.c = 5; i.c < 7 && !isOcc(this.m_layout.item(i)) &&
             !this.m_layout.isAttacked(l_king, i); i.c++);
-        if (i.c >= 7) q.push("0-0");
+        if (i.c >= 7)
+        {
+            var w = new PlyInfo();
+            w.pushPair(new Coords(4, i.r), new Coords(6, i.r));
+            w.pushPair(new Coords(7, i.r), new Coords(5, i.r));
+            q.push(w);
+        }
     }
     if (this.m_castling[l_startIndex + 1] != "")
     {
         for (i.c = 3; i.c > 0 && !isOcc(this.m_layout.item(i)) &&
             (i.c < 2 || !this.m_layout.isAttacked(l_king, i)); i.c--);
-        if (i.c <= 0) q.push("0-0-0");
+        if (i.c <= 0)
+        {
+            var w = new PlyInfo();
+            w.pushPair(new Coords(4, i.r), new Coords(2, i.r));
+            w.pushPair(new Coords(0, i.r), new Coords(3, i.r));
+            q.push(w);
+        }
     }
     return q;
 }
