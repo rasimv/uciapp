@@ -84,6 +84,17 @@ ApplicationWindow
 
                 Button
                 {
+                    text: "update"
+
+                    onClicked:
+                    {
+                        id_logic.fromFen("r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6");
+                        id_board.update();
+                    }
+                }
+
+                Button
+                {
                     text: "move"
 
                     onClicked:

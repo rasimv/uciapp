@@ -1,15 +1,25 @@
 import QtQuick 2.7
+import "chessutil.js" as ChessUtil
 
 QtObject
 {
+    property var m_position: new ChessUtil.Position()
+
     function value(a_coords)
     {
-        return a_coords.x == 3 && a_coords.y == 3 ? "P" : "0";
+        var l_coords = new ChessUtil.Coords(a_coords.x, a_coords.y);
+        return m_position.square(l_coords);
     }
 
     function isItAllowed(a_from, a_to)
     {
         return true;
+    }
+
+    function fromFen(s)
+    {
+        m_position.fromFen(s);
+        console.log(m_position.asText("\r\n"));
     }
 
     property var m_this

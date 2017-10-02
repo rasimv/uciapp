@@ -12,10 +12,24 @@ Item
 
     function setLogic(a) { m_logic = a; }
 
+    function update()
+    {
+        for (var i = 0; i < id_repeater.count; i++)
+        {
+            var l_coords = m_data.indexToCoords(i);
+            id_repeater.itemAt(i).setValue(m_logic.value(l_coords));
+        }
+    }
+
     function qqq()
     {
         flip = !flip;
-        id_repeater.itemAt(27).setValue("P");
+        //id_repeater.itemAt(27).setValue("P");
+    }
+
+    onFlipChanged:
+    {
+        update();
     }
 
     property var m_data: new BoardJS.BoardData(this)

@@ -526,6 +526,11 @@ function Position()
     this.m_turnCount = 0;
 }
 
+Position.prototype.square = function (a_coords)
+{
+    return this.m_layout.item(a_coords);
+}
+
 Position.prototype.enPassant = function ()
 {
     var q = [];
