@@ -111,8 +111,17 @@ Item
     {
         console.log("drop");
         var l_target = fieldAt(a_pos);
-        if (l_target != null)
+        if (l_target != null && l_target != m_dragged)
         {
+            var l_from = m_data.indexToCoords(m_dragged.magicIndex);
+            var l_to = m_data.indexToCoords(l_target.magicIndex);
+            if (m_logic.isItAllowed(l_from, l_to))
+            {
+                l_target.setValue(m_logic.value(l_from));
+                m_dragged.setValue("0");
+            }
         }
+        m_dragged.magicMask = false;
+        m_placeholder.visible = false;
     }
 }

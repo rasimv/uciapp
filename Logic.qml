@@ -7,6 +7,11 @@ QtObject
         return a_coords.x == 3 && a_coords.y == 3 ? "P" : "0";
     }
 
+    function isItAllowed(a_from, a_to)
+    {
+        return true;
+    }
+
     property var m_this
     property var m_player1
     property var m_player2
