@@ -5,9 +5,10 @@ import "board.js" as BoardJS
 
 Item
 {
+    property int magicIndex
     property color magicColor
-    property bool mask: false
-    property string value: "0"
+    property bool magicMask: false
+    property string magicValue: "0"
 
     Rectangle
     {
@@ -23,14 +24,14 @@ Item
         sourceSize.height: 256
     }
 
-    onMaskChanged:
+    onMagicMaskChanged:
     {
-        id_image.visible = !mask;
+        id_image.visible = !magicMask;
     }
 
-    onValueChanged:
+    onMagicValueChanged:
     {
-        var l_filepath = BoardJS.imageFilepath(value);
+        var l_filepath = BoardJS.imageFilepath(magicValue);
         id_image.source = l_filepath;
         id_image.visible = l_filepath != "";
     }

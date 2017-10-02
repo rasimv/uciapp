@@ -10,13 +10,16 @@ Item
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
 
+    function setLogic(a) { m_logic = a; }
+
     function qqq()
     {
         flip = !flip;
-        id_repeater.itemAt(5).value = flip ? "0" : "P";
+        id_repeater.itemAt(5).magicValue = flip ? "0" : "P";
     }
 
     property var m_data: new BoardJS.BoardData(this)
+    property var m_logic
     property var m_dragged
     property var m_placeholder
 
@@ -80,18 +83,18 @@ Item
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
-        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.value) >= 0;
+        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.magicValue) >= 0;
     }
 
     function dragStarted(a_pos)
     {
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
-        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.value));
+        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.magicValue));
         m_placeholder.width = m_dragged.width; m_placeholder.height = m_dragged.height;
         m_placeholder.setCenter(a_pos);
         m_placeholder.visible = true;
-        m_dragged.mask = true;
+        m_dragged.magicMask = true;
     }
 
     function dragging(a_pos)
@@ -103,5 +106,9 @@ Item
     function drop(a_pos)
     {
         console.log("drop");
+        var l_target = fieldAt(a_pos);
+        if (l_target != null)
+        {
+        }
     }
 }

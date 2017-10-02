@@ -1,8 +1,8 @@
 .pragma library
 
-.import "chessutil.js" as ChessUtil
-
 //------------------------------------------------------------------------------
+var s_pawnsAndPieces = "rnbqkpPRNBQK";
+
 var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
@@ -10,7 +10,7 @@ var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "ima
 
 function pawnOrPieceIndex(a)
 {
-   return ChessUtil.s_pawnsAndPieces.indexOf(a);
+   return s_pawnsAndPieces.indexOf(a);
 }
 
 function imageFilepath(a)
