@@ -15,7 +15,7 @@ Item
     function qqq()
     {
         flip = !flip;
-        id_repeater.itemAt(5).setValue(flip ? "0" : "P");
+        id_repeater.itemAt(27).setValue("P");
     }
 
     property var m_data: new BoardJS.BoardData(this)
