@@ -35,6 +35,11 @@ ApplicationWindow
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
+                Component.onCompleted:
+                {
+                    id_board.setLogic(id_logic);
+                }
             }
 
             RowLayout

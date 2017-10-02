@@ -8,7 +8,13 @@ Item
     property int magicIndex
     property color magicColor
     property bool magicMask: false
-    property string magicValue: "0"
+
+    function setValue(a)
+    {
+        var l_filepath = BoardJS.imageFilepath(a);
+        id_image.source = l_filepath;
+        id_image.visible = l_filepath != "";
+    }
 
     Rectangle
     {
@@ -27,12 +33,5 @@ Item
     onMagicMaskChanged:
     {
         id_image.visible = !magicMask;
-    }
-
-    onMagicValueChanged:
-    {
-        var l_filepath = BoardJS.imageFilepath(magicValue);
-        id_image.source = l_filepath;
-        id_image.visible = l_filepath != "";
     }
 }

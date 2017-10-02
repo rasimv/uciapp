@@ -8,10 +8,7 @@ var s_imageFilepaths = ["images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "ima
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg",
                         "images/Chess_pdt45.svg", "images/Chess_pdt45.svg", "images/Chess_pdt45.svg"];
 
-function pawnOrPieceIndex(a)
-{
-   return s_pawnsAndPieces.indexOf(a);
-}
+function pawnOrPieceIndex(a) { return s_pawnsAndPieces.indexOf(a); }
 
 function imageFilepath(a)
 {
@@ -40,6 +37,18 @@ function BoardData(a_board)
 {
     this.m_board = a_board;
     this.m_state = BD_S_DEFAULT;
+}
+
+BoardData.prototype.indexToCoords = function (a)
+{
+    var r = Math.floor(a / 8);
+    return Qt.point(a % 8, this.m_board.flip ? 7 - r : r);
+}
+
+BoardData.prototype.coordsToIndex = function (a)
+{
+    var r = this.m_board.flip ? 7 - a.y : a.y;
+    return a.x + 8 * r;
 }
 
 BoardData.prototype.transition = function (a_sig)

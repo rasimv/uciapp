@@ -15,7 +15,7 @@ Item
     function qqq()
     {
         flip = !flip;
-        id_repeater.itemAt(5).magicValue = flip ? "0" : "P";
+        id_repeater.itemAt(5).setValue(flip ? "0" : "P");
     }
 
     property var m_data: new BoardJS.BoardData(this)
@@ -42,6 +42,7 @@ Item
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
+                magicIndex: index
                 magicColor: { return magicColors[(Math.floor(index / 8) % 2 + index % 2 + flip) % 2]; }
             }
         }
@@ -83,14 +84,17 @@ Item
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
-        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.magicValue) >= 0;
+        if (l_field == null) return false;
+        var l_coords = m_data.indexToCoords(l_field.magicIndex);
+        return BoardJS.pawnOrPieceIndex(m_logic.value(l_coords)) >= 0;
     }
 
     function dragStarted(a_pos)
     {
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
-        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.magicValue));
+        var l_coords = m_data.indexToCoords(m_dragged.magicIndex);
+        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_logic.value(l_coords)));
         m_placeholder.width = m_dragged.width; m_placeholder.height = m_dragged.height;
         m_placeholder.setCenter(a_pos);
         m_placeholder.visible = true;
