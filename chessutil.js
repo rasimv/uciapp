@@ -465,19 +465,17 @@ Layout.prototype.decodePly = function (a_notat, a_king)
     return g;
 }
 
-Layout.prototype.makePly = function (a_notation, a_king, a_isCapture)
+Layout.prototype.makePly = function (a_info)
 {
-    var g = this.decodePly(a_notation, a_king);
-    if (typeof a_isCapture != "undefined") g.isCapture = isOcc(this.item(g.transp[0][1])) ||
-        this.item(g.transp[0][0]).toLowerCase() == "p" && g.transp[0][0].c != g.transp[0][1].c;
-    for (var k = 0; k < g.transp.length; k++)
+    for (var k = 0; k < a_info.transp.length; k++)
     {
-        if (!g.transp[k][1].isValid()) { this.setItem(g.transp[k][0], "0"); continue; }
-        this.setItem(g.transp[k][1], this.item(g.transp[k][0]));
-        this.setItem(g.transp[k][0], "0");
+        if (!a_info.transp[k][1].isValid()) { this.setItem(a_info.transp[k][0], "0"); continue; }
+        this.setItem(a_info.transp[k][1], this.item(a_info.transp[k][0]));
+        this.setItem(a_info.transp[k][0], "0");
     }
-    if (g.promotion != "") this.setItem(g.transp[0][1], g.promotion);
-    return g;
+    if (a_info.promotion != "")
+        this.setItem(a_info.transp[0][1], a_info.transp[0][1].r == 0 ?
+            a_info.promotion.toUpperCase() : a_info.promotion.toLowerCase());
 }
 
 Layout.prototype.fen = function ()
@@ -618,12 +616,12 @@ Position.prototype.decodePly = function (a_notation)
     return this.m_layout.decodePly(a_notation, l_king);
 }
 
-Position.prototype.makePly = function (a_notation)
+Position.prototype.makePly = function (a_info)
 {
-    var l_king = this.m_turnCount % 2 ? "k" : "K";
-    var g = this.m_layout.makePly(a_notation, l_king, 1);
-    var t = g.transp;
-    var x = this.m_layout.item(t[0][1]);
+    var t = a_info.transp;
+    var x = this.m_layout.item(t[0][0]);
+    var l_isCapture = isOcc(this.m_layout.item(a_info.transp[0][1]));    //But not en passant
+    this.m_layout.makePly(a_info);
     if (x == "P" && t[0][0].r > t[0][1].r + 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r + 1);
     else if (x == "p" && t[0][0].r < t[0][1].r - 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r - 1);
     else if (this.m_enPassant.isValid()) this.m_enPassant = new Coords(-1, -1);
@@ -631,10 +629,9 @@ Position.prototype.makePly = function (a_notation)
     if (this.m_castling[1] != "" && (x == "K" || t[0][0].isEqual(new Coords(0, 7)))) this.m_castling[1] = "";
     if (this.m_castling[2] != "" && (x == "k" || t[0][0].isEqual(new Coords(7, 0)))) this.m_castling[2] = "";
     if (this.m_castling[3] != "" && (x == "k" || t[0][0].isEqual(new Coords(0, 0)))) this.m_castling[3] = "";
-    if (x == "P" || x == "p" || g.isCapture) this.m_pawnCaptCount = 0;
+    if (x == "P" || x == "p" || l_isCapture) this.m_pawnCaptCount = 0;
     else this.m_pawnCaptCount++;
     this.m_turnCount++;
-    return g;
 }
 
 Position.prototype.fen = function ()
