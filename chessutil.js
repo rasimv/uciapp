@@ -145,6 +145,18 @@ PlyInfo.prototype.clone = function ()
     return w;
 }
 
+PlyInfo.prototype.notation = function ()
+{
+    if (this.transp.length > 1)
+    {
+        if (this.transp[0][0].c == 4 && this.transp[1][0].c == 7) return "0-0";
+        if (this.transp[0][0].c == 4 && this.transp[1][0].c == 0) return "0-0-0";
+    }
+    var s = notatePair(this.transp[0][0], this.transp[0][1]);
+    if (this.promotion != "") s += this.promotion.toLowerCase();
+    return s;
+}
+
 PlyInfo.prototype.asText = function ()
 {
     var s = "";

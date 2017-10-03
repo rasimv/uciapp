@@ -110,7 +110,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
-                        var l_fen = "rnbqkbnr/1pppp1pp/8/4PpP1/p7/8/PPPP1P1P/RNBQKBNR w KQkq f6 0 5";
+                        var l_fen = "rnbq1rk1/1ppp1ppp/p4n2/4p1B1/1b1PP3/2NQ4/PPP2PPP/R3KBNR w KQ - 4 6";
                         var w = new ChessUtil.Position();
                         w.m_layout.clear();
                         w.fromFen(l_fen);
@@ -124,9 +124,14 @@ ApplicationWindow
                         console.log("time: " + (l_finish - l_start));
                         console.log("#" + q.length + "#");
                         for (var i = 0; i < q.length; i++)
-                            console.log(q[i].asText());
+                        {
+                            var s1 = q[i].notation();
+                            var l_info = w.decodePly(s1);
+                            var s2 = l_info.notation();
+                            console.log(q[i].asText() + " | " + s1 + " | " + s2 + " | " + (s1 == s2));
+                        }
 
-                        w.makePly(q[31]);
+                        //w.makePly(q[31]);
                         console.log("========================\r\n" + w.asText("\r\n"));
                         console.log(w.fen());
                     }
