@@ -10,30 +10,10 @@ Item
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
 
-    function setLogic(a) { m_logic = a; }
-
-    function update()
-    {
-        for (var i = 0; i < id_repeater.count; i++)
-        {
-            var l_coords = m_data.indexToCoords(i);
-            id_repeater.itemAt(i).setValue(m_logic.value(l_coords));
-        }
-    }
-
-    function qqq()
-    {
-        flip = !flip;
-        //id_repeater.itemAt(27).setValue("P");
-    }
-
-    onFlipChanged:
-    {
-        update();
-    }
+    function qqq1() { console.log("qqq1"); id_repeater.itemAt(12).magicValue = "n"; }
+    function qqq2() { console.log("qqq2"); flip = !flip; }
 
     property var m_data: new BoardJS.BoardData(this)
-    property var m_logic
     property var m_dragged
     property var m_placeholder
 
@@ -74,7 +54,7 @@ Item
         }
     }
 
-    MouseArea
+    /*MouseArea
     {
         anchors.fill: parent
 
@@ -92,9 +72,20 @@ Item
         {
             m_data.mouseReleased(Qt.point(mouse.x, mouse.y));
         }
+    }*/
+
+    onFlipChanged:
+    {
+        for (var i = 0; i < 4; i++)
+            for (var j = 0; j < 8; j++)
+            {
+                var o = id_repeater.itemAt(m_data.coordsToIndex(Qt.point(j, i)));
+                var a = id_repeater.itemAt(m_data.coordsToIndex(Qt.point(j, 7 - i)));
+                var v = o.magicValue; o.magicValue = a.magicValue; a.magicValue = v;
+            }
     }
 
-    function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
+    /*function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
@@ -137,5 +128,5 @@ Item
         }
         m_dragged.magicMask = false;
         m_placeholder.visible = false;
-    }
+    }*/
 }

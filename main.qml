@@ -5,11 +5,6 @@ import "chessutil.js" as ChessUtil
 
 ApplicationWindow
 {
-    function func2()
-    {
-        id_board.qqq()
-    }
-
     Logic
     {
         id: id_logic
@@ -88,8 +83,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_logic.fromFen("r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6");
-                        id_board.update();
+						id_board.qqq1();
                     }
                 }
 
@@ -99,7 +93,7 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        func2();
+						id_board.qqq2();
                     }
                 }
 
