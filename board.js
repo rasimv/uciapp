@@ -37,6 +37,7 @@ function BoardData(a_board)
 {
     this.m_board = a_board;
     this.m_state = BD_S_DEFAULT;
+    this.m_legalPlies = []
 }
 
 BoardData.prototype.indexToCoords = function (a)
@@ -49,6 +50,18 @@ BoardData.prototype.coordsToIndex = function (a)
 {
     var r = this.m_board.flip ? 7 - a.y : a.y;
     return a.x + 8 * r;
+}
+
+BoardData.prototype.findPly = function (a_from, a_to)
+{
+    for (var i = 0; i < this.m_legalPlies.length; i++)
+    {
+        var l_from = this.m_legalPlies[i].transp[0][0];
+        var l_to = this.m_legalPlies[i].transp[0][1];
+        if (a_from.x == l_from.c && a_from.y == l_from.r && a_to.x == l_to.c && a_to.y == l_to.r)
+            return this.m_legalPlies[i];
+    }
+    return null;
 }
 
 BoardData.prototype.transition = function (a_sig)
