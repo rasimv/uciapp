@@ -54,7 +54,7 @@ Item
         }
     }
 
-    /*MouseArea
+    MouseArea
     {
         anchors.fill: parent
 
@@ -72,7 +72,7 @@ Item
         {
             m_data.mouseReleased(Qt.point(mouse.x, mouse.y));
         }
-    }*/
+    }
 
     onFlipChanged:
     {
@@ -85,21 +85,18 @@ Item
             }
     }
 
-    /*function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
+    function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
-        if (l_field == null) return false;
-        var l_coords = m_data.indexToCoords(l_field.magicIndex);
-        return BoardJS.pawnOrPieceIndex(m_logic.value(l_coords)) >= 0;
+        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.magicValue) >= 0;
     }
 
     function dragStarted(a_pos)
     {
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
-        var l_coords = m_data.indexToCoords(m_dragged.magicIndex);
-        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_logic.value(l_coords)));
+        m_placeholder = id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(m_dragged.magicValue));
         m_placeholder.width = m_dragged.width; m_placeholder.height = m_dragged.height;
         m_placeholder.setCenter(a_pos);
         m_placeholder.visible = true;
@@ -118,15 +115,10 @@ Item
         var l_target = fieldAt(a_pos);
         if (l_target != null && l_target != m_dragged)
         {
-            var l_from = m_data.indexToCoords(m_dragged.magicIndex);
-            var l_to = m_data.indexToCoords(l_target.magicIndex);
-            if (m_logic.isItAllowed(l_from, l_to))
-            {
-                l_target.setValue(m_logic.value(l_from));
-                m_dragged.setValue("0");
-            }
+            l_target.magicValue = m_dragged.magicValue;
+            m_dragged.magicValue = "0";
         }
         m_dragged.magicMask = false;
         m_placeholder.visible = false;
-    }*/
+    }
 }
