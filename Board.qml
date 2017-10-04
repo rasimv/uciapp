@@ -13,8 +13,8 @@ Item
 
     function qqq1()
     {
-        console.log("qqq1"); id_repeater.itemAt(57).magicValue = "N";
-        transfer(Qt.point(1, 7), Qt.point(3, 5))
+        console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
+        transfer(Qt.point(1, 7), Qt.point(7, 1))
     }
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
@@ -110,7 +110,7 @@ Item
             {
                 var o = fieldByCoords(Qt.point(j, i));
                 var a = fieldByCoords(Qt.point(j, 7 - i));
-                var v = o.magicValue; o.magicValue = a.magicValue; a.magicValue = v;
+                var v = o.magicValue(); o.magicSetValue(a.magicValue()); a.magicSetValue(v);
             }
     }
 
@@ -122,25 +122,37 @@ Item
 //------------------------------------------------------------------------------
     function transfOnTimer()
     {
+		if (m_transfTarget == null) return;
         var l_timeFix = new Date().getTime();
         var l_elapsed = (l_timeFix - m_transfTimeFix) / 1000;
         var l_path = transfVelocity * l_elapsed;
-        var l_relPos = m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1));
-        var l_size = m_dragged.magicSize();
-        console.log(l_relPos.x + "^" + l_relPos.y);
-        m_placeholder.magicSetCenter(Qt.point(l_size.width * (1 / 2 + l_relPos.x), l_size.height * (1 / 2 + l_relPos.y)));
+        var l_from = m_data.indexToCoords(m_dragged.magicIndex);
+        var l_to = m_data.indexToCoords(m_transfTarget.magicIndex);
+        var v = l_to.x - l_from.x, h = l_to.y - l_from.y, l = Math.sqrt(h * h + v * v);
+        if (l > l_path)
+        {
+            var l_relPos = m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1));
+            var l_size = Qt.size(id_layout.width / id_layout.columns, id_layout.height / id_layout.rows);
+            var l_center = Qt.point(l_size.width * (0.5 + l_relPos.x), l_size.height * (0.5 + l_relPos.y));
+            m_placeholder.magicSetCenter(l_center);
+            return;
+        }
+        id_timer.stop();
+        m_placeholder.visible = false;
+        m_transfTarget.magicSetValue(m_dragged.magicValue()); m_dragged.magicSetValue("0");
+        m_transfTarget = null;
     }
 
     function transfer(a_from, a_to)
     {
         m_dragged = fieldByCoords(a_from);
         m_transfTarget = fieldByCoords(a_to);
-        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue);
+        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue());
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(m_dragged.magicCenter());
         var v = a_to.x - a_from.x, h = a_to.y - a_from.y, l = Math.sqrt(h * h + v * v);
         m_transfMatrix = Qt.matrix4x4(v / l, -h / l, 0, a_from.x, h / l, v / l, 0, a_from.y, 0, 0, 1, 0, 0, 0, 0, 1);
-        m_placeholder.visible = true; m_dragged.magicMask = true;
+        m_placeholder.visible = true; m_dragged.magicSetMask(true);
         m_transfTimeFix = new Date().getTime();
         id_timer.callable = transfOnTimer;
         id_timer.start();
@@ -150,17 +162,17 @@ Item
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
-        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.magicValue) >= 0;
+        return l_field != null && BoardJS.pawnOrPieceIndex(l_field.magicValue()) >= 0;
     }
 
     function dragStarted(a_pos)
     {
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
-        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue);
+        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue());
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(a_pos);
-        m_placeholder.visible = true; m_dragged.magicMask = true;
+        m_placeholder.visible = true; m_dragged.magicSetMask(true);
     }
 
     function dragging(a_pos)
@@ -180,13 +192,11 @@ Item
             var l_info = m_data.findPly(l_from, l_to);
             if (l_info != null)
             {
-                l_target.magicValue = m_dragged.magicValue;
-                m_dragged.magicValue = "0";
+                l_target.magicSetValue(m_dragged.magicValue());
+                m_dragged.magicSetValue("0");
             }
         }
-        m_dragged.magicMask = false;
+        m_dragged.magicSetMask(false);
         m_placeholder.visible = false;
     }
-
-//------------------------------------------------------------------------------
 }
