@@ -9,16 +9,19 @@ Item
 
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
+    property var transfVelocity: 80
 
     function qqq1() { console.log("qqq1"); id_repeater.itemAt(57).magicValue = "N"; }
     function qqq2() { console.log("qqq2"); flip = !flip; }
 
+    function setLegalPlies(a) { m_data.m_legalPlies = a; }
+
+//------------------------------------------------------------------------------
     property var m_data: new BoardJS.BoardData(this)
     property var m_dragged
     property var m_placeholder
 
-    function setLegalPlies(a) { m_data.m_legalPlies = a; }
-
+//------------------------------------------------------------------------------
     GridLayout
     {
         id: id_layout
@@ -56,6 +59,7 @@ Item
         }
     }
 
+//------------------------------------------------------------------------------
     MouseArea
     {
         anchors.fill: parent
@@ -76,6 +80,14 @@ Item
         }
     }
 
+//------------------------------------------------------------------------------
+    Timer
+    {
+        id: id_timer
+        interval: 30; repeat: true
+    }
+
+//------------------------------------------------------------------------------
     onFlipChanged:
     {
         for (var i = 0; i < 4; i++)
@@ -87,7 +99,14 @@ Item
             }
     }
 
+//------------------------------------------------------------------------------
     function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
+
+//------------------------------------------------------------------------------
+    function transfer()
+    {}
+
+//------------------------------------------------------------------------------
     function isDraggable(a_pos)
     {
         var l_field = fieldAt(a_pos);
@@ -129,4 +148,6 @@ Item
         m_dragged.magicMask = false;
         m_placeholder.visible = false;
     }
+
+//------------------------------------------------------------------------------
 }

@@ -82,6 +82,9 @@
     <None Include="Placeholder.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="PromoPanel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">
