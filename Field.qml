@@ -10,6 +10,9 @@ Item
     property bool magicMask: false
     property string magicValue: "0"
 
+    function magicCenter() { return Qt.point(x + width / 2, y + height / 2); }
+    function magicSize() { return Qt.point(width, height); }
+
     Rectangle
     {
         anchors.fill: parent

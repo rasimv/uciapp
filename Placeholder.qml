@@ -4,18 +4,16 @@ import QtQuick.Controls 2.0
 
 Item
 {
-	property string filepath
+    property string filepath
 
-	function setCenter(a_pos)
-	{
-		x = a_pos.x - width / 2; y = a_pos.y - height / 2;
-	}
+    function magicSetCenter(a) { x = a.x - width / 2; y = a.y - height / 2; }
+    function magicSetSize(a) { width = a.x; height = a.y; }
 
-	Image
-	{
-		anchors.fill: parent
-		sourceSize.width: 256
-		sourceSize.height: 256
-		source: filepath
-	}
+    Image
+    {
+        anchors.fill: parent
+        sourceSize.width: 256
+        sourceSize.height: 256
+        source: filepath
+    }
 }
