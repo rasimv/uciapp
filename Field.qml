@@ -11,7 +11,7 @@ Item
     property string magicValue: "0"
 
     function magicCenter() { return Qt.point(x + width / 2, y + height / 2); }
-    function magicSize() { return Qt.point(width, height); }
+    function magicSize() { return Qt.size(width, height); }
 
     Rectangle
     {

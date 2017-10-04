@@ -9,12 +9,12 @@ Item
 
     property bool flip: false
     property var magicColors: ["#707070", "#909090"]
-    property var transfVelocity: 80    // sq/s
+    property var transfVelocity: 10    // sq/s
 
     function qqq1()
     {
         console.log("qqq1"); id_repeater.itemAt(57).magicValue = "N";
-        transfer(Qt.point(1, 7), Qt.point(5, 7))
+        transfer(Qt.point(1, 7), Qt.point(3, 5))
     }
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
@@ -29,6 +29,7 @@ Item
 
     property var m_transfTarget
     property var m_transfTimeFix
+    property var m_transfMatrix
 
 //------------------------------------------------------------------------------
     GridLayout
@@ -95,7 +96,7 @@ Item
     Timer
     {
         id: id_timer
-        interval: 3000; repeat: true
+        interval: 30; repeat: true
         onTriggered: callable()
 
         property var callable
@@ -121,19 +122,26 @@ Item
 //------------------------------------------------------------------------------
     function transfOnTimer()
     {
-        console.log("on timer");
+        var l_timeFix = new Date().getTime();
+        var l_elapsed = (l_timeFix - m_transfTimeFix) / 1000;
+        var l_path = transfVelocity * l_elapsed;
+        var l_relPos = m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1));
+        var l_size = m_dragged.magicSize();
+        console.log(l_relPos.x + "^" + l_relPos.y);
+        m_placeholder.magicSetCenter(Qt.point(l_size.width * (1 / 2 + l_relPos.x), l_size.height * (1 / 2 + l_relPos.y)));
     }
 
     function transfer(a_from, a_to)
     {
         m_dragged = fieldByCoords(a_from);
         m_transfTarget = fieldByCoords(a_to);
-
         m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue);
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(m_dragged.magicCenter());
+        var v = a_to.x - a_from.x, h = a_to.y - a_from.y, l = Math.sqrt(h * h + v * v);
+        m_transfMatrix = Qt.matrix4x4(v / l, -h / l, 0, a_from.x, h / l, v / l, 0, a_from.y, 0, 0, 1, 0, 0, 0, 0, 1);
         m_placeholder.visible = true; m_dragged.magicMask = true;
-
+        m_transfTimeFix = new Date().getTime();
         id_timer.callable = transfOnTimer;
         id_timer.start();
     }

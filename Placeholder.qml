@@ -7,7 +7,7 @@ Item
     property string filepath
 
     function magicSetCenter(a) { x = a.x - width / 2; y = a.y - height / 2; }
-    function magicSetSize(a) { width = a.x; height = a.y; }
+    function magicSetSize(a) { width = a.width; height = a.height; }
 
     Image
     {
