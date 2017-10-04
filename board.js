@@ -16,6 +16,8 @@ function imageFilepath(a)
     return l_index < 0 ? "" : s_imageFilepaths[l_index];
 }
 
+function coordsToPoint(a) { return Qt.point(a.c, a.r); }
+
 //------------------------------------------------------------------------------
 var BD_S_DEFAULT = 0;
 var BD_S_MOUSE_PRESSED_1 = 1;

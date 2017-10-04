@@ -18,6 +18,7 @@ Item
 
 //------------------------------------------------------------------------------
     property var m_data: new BoardJS.BoardData(this)
+
     property var m_dragged
     property var m_placeholder
 
@@ -104,7 +105,8 @@ Item
 
 //------------------------------------------------------------------------------
     function transfer()
-    {}
+    {
+    }
 
 //------------------------------------------------------------------------------
     function isDraggable(a_pos)
