@@ -22,13 +22,13 @@ Item
 
     function setLegalPlies(a) { m_data.m_legalPlies = a; }
 
-    function fromStringArray(a)
+    function fromLayout(a)
     {
         for (var i = 0; i < id_repeater.count; i++)
         {
             var l_field = id_repeater.itemAt(i);
             var l_coords = m_data.indexToCoords(l_field.magicIndex);
-            l_field.magicSetValue(a[l_coords.r][l_coords.c]);
+            l_field.magicSetValue(a.item(l_coords));
         }
     }
 

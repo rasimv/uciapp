@@ -125,7 +125,7 @@ ApplicationWindow
                         console.log("========================\r\n" + w.asText("\r\n"));
                         console.log(w.fen());
 
-                        id_board.fromStringArray(w.layout().asStringArray());
+                        id_board.fromLayout(w.layout());
                     }
                 }
             }
