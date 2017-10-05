@@ -204,6 +204,14 @@ Layout.prototype.clear = function ()
         for (var j = 0; j < 8; j++) this.m[i][j] = "0";
 }
 
+Layout.prototype.clone = function ()
+{
+    var d = new Layout();
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++) d.m[i][j] = this.m[i][j];
+    return d;
+}
+
 Layout.prototype.findFirst = function (a_pawnOrPiece)
 {
     for (var i = 0; i < 8; i++)
@@ -549,10 +557,7 @@ function Position()
     this.m_turnCount = 0;
 }
 
-Position.prototype.square = function (a_coords)
-{
-    return this.m_layout.item(a_coords);
-}
+Position.prototype.layout = function () { return this.m_layout; }
 
 Position.prototype.enPassant = function ()
 {
