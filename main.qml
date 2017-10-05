@@ -99,7 +99,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
-                        var l_fen = "r3kbnr/ppp1qppp/2n5/1B2p3/P2pP1b1/2NP1N2/1PP2PPP/R1BQ1RK1 b kq a3 0 7";
+                        var l_fen = "rnbqkbnr/ppppp1p1/7p/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3";
                         var w = new ChessUtil.Position();
                         w.m_layout.clear();
                         w.fromFen(l_fen);
@@ -126,6 +126,10 @@ ApplicationWindow
                         console.log(w.fen());
 
                         id_board.fromLayout(w.layout());
+
+                        var l_ply = w.decodePly("e5f6");
+                        id_board.makePly(l_ply);
+
                     }
                 }
             }

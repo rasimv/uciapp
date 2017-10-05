@@ -41,6 +41,10 @@ Item
     property var m_transfTarget
     property var m_transfTimeFix
     property var m_transfMatrix
+    property var m_transfFunc
+
+    property var m_plyInfo
+    property var m_makePlyState
 
 //------------------------------------------------------------------------------
     GridLayout
@@ -73,14 +77,15 @@ Item
         id: id_placeholders
         model: BoardJS.s_imageFilepaths
 
-        function itemByValue(a) { return itemAt(BoardJS.pawnOrPieceIndex(a)); }
-
         Placeholder
         {
             visible: false
             filepath: modelData
         }
     }
+
+    PromoPanel
+    {}
 
 //------------------------------------------------------------------------------
     MouseArea
@@ -127,8 +132,8 @@ Item
 
 //------------------------------------------------------------------------------
     function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
-
     function fieldByCoords(a) { return id_repeater.itemAt(m_data.coordsToIndex(a)); }
+    function placeholderByValue(a) { return id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(a)); }
 
 //------------------------------------------------------------------------------
     function transfOnTimer()
@@ -152,13 +157,14 @@ Item
         m_placeholder.visible = false;
         m_transfTarget.magicSetValue(m_dragged.magicValue()); m_dragged.magicSetValue("0");
         m_transfTarget = null;
+        m_transfFunc();
     }
 
     function transfer(a_from, a_to)
     {
         m_dragged = fieldByCoords(a_from);
         m_transfTarget = fieldByCoords(a_to);
-        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue());
+        m_placeholder = placeholderByValue(m_dragged.magicValue());
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(m_dragged.magicCenter());
         var v = a_to.c - a_from.c, h = a_to.r - a_from.r, l = Math.sqrt(h * h + v * v);
@@ -180,7 +186,7 @@ Item
     {
         console.log("drag started");
         m_dragged = fieldAt(a_pos);
-        m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue());
+        m_placeholder = placeholderByValue(m_dragged.magicValue());
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(a_pos);
         m_placeholder.visible = true; m_dragged.magicSetMask(true);
@@ -214,5 +220,25 @@ Item
 //------------------------------------------------------------------------------
     function makePly(a_info)
     {
+        m_plyInfo = a_info;
+        m_makePlyState = 0;
+        m_transfFunc = makePlyFunc;
+        makePlyFunc();
+    }
+
+    function makePlyFunc()
+    {
+        if (m_makePlyState < m_plyInfo.transp.length)
+        {
+            var l_pair = m_plyInfo.transp[m_makePlyState];
+            if (l_pair[1].isValid()) { transfer(l_pair[0], l_pair[1]); m_makePlyState++; }
+            else { fieldByCoords(l_pair[0]).magicSetValue("0"); m_makePlyState++; makePlyFunc(); }
+            return;
+        }
+        if (m_plyInfo.promotion != "")
+        {
+            var l_pair = m_plyInfo.transp[0];
+            fieldByCoords(l_pair[1]).magicSetValue(m_plyInfo.promotion);
+        }
     }
 }
