@@ -1,14 +1,14 @@
 .pragma library
 
-//------------------------------------------------------------------------------
-var s_pawnsAndPieces = "rnbqkpPRNBQK";
+.import "chessutil.js" as ChessUtil
 
+//------------------------------------------------------------------------------
 var s_imageFilepaths = ["images/Chess_rdt45.svg", "images/Chess_ndt45.svg", "images/Chess_bdt45.svg",
                         "images/Chess_qdt45.svg", "images/Chess_kdt45.svg", "images/Chess_pdt45.svg",
                         "images/Chess_plt45.svg", "images/Chess_rlt45.svg", "images/Chess_nlt45.svg",
                         "images/Chess_blt45.svg", "images/Chess_qlt45.svg", "images/Chess_klt45.svg"];
 
-function pawnOrPieceIndex(a) { return s_pawnsAndPieces.indexOf(a); }
+function pawnOrPieceIndex(a) { return ChessUtil.pawnsAndPieces.indexOf(a); }
 
 function imageFilepath(a)
 {
@@ -43,13 +43,13 @@ function BoardData(a_board)
 BoardData.prototype.indexToCoords = function (a)
 {
     var r = Math.floor(a / 8);
-    return Qt.point(a % 8, this.m_board.flip ? 7 - r : r);
+    return new ChessUtil.Coords(a % 8, this.m_board.flip ? 7 - r : r);
 }
 
 BoardData.prototype.coordsToIndex = function (a)
 {
-    var r = this.m_board.flip ? 7 - a.y : a.y;
-    return a.x + 8 * r;
+    var r = this.m_board.flip ? 7 - a.r : a.r;
+    return a.c + 8 * r;
 }
 
 BoardData.prototype.findPly = function (a_from, a_to)
@@ -58,7 +58,7 @@ BoardData.prototype.findPly = function (a_from, a_to)
     {
         var l_from = this.m_legalPlies[i].transp[0][0];
         var l_to = this.m_legalPlies[i].transp[0][1];
-        if (a_from.x == l_from.c && a_from.y == l_from.r && a_to.x == l_to.c && a_to.y == l_to.r)
+        if (a_from.isEqual(l_from) && a_to.isEqual(l_to))
             return this.m_legalPlies[i];
     }
     return null;

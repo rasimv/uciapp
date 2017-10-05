@@ -1,9 +1,9 @@
 .pragma library
 
 //------------------------------------------------------------------------------
-var s_horizontals = "abcdefgh";
-var s_verticals = "87654321";
-var s_pawnsAndPieces = "rnbqkpPRNBQK";
+var horizontals = "abcdefgh";
+var verticals = "87654321";
+var pawnsAndPieces = "rnbqkpPRNBQK";
 
 //------------------------------------------------------------------------------
 function sepChar(a) { return a == " " || a == "\t"; }
@@ -25,22 +25,22 @@ function split_s(a_input, a_sepPred)
 //------------------------------------------------------------------------------
 function indexToHorizontal(a)
 {
-    return a >= 0 && a < 8 ? s_horizontals[a] : "";
+    return a >= 0 && a < 8 ? horizontals[a] : "";
 }
 
 function indexToVertical(a)
 {
-    return a >= 0 && a < 8 ? s_verticals[a] : "";
+    return a >= 0 && a < 8 ? verticals[a] : "";
 }
 
 function horizontalToIndex(a)
 {
-    return s_horizontals.indexOf(a);
+    return horizontals.indexOf(a);
 }
 
 function verticalToIndex(a)
 {
-    return s_verticals.indexOf(a);
+    return verticals.indexOf(a);
 }
 
 function isOcc(a)
@@ -445,7 +445,7 @@ Layout.prototype.pawnOrPiecePlies = function (a_king, a_from)
         for (var l = 0; l < 4; l++)
         {
             var y = w.clone();
-            y.promotion = s_pawnsAndPieces[l];
+            y.promotion = pawnsAndPieces[l];
             q.push(y);
         }
     }
@@ -539,7 +539,7 @@ Layout.prototype.fromFen = function (a)
             if (sepChar(a[k])) return k;
             if (a[k] == "/") { k++; break; }
             if (j > 7) continue;
-            if (s_pawnsAndPieces.indexOf(a[k]) >= 0) { this.m[i][j++] = a[k]; continue; }
+            if (pawnsAndPieces.indexOf(a[k]) >= 0) { this.m[i][j++] = a[k]; continue; }
             var q = parseInt(a[k]);
             if (isNaN(q)) { this.m[i][j++] = "0"; continue; }
             for (var l = 0; l < q && j < 8; l++) this.m[i][j++] = "0";

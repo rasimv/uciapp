@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
+import "chessutil.js" as ChessUtil
 import "board.js" as BoardJS
 
 Item
@@ -14,7 +15,7 @@ Item
     function qqq1()
     {
         console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
-        transfer(Qt.point(1, 7), Qt.point(7, 1))
+        transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
     }
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
@@ -27,7 +28,7 @@ Item
         {
             var l_field = id_repeater.itemAt(i);
             var l_coords = m_data.indexToCoords(l_field.magicIndex);
-            l_field.magicSetValue(a[l_coords.y][l_coords.x]);
+            l_field.magicSetValue(a[l_coords.r][l_coords.c]);
         }
     }
 
@@ -118,8 +119,8 @@ Item
         for (var i = 0; i < 4; i++)
             for (var j = 0; j < 8; j++)
             {
-                var o = fieldByCoords(Qt.point(j, i));
-                var a = fieldByCoords(Qt.point(j, 7 - i));
+                var o = fieldByCoords(new ChessUtil.Coords(j, i));
+                var a = fieldByCoords(new ChessUtil.Coords(j, 7 - i));
                 var v = o.magicValue(); o.magicSetValue(a.magicValue()); a.magicSetValue(v);
             }
     }
@@ -138,7 +139,7 @@ Item
         var l_path = transfVelocity * l_elapsed;
         var l_from = m_data.indexToCoords(m_dragged.magicIndex);
         var l_to = m_data.indexToCoords(m_transfTarget.magicIndex);
-        var v = l_to.x - l_from.x, h = l_to.y - l_from.y, l = Math.sqrt(h * h + v * v);
+        var v = l_to.c - l_from.c, h = l_to.r - l_from.r, l = Math.sqrt(h * h + v * v);
         if (l > l_path)
         {
             var l_relPos = m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1));
@@ -160,8 +161,8 @@ Item
         m_placeholder = id_placeholders.itemByValue(m_dragged.magicValue());
         m_placeholder.magicSetSize(m_dragged.magicSize());
         m_placeholder.magicSetCenter(m_dragged.magicCenter());
-        var v = a_to.x - a_from.x, h = a_to.y - a_from.y, l = Math.sqrt(h * h + v * v);
-        m_transfMatrix = Qt.matrix4x4(v / l, -h / l, 0, a_from.x, h / l, v / l, 0, a_from.y, 0, 0, 1, 0, 0, 0, 0, 1);
+        var v = a_to.c - a_from.c, h = a_to.r - a_from.r, l = Math.sqrt(h * h + v * v);
+        m_transfMatrix = Qt.matrix4x4(v / l, -h / l, 0, a_from.c, h / l, v / l, 0, a_from.r, 0, 0, 1, 0, 0, 0, 0, 1);
         m_placeholder.visible = true; m_dragged.magicSetMask(true);
         m_transfTimeFix = new Date().getTime();
         id_timer.callable = transfOnTimer;
