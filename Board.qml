@@ -14,7 +14,7 @@ Item
 
     function qqq1()
     {
-        console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
+        console.log("qqq1"); //id_repeater.itemAt(57).magicSetValue("N");
         transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
     }
 
@@ -213,5 +213,6 @@ Item
 
 //------------------------------------------------------------------------------
     function makePly(a_info)
-    {}
+    {
+    }
 }
