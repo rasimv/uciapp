@@ -34,11 +34,13 @@ Item
 
 //------------------------------------------------------------------------------
     property var m_data: new BoardJS.BoardData(this)
+    property var m_flipMatrix: Qt.matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 
-    property var m_dragged
+    property var m_drag
     property var m_placeholder
 
-    property var m_transfTarget
+    property var m_transfFrom
+    property var m_transfTo
     property var m_transfTimeFix
     property var m_transfMatrix
     property var m_transfFunc
@@ -121,6 +123,7 @@ Item
 //------------------------------------------------------------------------------
     onFlipChanged:
     {
+        m_flipMatrix.m22 = flip ? -1 : 1; m_flipMatrix.m24 = flip ? 7 : 0;
         for (var i = 0; i < 4; i++)
             for (var j = 0; j < 8; j++)
             {
@@ -138,16 +141,15 @@ Item
 //------------------------------------------------------------------------------
     function transfOnTimer()
     {
-		if (m_transfTarget == null) return;
+        if (m_transfTo == null) return;
         var l_timeFix = new Date().getTime();
         var l_elapsed = (l_timeFix - m_transfTimeFix) / 1000;
         var l_path = transfVelocity * l_elapsed;
-        var l_from = m_data.indexToCoords(m_dragged.magicIndex);
-        var l_to = m_data.indexToCoords(m_transfTarget.magicIndex);
-        var v = l_to.c - l_from.c, h = l_to.r - l_from.r, l = Math.sqrt(h * h + v * v);
+        var h = m_transfTo.c - m_transfFrom.c, v = m_transfTo.r - m_transfFrom.r;
+        var l = Math.sqrt(h * h + v * v);
         if (l > l_path)
         {
-            var l_relPos = m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1));
+            var l_relPos = m_flipMatrix.times(m_transfMatrix.times(Qt.vector4d(l_path, 0, 0, 1)));
             var l_size = Qt.size(id_layout.width / id_layout.columns, id_layout.height / id_layout.rows);
             var l_center = Qt.point(l_size.width * (0.5 + l_relPos.x), l_size.height * (0.5 + l_relPos.y));
             m_placeholder.magicSetCenter(l_center);
@@ -155,21 +157,22 @@ Item
         }
         id_timer.stop();
         m_placeholder.visible = false;
-        m_transfTarget.magicSetValue(m_dragged.magicValue()); m_dragged.magicSetValue("0");
-        m_transfTarget = null;
+        var l_source = fieldByCoords(m_transfFrom), l_target = fieldByCoords(m_transfTo);
+        l_target.magicSetValue(l_source.magicValue()); l_source.magicSetValue("0");
+        m_transfTo = null;
         m_transfFunc();
     }
 
     function transfer(a_from, a_to)
     {
-        m_dragged = fieldByCoords(a_from);
-        m_transfTarget = fieldByCoords(a_to);
-        m_placeholder = placeholderByValue(m_dragged.magicValue());
-        m_placeholder.magicSetSize(m_dragged.magicSize());
-        m_placeholder.magicSetCenter(m_dragged.magicCenter());
-        var v = a_to.c - a_from.c, h = a_to.r - a_from.r, l = Math.sqrt(h * h + v * v);
-        m_transfMatrix = Qt.matrix4x4(v / l, -h / l, 0, a_from.c, h / l, v / l, 0, a_from.r, 0, 0, 1, 0, 0, 0, 0, 1);
-        m_placeholder.visible = true; m_dragged.magicSetMask(true);
+        m_transfFrom = a_from, m_transfTo = a_to;
+        var l_source = fieldByCoords(m_transfFrom);
+        m_placeholder = placeholderByValue(l_source.magicValue());
+        m_placeholder.magicSetSize(l_source.magicSize());
+        m_placeholder.magicSetCenter(l_source.magicCenter());
+        var h = a_to.c - a_from.c, v = a_to.r - a_from.r, l = Math.sqrt(h * h + v * v);
+        m_transfMatrix = Qt.matrix4x4(h / l, -v / l, 0, a_from.c, v / l, h / l, 0, a_from.r, 0, 0, 1, 0, 0, 0, 0, 1);
+        m_placeholder.visible = true; l_source.magicSetMask(true);
         m_transfTimeFix = new Date().getTime();
         id_timer.callable = transfOnTimer;
         id_timer.start();
