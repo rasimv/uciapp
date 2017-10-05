@@ -185,11 +185,12 @@ Item
     function dragStarted(a_pos)
     {
         console.log("drag started");
-        m_dragged = fieldAt(a_pos);
-        m_placeholder = placeholderByValue(m_dragged.magicValue());
-        m_placeholder.magicSetSize(m_dragged.magicSize());
+        var l_field = fieldAt(a_pos);
+        m_drag = m_data.indexToCoords(l_field.magicIndex);
+        m_placeholder = placeholderByValue(l_field.magicValue());
+        m_placeholder.magicSetSize(l_field.magicSize());
         m_placeholder.magicSetCenter(a_pos);
-        m_placeholder.visible = true; m_dragged.magicSetMask(true);
+        m_placeholder.visible = true; l_field.magicSetMask(true);
     }
 
     function dragging(a_pos)
@@ -201,19 +202,19 @@ Item
     function drop(a_pos)
     {
         console.log("drop");
+        var l_source = fieldByCoords(m_drag);
         var l_target = fieldAt(a_pos);
-        if (l_target != null && l_target != m_dragged)
+        if (l_target != null && l_source != l_target)
         {
-            var l_from = m_data.indexToCoords(m_dragged.magicIndex);
-            var l_to = m_data.indexToCoords(l_target.magicIndex);
-            var l_info = m_data.findPly(l_from, l_to);
+            var l_drop = m_data.indexToCoords(l_target.magicIndex);
+            var l_info = m_data.findPly(m_drag, l_drop);
             if (l_info != null)
             {
-                l_target.magicSetValue(m_dragged.magicValue());
-                m_dragged.magicSetValue("0");
+                l_target.magicSetValue(l_source.magicValue());
+                l_source.magicSetValue("0");
             }
         }
-        m_dragged.magicSetMask(false);
+        l_source.magicSetMask(false);
         m_placeholder.visible = false;
     }
 
