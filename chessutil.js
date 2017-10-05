@@ -212,6 +212,18 @@ Layout.prototype.clone = function ()
     return d;
 }
 
+Layout.prototype.asStringArray = function ()
+{
+    var h = [];
+    for (var i = 0; i < 8; i++)
+    {
+        var s = "";
+        for (var j = 0; j < 8; j++) s += this.m[i][j];
+        h.push(s);
+    }
+    return h;
+}
+
 Layout.prototype.findFirst = function (a_pawnOrPiece)
 {
     for (var i = 0; i < 8; i++)

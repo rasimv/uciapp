@@ -21,6 +21,16 @@ Item
 
     function setLegalPlies(a) { m_data.m_legalPlies = a; }
 
+    function fromStringArray(a)
+    {
+        for (var i = 0; i < id_repeater.count; i++)
+        {
+            var l_field = id_repeater.itemAt(i);
+            var l_coords = m_data.indexToCoords(l_field.magicIndex);
+            l_field.magicSetValue(a[l_coords.y][l_coords.x]);
+        }
+    }
+
 //------------------------------------------------------------------------------
     property var m_data: new BoardJS.BoardData(this)
 
@@ -199,4 +209,8 @@ Item
         m_dragged.magicSetMask(false);
         m_placeholder.visible = false;
     }
+
+//------------------------------------------------------------------------------
+    function makePly(a_info)
+    {}
 }
