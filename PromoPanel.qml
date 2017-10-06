@@ -5,7 +5,7 @@ import "board.js" as BoardJS
 
 Item
 {
-    property var flip
+    property var flip: false
     property var pawn: "P"
 
     property var m_pieces: "QNRBBRNQbrnqqnrb"
