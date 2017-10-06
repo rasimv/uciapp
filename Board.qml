@@ -16,7 +16,7 @@ Item
     {
         //console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
         //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
-        id_promoPanel.king = id_promoPanel.king == "P" ? "p" : "P";
+        id_promoPanel.pawn = id_promoPanel.pawn == "P" ? "p" : "P";
     }
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
@@ -87,15 +87,6 @@ Item
         }
     }
 
-    PromoPanel
-    {
-        id: id_promoPanel
-        flip: id_board.flip
-        x: 100
-        width: 100
-        height: 400
-    }
-
 //------------------------------------------------------------------------------
     MouseArea
     {
@@ -114,6 +105,21 @@ Item
         onReleased:
         {
             m_data.mouseReleased(Qt.point(mouse.x, mouse.y));
+        }
+    }
+
+//------------------------------------------------------------------------------
+    PromoPanel
+    {
+        id: id_promoPanel
+        flip: id_board.flip
+        x: 100
+        width: 100
+        height: 400
+
+        onPieceSelected:
+        {
+            console.log("onPieceSelected: " + a);
         }
     }
 

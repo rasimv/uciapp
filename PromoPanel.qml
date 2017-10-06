@@ -10,6 +10,8 @@ Item
 
     property var m_pieces: "QNRBBRNQbrnqqnrb"
 
+    signal pieceSelected(string a);
+
     Rectangle
     {
         anchors.fill: parent
@@ -18,6 +20,7 @@ Item
 
     ColumnLayout
     {
+        id: id_layout
         anchors.fill: parent
         spacing: 0
 
@@ -36,6 +39,8 @@ Item
 
                 visible: index < 4
                 source: BoardJS.imageFilepath(m_pieces[index])
+
+                property var magicIndex: index
             }
         }
     }
@@ -54,12 +59,25 @@ Item
 
     onPawnChanged:
     {
-        console.log("onpawnChanged");
+        console.log("onPawnChanged");
         for (var i = 0; i < 4; i++)
         {
             var l_ofs = flip ? 4 : 0;
             id_repeater.itemAt(l_ofs + i).visible = pawn == "P";
             id_repeater.itemAt(8 + l_ofs + i).visible = pawn != "P";
+        }
+    }
+
+    MouseArea
+    {
+        anchors.fill: parent
+
+        onClicked:
+        {
+            console.log("Promo clicked");
+            var l_clicked = id_layout.childAt(mouse.x, mouse.y);
+            var l_selected = l_clicked == null ? "" : m_pieces[l_clicked.magicIndex];
+            pieceSelected(l_selected);
         }
     }
 }
