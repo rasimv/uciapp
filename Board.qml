@@ -9,13 +9,14 @@ Item
     id: id_board
 
     property bool flip: false
-    property var magicColors: ["#707070", "#909090"]
+    property var magicColors: ["#909090", "#707070"]
     property var transfVelocity: 10    // sq/s
 
     function qqq1()
     {
-        console.log("qqq1"); //id_repeater.itemAt(57).magicSetValue("N");
-        transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
+        //console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
+        //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
+        id_promoPanel.king = id_promoPanel.king == "P" ? "p" : "P";
     }
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
@@ -87,7 +88,13 @@ Item
     }
 
     PromoPanel
-    {}
+    {
+        id: id_promoPanel
+        flip: id_board.flip
+        x: 100
+        width: 100
+        height: 400
+    }
 
 //------------------------------------------------------------------------------
     MouseArea

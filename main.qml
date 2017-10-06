@@ -127,7 +127,7 @@ ApplicationWindow
 
                         id_board.fromLayout(w.layout());
 
-                        var l_ply = w.decodePly("f6c3");
+                        var l_ply = w.decodePly("0-0-0");
                         id_board.makePly(l_ply);
                     }
                 }
