@@ -17,7 +17,7 @@ Item
     {
         console.log("qqq0");
         //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
-        id_promoPanel.magicActivate(id_repeater.itemAt(1));
+        //id_promoPanel.magicActivate(id_repeater.itemAt(1));
     }
 
     function qqq1()
@@ -102,21 +102,38 @@ Item
     {
         id: id_promoPanel
         flip: id_board.flip
-        visible: false
 
+        function activateExt(a_field, a_callable) { m_callable = a_callable; magicActivate(a_field); }
+
+        visible: false
         width: id_layout.width / id_layout.columns
         fieldHeight: id_layout.height / id_layout.rows
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+        property var m_callable
+        onPieceSelected: { m_callable(a); }
     }
 
     Timer
     {
-        id: id_timer
-        property var callable
+        id: id_timer1
+        function magicStart(a_callable, a_arg) { m_callable = a_callable; m_arg = a_arg; start(); }
         interval: 30; repeat: true
-        onTriggered: callable()
+        onTriggered: m_callable(m_arg)
+        property var m_callable
+        property var m_arg
+    }
+
+    Timer
+    {
+        id: id_timer2
+        function singleShot(a_callable, a_arg) { m_callable = a_callable; m_arg = a_arg; start(); }
+        interval: 0; repeat: false
+        onTriggered: m_callable(m_arg)
+        property var m_callable
+        property var m_arg
     }
 
 //------------------------------------------------------------------------------
@@ -154,7 +171,7 @@ Item
     function placeholderByValue(a) { return id_placeholders.itemAt(BoardJS.pawnOrPieceIndex(a)); }
 
 //------------------------------------------------------------------------------
-    function transfOnTimer()
+    function transfOnTimer(a)
     {
         if (m_transfTo == null) return;
         var l_timeFix = new Date().getTime();
@@ -170,7 +187,7 @@ Item
             m_placeholder.magicSetCenter(l_center);
             return;
         }
-        id_timer.stop();
+        id_timer1.stop();
         m_placeholder.visible = false;
         var l_source = fieldByCoords(m_transfFrom), l_target = fieldByCoords(m_transfTo);
         l_target.magicSetValue(l_source.magicValue()); l_source.magicSetValue("0");
@@ -189,8 +206,7 @@ Item
         m_transfMatrix = Qt.matrix4x4(h / l, -v / l, 0, a_from.c, v / l, h / l, 0, a_from.r, 0, 0, 1, 0, 0, 0, 0, 1);
         m_placeholder.visible = true; l_source.magicSetMask(true);
         m_transfTimeFix = new Date().getTime();
-        id_timer.callable = transfOnTimer;
-        id_timer.start();
+        id_timer1.magicStart(transfOnTimer, 0);
     }
 
 //------------------------------------------------------------------------------
@@ -259,38 +275,48 @@ Item
             var l_pair = m_plyInfo.transp[0];
             fieldByCoords(l_pair[1]).magicSetValue(m_plyInfo.promotion);
         }
+        id_timer2.singleShot(emitPlyMade, m_plyInfo);
+    }
+
+    function emitPlyMade(a)
+    {
+        console.log("emitPlyMade");
     }
 
 //------------------------------------------------------------------------------
     function finishPly(a_info)
     {
         m_plyInfo = a_info;
-
         var t = a_info.transp[0];
-
         var l_source = fieldByCoords(t[0]);
         var l_target = fieldByCoords(t[1]);
-
         l_target.magicSetValue(l_source.magicValue());
         l_source.magicSetValue("0");
-
-        if (a_info.promotion != "")
+        if (a_info.promotion != "") { id_promoPanel.activateExt(l_target, finishPlyFunc); return; }
+        if (a_info.transp.length < 2)
         {
-            id_promoPanel.magicActivate(l_target);
+            id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+            return;
         }
-
-        if (a_info.transp.length < 2) return;
-
         var t = a_info.transp[1];
         if (!t[1].isValid()) { fieldByCoords(t[0]).magicSetValue("0"); return; }
-
         l_source = fieldByCoords(t[0]);
         l_target = fieldByCoords(t[1]);
-
         l_target.magicSetValue(l_source.magicValue());
         l_source.magicSetValue("0");
+        id_timer2.singleShot(emitPlyByUser, m_plyInfo);
     }
 
-    function finishPlyFunc(a_info)
-    {}
+    function finishPlyFunc(a)
+    {
+        var t = m_plyInfo.transp[0];
+        var l_target = fieldByCoords(t[1]);
+        l_target.magicSetValue(a);
+        id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+        }
+
+    function emitPlyByUser(a)
+    {
+        console.log("emitPlyByUser");
+    }
 }
