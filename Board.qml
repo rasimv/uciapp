@@ -16,6 +16,7 @@ Item
     function qqq0()
     {
         console.log("qqq0");
+        m_dragEnabled = true;
         //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
         //id_promoPanel.magicActivate(id_repeater.itemAt(1));
     }
@@ -153,6 +154,7 @@ Item
     property var m_data: new BoardJS.BoardData(this)
     property var m_flipMatrix: Qt.matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 
+    property var m_dragEnabled: false
     property var m_drag
     property var m_placeholder
 
@@ -292,7 +294,12 @@ Item
         var l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(l_source.magicValue());
         l_source.magicSetValue("0");
-        if (a_info.promotion != "") { id_promoPanel.activateExt(l_target, finishPlyFunc); return; }
+        if (a_info.promotion != "")
+        {
+            m_dragEnabled = false;
+            id_promoPanel.activateExt(l_target, finishPlyFunc);
+            return;
+        }
         if (a_info.transp.length < 2)
         {
             id_timer2.singleShot(emitPlyByUser, m_plyInfo);
@@ -318,7 +325,7 @@ Item
         var l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(a);
         id_timer2.singleShot(emitPlyByUser, m_plyInfo);
-        }
+    }
 
     function emitPlyByUser(a)
     {

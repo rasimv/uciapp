@@ -69,7 +69,7 @@ BoardData.prototype.transition = function (a_sig)
     switch (this.m_state)
     {
         case BD_S_DEFAULT:
-            if (a_sig == BD_SIG_MOUSE_PRESSED)
+            if (this.m_board.m_dragEnabled && a_sig == BD_SIG_MOUSE_PRESSED)
             {
                 this.m_state = BD_S_MOUSE_PRESSED_1;
                 return true;

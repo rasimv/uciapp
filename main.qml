@@ -109,7 +109,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
-                        var l_fen = "r1bqkbnr/pppp2pp/2n2p2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4";
+                        var l_fen = "rnbqkbnr/ppPppp1p/8/8/8/6p1/P1PPPPPP/RNBQKBNR w KQkq - 0 5";
                         var w = new ChessUtil.Position();
                         w.m_layout.clear();
                         w.fromFen(l_fen);
