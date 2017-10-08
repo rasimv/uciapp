@@ -8,14 +8,21 @@ Item
 {
     id: id_board
 
+//------------------------------------------------------------------------------
     property bool flip: false
     property var magicColors: ["#909090", "#707070"]
     property var transfVelocity: 10    // sq/s
 
+    function qqq0()
+    {
+        console.log("qqq0");
+        //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
+        id_promoPanel.magicActivate(id_repeater.itemAt(1));
+    }
+
     function qqq1()
     {
-        //console.log("qqq1"); id_repeater.itemAt(57).magicSetValue("N");
-        //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
+        console.log("qqq0");
         id_promoPanel.pawn = id_promoPanel.pawn == "P" ? "p" : "P";
     }
 
@@ -32,22 +39,6 @@ Item
             l_field.magicSetValue(a.item(l_coords));
         }
     }
-
-//------------------------------------------------------------------------------
-    property var m_data: new BoardJS.BoardData(this)
-    property var m_flipMatrix: Qt.matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-
-    property var m_drag
-    property var m_placeholder
-
-    property var m_transfFrom
-    property var m_transfTo
-    property var m_transfTimeFix
-    property var m_transfMatrix
-    property var m_transfFunc
-
-    property var m_plyInfo
-    property var m_makePlyState
 
 //------------------------------------------------------------------------------
     GridLayout
@@ -87,7 +78,6 @@ Item
         }
     }
 
-//------------------------------------------------------------------------------
     MouseArea
     {
         anchors.fill: parent
@@ -108,29 +98,25 @@ Item
         }
     }
 
-//------------------------------------------------------------------------------
     PromoPanel
     {
         id: id_promoPanel
         flip: id_board.flip
-        x: 100
-        width: 100
-        height: 400
+        visible: false
 
-        onPieceSelected:
-        {
-            console.log("onPieceSelected: " + a);
-        }
+        width: id_layout.width / id_layout.columns
+        fieldHeight: id_layout.height / id_layout.rows
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
     }
 
-//------------------------------------------------------------------------------
     Timer
     {
         id: id_timer
+        property var callable
         interval: 30; repeat: true
         onTriggered: callable()
-
-        property var callable
     }
 
 //------------------------------------------------------------------------------
@@ -145,6 +131,22 @@ Item
                 var v = o.magicValue(); o.magicSetValue(a.magicValue()); a.magicSetValue(v);
             }
     }
+
+//------------------------------------------------------------------------------
+    property var m_data: new BoardJS.BoardData(this)
+    property var m_flipMatrix: Qt.matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+
+    property var m_drag
+    property var m_placeholder
+
+    property var m_transfFrom
+    property var m_transfTo
+    property var m_transfTimeFix
+    property var m_transfMatrix
+    property var m_transfFunc
+
+    property var m_plyInfo
+    property var m_makePlyState
 
 //------------------------------------------------------------------------------
     function fieldAt(a) { return id_layout.childAt(a.x, a.y); }
@@ -226,12 +228,12 @@ Item
             var l_info = m_data.findPly(m_drag, l_drop);
             if (l_info != null)
             {
-                l_target.magicSetValue(l_source.magicValue());
-                l_source.magicSetValue("0");
+                l_source.magicSetMask(false); m_placeholder.visible = false;
+                finishPly(l_info);
+                return;
             }
         }
-        l_source.magicSetMask(false);
-        m_placeholder.visible = false;
+        l_source.magicSetMask(false); m_placeholder.visible = false;
     }
 
 //------------------------------------------------------------------------------
@@ -258,4 +260,37 @@ Item
             fieldByCoords(l_pair[1]).magicSetValue(m_plyInfo.promotion);
         }
     }
+
+//------------------------------------------------------------------------------
+    function finishPly(a_info)
+    {
+        m_plyInfo = a_info;
+
+        var t = a_info.transp[0];
+
+        var l_source = fieldByCoords(t[0]);
+        var l_target = fieldByCoords(t[1]);
+
+        l_target.magicSetValue(l_source.magicValue());
+        l_source.magicSetValue("0");
+
+        if (a_info.promotion != "")
+        {
+            id_promoPanel.magicActivate(l_target);
+        }
+
+        if (a_info.transp.length < 2) return;
+
+        var t = a_info.transp[1];
+        if (!t[1].isValid()) { fieldByCoords(t[0]).magicSetValue("0"); return; }
+
+        l_source = fieldByCoords(t[0]);
+        l_target = fieldByCoords(t[1]);
+
+        l_target.magicSetValue(l_source.magicValue());
+        l_source.magicSetValue("0");
+    }
+
+    function finishPlyFunc(a_info)
+    {}
 }

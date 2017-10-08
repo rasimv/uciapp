@@ -7,21 +7,26 @@ Item
 {
     property var flip: false
     property var pawn: "P"
+    property var fieldHeight: 100
+    width: 100
 
-    property var m_pieces: "QNRBBRNQbrnqqnrb"
+    function magicActivate(a_field)
+    {
+        m_field = a_field;
+        pawn = m_field.magicValue();
+        x = Qt.binding(function() { return m_field.x; });
+        visible = true;
+    }
 
     signal pieceSelected(string a);
 
-    Rectangle
-    {
-        anchors.fill: parent
-        color: "purple"
-    }
-
+//------------------------------------------------------------------------------
     ColumnLayout
     {
-        id: id_layout
-        anchors.fill: parent
+        id: id_columnLayout
+
+        width: parent.width
+        height: 4 * fieldHeight
         spacing: 0
 
         Repeater
@@ -29,22 +34,33 @@ Item
             id: id_repeater
             model: m_pieces.length
 
-            Image
+            Rectangle
             {
+                property var magicIndex: index
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                sourceSize.width: 256
-                sourceSize.height: 256
-
                 visible: index < 4
-                source: BoardJS.imageFilepath(m_pieces[index])
+                color: "yellow"
 
-                property var magicIndex: index
-            }
+                Image
+                {
+                    anchors.fill: parent
+                    sourceSize.width: 256
+                    sourceSize.height: 256
+                    source: BoardJS.imageFilepath(m_pieces[index])
+                }
+
+                MouseArea
+                {
+                    anchors.fill: parent
+                    onClicked: magicClicked(magicIndex)
+                }
+                }
         }
     }
 
+//------------------------------------------------------------------------------
     onFlipChanged:
     {
         console.log("onFlipChanged: " + flip);
@@ -55,6 +71,7 @@ Item
             id_repeater.itemAt(l_ofs + i).visible = !flip;
             id_repeater.itemAt(4 + l_ofs + i).visible = flip;
         }
+        magicSnap();
     }
 
     onPawnChanged:
@@ -66,18 +83,30 @@ Item
             id_repeater.itemAt(l_ofs + i).visible = pawn == "P";
             id_repeater.itemAt(8 + l_ofs + i).visible = pawn != "P";
         }
+        magicSnap();
     }
 
-    MouseArea
-    {
-        anchors.fill: parent
+//------------------------------------------------------------------------------
+    property var m_pieces: "QNRBBRNQbrnqqnrb"
+    property var m_field
 
-        onClicked:
+    function magicSnap()
+    {
+        if (!flip && pawn == "P" || flip && pawn != "P")
         {
-            console.log("Promo clicked");
-            var l_clicked = id_layout.childAt(mouse.x, mouse.y);
-            var l_selected = l_clicked == null ? "" : m_pieces[l_clicked.magicIndex];
-            pieceSelected(l_selected);
+            id_columnLayout.anchors.bottom = undefined;
+            id_columnLayout.anchors.top = this.top;
         }
+        else
+        {
+            id_columnLayout.anchors.top = undefined;
+            id_columnLayout.anchors.bottom = this.bottom;
+        }
+    }
+
+    function magicClicked(a)
+    {
+        visible = false;
+        pieceSelected(m_pieces[a]);
     }
 }

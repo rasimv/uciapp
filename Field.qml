@@ -22,8 +22,7 @@ Item
 
     function magicSetMask(a) { id_image.visible = !a; }
 
-    property string m_value: "0"
-
+//------------------------------------------------------------------------------
     Rectangle
     {
         anchors.fill: parent
@@ -37,4 +36,7 @@ Item
         sourceSize.width: 256
         sourceSize.height: 256
     }
+
+//------------------------------------------------------------------------------
+    property string m_value: "0"
 }
