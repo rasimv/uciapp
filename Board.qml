@@ -299,7 +299,12 @@ Item
             return;
         }
         var t = a_info.transp[1];
-        if (!t[1].isValid()) { fieldByCoords(t[0]).magicSetValue("0"); return; }
+        if (!t[1].isValid())
+        {
+            fieldByCoords(t[0]).magicSetValue("0");
+            id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+            return;
+        }
         l_source = fieldByCoords(t[0]);
         l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(l_source.magicValue());
