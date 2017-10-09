@@ -4,6 +4,7 @@ QtObject
 {
     function start()
     {
+        m_timer.singleShot(started, this);
     }
 
     function turn(a_fen)

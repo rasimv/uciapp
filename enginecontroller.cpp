@@ -10,10 +10,15 @@ EngineController::EngineController(QObject *a)
 }
 
 EngineController::~EngineController()
-{}
-
-void EngineController::start()
 {
+    disconnect(&m_p, SIGNAL(started()), this, SLOT(onStarted()));
+    disconnect(&m_p, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onError(QProcess::ProcessError)));
+    disconnect(&m_p, SIGNAL(readyReadStandardOutput()), this, SLOT(onReadyRead()));
+}
+
+void EngineController::start(QVariant a_object)
+{
+    m_object = a_object;
     m_p.start("C:\\Users\\rasim\\deploy\\stockfish-8-win\\Windows\\stockfish_8_x64.exe");
 }
 
@@ -27,6 +32,6 @@ void EngineController::write(QString a)
     m_p.write(a.toLatin1());
 }
 
-void EngineController::onStarted() { emit started(); }
-void EngineController::onError(QProcess::ProcessError a) { emit error(); }
-void EngineController::onReadyRead() { emit readyRead(); }
+void EngineController::onStarted() { emit started(m_object); }
+void EngineController::onError(QProcess::ProcessError a) { emit error(m_object); }
+void EngineController::onReadyRead() { emit readyRead(m_object); }
