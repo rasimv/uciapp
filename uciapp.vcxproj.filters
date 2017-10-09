@@ -58,9 +58,6 @@
     <None Include="Board.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="SidePanel.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Field.qml">
       <Filter>Resource Files</Filter>
     </None>
@@ -68,9 +65,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Comp.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Human.qml">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="chessutil.js">
@@ -83,6 +77,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="PromoPanel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="User.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="comp.js">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SingleShotTimer.qml">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

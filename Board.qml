@@ -13,6 +13,15 @@ Item
     property var magicColors: ["#909090", "#707070"]
     property var transfVelocity: 10    // sq/s
 
+    function compPly(a_info)
+    {}
+
+    function userPly(a_legal)
+    {}
+
+    signal compPlyMade(variant a_info);
+    signal userPlyMade(variant a_info);
+
     function qqq0()
     {
         console.log("qqq0");
@@ -127,15 +136,7 @@ Item
         property var m_arg
     }
 
-    Timer
-    {
-        id: id_timer2
-        function singleShot(a_callable, a_arg) { m_callable = a_callable; m_arg = a_arg; start(); }
-        interval: 0; repeat: false
-        onTriggered: m_callable(m_arg)
-        property var m_callable
-        property var m_arg
-    }
+    SingleShotTimer { id: id_timer2 }
 
 //------------------------------------------------------------------------------
     onFlipChanged:
@@ -277,12 +278,13 @@ Item
             var l_pair = m_plyInfo.transp[0];
             fieldByCoords(l_pair[1]).magicSetValue(m_plyInfo.promotion);
         }
-        id_timer2.singleShot(emitPlyMade, m_plyInfo);
+        id_timer2.singleShot(emitCompPly, m_plyInfo);
     }
 
-    function emitPlyMade(a)
+    function emitCompPly(a)
     {
-        console.log("emitPlyMade");
+        console.log("emitCompPly");
+        compPlyMade(a);
     }
 
 //------------------------------------------------------------------------------
@@ -302,21 +304,21 @@ Item
         }
         if (a_info.transp.length < 2)
         {
-            id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+            id_timer2.singleShot(emitUserPly, m_plyInfo);
             return;
         }
         var t = a_info.transp[1];
         if (!t[1].isValid())
         {
             fieldByCoords(t[0]).magicSetValue("0");
-            id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+            id_timer2.singleShot(emitUserPly, m_plyInfo);
             return;
         }
         l_source = fieldByCoords(t[0]);
         l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(l_source.magicValue());
         l_source.magicSetValue("0");
-        id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+        id_timer2.singleShot(emitUserPly, m_plyInfo);
     }
 
     function finishPlyFunc(a)
@@ -324,11 +326,12 @@ Item
         var t = m_plyInfo.transp[0];
         var l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(a);
-        id_timer2.singleShot(emitPlyByUser, m_plyInfo);
+        id_timer2.singleShot(emitUserPly, m_plyInfo);
     }
 
-    function emitPlyByUser(a)
+    function emitUserPly(a)
     {
-        console.log("emitPlyByUser");
+        console.log("emitUserPly");
+        userPlyMade(a);
     }
 }

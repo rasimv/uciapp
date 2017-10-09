@@ -1,20 +1,19 @@
 import QtQml 2.2
-import "comp.js" as CompJS
 
 QtObject
 {
     function start()
     {
-        m_data.start();
     }
 
     function turn(a_fen)
     {
+        m_timer.singleShot(userPly, this);
     }
 
     signal started(variant a_player);
     signal compPly(variant a_player, string a_notation);
     signal userPly(variant a_player);
 
-    property var m_data: new CompJS.CompData(this)
+    property var m_timer: Qt.createQmlObject("SingleShotTimer {}", this, "User.qml")
 }

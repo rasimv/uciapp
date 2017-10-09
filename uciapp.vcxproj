@@ -127,9 +127,9 @@
     <None Include="board.js" />
     <None Include="Board.qml" />
     <None Include="chessutil.js" />
+    <None Include="comp.js" />
     <None Include="Comp.qml" />
     <None Include="Field.qml" />
-    <None Include="Human.qml" />
     <None Include="Logic.qml" />
     <None Include="main.qml" />
     <CustomBuild Include="qml.qrc">
@@ -137,11 +137,11 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;Human.qml;Comp.qml;Logic.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;Human.qml;Comp.qml;Logic.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="Placeholder.qml" />
     <None Include="PromoPanel.qml" />
@@ -157,7 +157,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\moc_predefs.h;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
-    <None Include="SidePanel.qml" />
+    <None Include="SingleShotTimer.qml" />
+    <None Include="User.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

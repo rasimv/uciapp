@@ -2,14 +2,15 @@
     <qresource prefix="/">
         <file>chessutil.js</file>
         <file>board.js</file>
+        <file>comp.js</file>
+        <file>SingleShotTimer.qml</file>
         <file>Field.qml</file>
         <file>Placeholder.qml</file>
         <file>PromoPanel.qml</file>
         <file>Board.qml</file>
-        <file>Human.qml</file>
+        <file>User.qml</file>
         <file>Comp.qml</file>
         <file>Logic.qml</file>
-        <file>SidePanel.qml</file>
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>images/Chess_rdt45.svg</file>

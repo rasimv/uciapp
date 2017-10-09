@@ -78,7 +78,8 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_board.qqq0();
+                        //id_board.qqq0();
+                        id_logic.startNewGame();
                     }
                 }
 
@@ -142,12 +143,6 @@ ApplicationWindow
                     }
                 }
             }
-        }
-
-        SidePanel
-        {
-            width: 200
-            Layout.fillHeight: true
         }
     }
 }
