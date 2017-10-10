@@ -110,7 +110,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //var l_fen = "r1bqkb1r/ppppn1pp/8/1B2ppP1/1n2P3/5N2/PPPP1P1P/RNBQK2R w KQkq f6 0 6";
-                        var l_fen = "rnbqkbnr/ppPppp1p/8/8/8/6p1/P1PPPPPP/RNBQKBNR w KQkq - 0 5";
+                        var l_fen = "4k3/1b3n2/8/8/8/8/8/4K3 w - - 0 1";
                         var w = new ChessUtil.Position();
                         w.m_layout.clear();
                         w.fromFen(l_fen);
@@ -138,8 +138,9 @@ ApplicationWindow
 
                         id_board.fromLayout(w.layout());
 
-                        var l_ply = w.decodePly("f6e4");
+                        //var l_ply = w.decodePly("f6e4");
                         //id_board.makePly(l_ply);
+                        console.log("isInsufMat: " + w.layout().isInsufMat("K"));
                     }
                 }
             }

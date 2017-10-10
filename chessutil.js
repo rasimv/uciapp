@@ -503,6 +503,32 @@ Layout.prototype.decodePly = function (a_notat, a_king)
     return g;
 }
 
+Layout.prototype.isAlone = function (a_king)
+{
+    var e = 0, f = 0;
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+        {
+            if (a_king == this.m[i][j]) f++;
+            else if (isOcc(this.m[i][j]) && !isOpp(a_king, this.m[i][j])) e++;
+        }
+    return e <= 0 && f <= 1;
+}
+
+Layout.prototype.isInsufMat = function (a_king)
+{
+    if (!this.isAlone(a_king)) return false;
+    var n = 0, b1 = 0, b2 = 0, o = 0;
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+        {
+            if (this.m[i][j] == "N" || this.m[i][j] == "n") n++;
+            else if (this.m[i][j] == "B" || this.m[i][j] == "b") (i + j) % 2 ? b1++ : b2++;
+            else if (isOpp(a_king, this.m[i][j])) o++;
+        }
+    return !(o > 1 || n > 2 || b1 > 0 && b2 > 0 || n > 0 && b1 > 0 || n > 0 && b2 > 0);
+}
+
 Layout.prototype.makePly = function (a_info)
 {
     for (var k = 0; k < a_info.transp.length; k++)
@@ -645,6 +671,18 @@ Position.prototype.legalPlies = function ()
     q = q.concat(this.enPassant());
     q = q.concat(this.castling());
     return q;
+}
+
+Position.prototype.isCheck = function ()
+{
+    var l_king = this.m_turnCount % 2 ? "k" : "K";
+    return this.m_layout.isCheck(l_king);
+}
+
+Position.prototype.isInsufMat = function ()
+{
+    var l_king = this.m_turnCount % 2 ? "k" : "K";
+    return this.m_layout.isInsufMat(l_king);
 }
 
 Position.prototype.decodePly = function (a_notation)

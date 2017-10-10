@@ -51,6 +51,9 @@ QtObject
     {
         console.log("onPlyMade");
         m_position.makePly(a_info);
+
+
+
         var l_fen = m_position.fen();
         m_player1.position(l_fen);
         m_player2.position(l_fen);
