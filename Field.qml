@@ -1,6 +1,4 @@
-import QtQuick 2.7
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 2.0
+import QtQuick 2.9
 import "board.js" as BoardJS
 
 Item

@@ -1,6 +1,6 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.9
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.2
 import "chessutil.js" as ChessUtil
 
 ApplicationWindow
@@ -22,6 +22,7 @@ ApplicationWindow
     RowLayout
     {
         anchors.fill: parent
+		spacing: 0
 
         ColumnLayout
         {
@@ -149,5 +150,11 @@ ApplicationWindow
                 }
             }
         }
+
+		SidePanel
+		{
+			width: 300
+			Layout.fillHeight: true
+		}
     }
 }

@@ -1,4 +1,4 @@
-import QtQml 2.2
+import QtQml 2.8
 import "comp.js" as CompJS
 
 QtObject
