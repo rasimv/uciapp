@@ -8,6 +8,10 @@ ApplicationWindow
     Logic
     {
         id: id_logic
+        onGameOver:
+        {
+            console.log(a_result + " - " + a_note);
+        }
     }
 
     visible: true
@@ -79,7 +83,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //id_board.qqq0();
-                        id_logic.startNewGame(id_board);
+                        id_logic.startNewGame(id_board, true);
                     }
                 }
 

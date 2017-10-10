@@ -204,6 +204,14 @@ Layout.prototype.clear = function ()
         for (var j = 0; j < 8; j++) this.m[i][j] = "0";
 }
 
+Layout.prototype.isEqual = function (a_another)
+{
+    for (var i = 0; i < 8; i++)
+        for (var j = 0; j < 8; j++)
+            if (this.m[i][j] != a_another.m[i][j]) return false;
+    return true;
+}
+
 Layout.prototype.clone = function ()
 {
     var d = new Layout();

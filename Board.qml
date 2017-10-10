@@ -45,8 +45,6 @@ Item
 
     function qqq2() { console.log("qqq2"); flip = !flip; }
 
-    function setLegalPlies(a) { m_data.m_legalPlies = a; }
-
     function fromLayout(a)
     {
         for (var i = 0; i < id_repeater.count; i++)
@@ -344,3 +342,6 @@ Item
         userPlyMade(a);
     }
 }
+
+//------------------------------------------------------------------------------
+    function setLegalPlies(a) { m_data.m_legalPlies = a; }

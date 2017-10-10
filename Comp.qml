@@ -12,7 +12,7 @@ QtObject
     signal userPly(variant a_player);
 
     property var m_data: new CompJS.CompData(this)
-    property var m_timer: Qt.createQmlObject("SingleShotTimer {}", this, "User.qml")
+    property var m_timer: Qt.createQmlObject("SingleShotTimer {}", this, "Comp.qml")
 
     function queueStarted() { m_timer.singleShot(started, this); }
     function queueCompPly(a_notation) { m_timer.singleShot(compPly, this, a_notation); }
