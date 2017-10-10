@@ -88,6 +88,12 @@
     <None Include="SingleShotTimer.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="PlayerBlock.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="SidePanel.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qml.qrc">

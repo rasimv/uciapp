@@ -137,13 +137,14 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC qml.qrc</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="Placeholder.qml" />
+    <None Include="PlayerBlock.qml" />
     <None Include="PromoPanel.qml" />
     <None Include="qtquickcontrols2.conf" />
     <CustomBuild Include="Release\moc_predefs.h.cbt">
@@ -157,6 +158,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\moc_predefs.h;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
+    <None Include="SidePanel.qml" />
     <None Include="SingleShotTimer.qml" />
     <None Include="User.qml" />
   </ItemGroup>

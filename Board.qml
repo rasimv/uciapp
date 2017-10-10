@@ -341,7 +341,7 @@ Item
         console.log("emitUserPly");
         userPlyMade(a);
     }
-}
 
 //------------------------------------------------------------------------------
     function setLegalPlies(a) { m_data.m_legalPlies = a; }
+}

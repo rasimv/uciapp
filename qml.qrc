@@ -11,6 +11,8 @@
         <file>User.qml</file>
         <file>Comp.qml</file>
         <file>Logic.qml</file>
+        <file>PlayerBlock.qml</file>
+        <file>SidePanel.qml</file>
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>images/Chess_rdt45.svg</file>
