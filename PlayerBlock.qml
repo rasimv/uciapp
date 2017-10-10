@@ -4,30 +4,85 @@ import QtQuick.Controls 2.2
 
 Item
 {
+    function minimalHeight()
+    {
+        return id_item1.height + id_text1.height + id_radioButton1.height + id_item2.height;
+    }
+
     Rectangle
     {
         anchors.fill: parent
         color: "green"
     }
 
-    /*GroupBox
+    ColumnLayout
     {
-        RowLayout
-        {
-            ExclusiveGroup { id: id_tabPosGroup }
+        anchors.fill: parent
+        spacing: 0
 
-            RadioButton
+        Item
+        {
+            id: id_item1
+            Layout.fillWidth: true
+            height: 0.4 * id_text1.height
+        }
+
+        Item
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Text
             {
-                text: "Top"
-                checked: true
-                exclusiveGroup: id_tabPosGroup
+                id: id_text1
+                anchors.left: parent.left
+                width: id_radioButton1.width
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                text: "Comp"
             }
 
-            RadioButton
+            Text
             {
-                text: "Bottom"
-                exclusiveGroup: id_tabPosGroup
+                id: id_text2
+                anchors.right: parent.right
+                width: id_radioButton2.width
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                text: "User"
             }
         }
-    }*/
+
+        RowLayout
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            spacing: 0
+
+            RadioButton
+            {
+                id: id_radioButton1
+                Layout.fillWidth: true
+
+                checked: true
+            }
+
+            RadioButton
+            {
+                id: id_radioButton2
+                Layout.fillWidth: true
+            }
+        }
+
+        Item
+        {
+            id: id_item2
+            Layout.fillWidth: true
+            height: 0.4 * id_text1.height
+        }
+    }
 }

@@ -3,28 +3,25 @@ import QtQuick.Layouts 1.3
 
 Item
 {
-    ColumnLayout
+    Rectangle
     {
         anchors.fill: parent
-        spacing: 0
+        color: "yellow"
+    }
 
-        PlayerBlock
-        {
-            Layout.fillWidth: true
-            height: 50
-        }
+    PlayerBlock
+    {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: minimalHeight()
+    }
 
-        Rectangle
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            color: "yellow"
-        }
-
-        PlayerBlock
-        {
-            Layout.fillWidth: true
-            height: 50
-        }
+    PlayerBlock
+    {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: minimalHeight()
     }
 }
