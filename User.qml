@@ -7,7 +7,11 @@ QtObject
         m_timer.singleShot(started, this);
     }
 
-    function turn(a_fen)
+    function position(a_fen)
+    {
+    }
+
+    function turn()
     {
         m_timer.singleShot(userPly, this);
     }

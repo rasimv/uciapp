@@ -14,10 +14,17 @@ Item
     property var transfVelocity: 10    // sq/s
 
     function compPly(a_info)
-    {}
+    {
+        console.log("compPly");
+        makePly(a_info);
+    }
 
     function userPly(a_legal)
-    {}
+    {
+        console.log("userPly");
+        setLegalPlies(a_legal);
+        m_dragEnabled = true;
+    }
 
     signal compPlyMade(variant a_info);
     signal userPlyMade(variant a_info);
@@ -291,6 +298,7 @@ Item
     function finishPly(a_info)
     {
         m_plyInfo = a_info;
+        m_dragEnabled = false;
         var t = a_info.transp[0];
         var l_source = fieldByCoords(t[0]);
         var l_target = fieldByCoords(t[1]);
@@ -298,7 +306,6 @@ Item
         l_source.magicSetValue("0");
         if (a_info.promotion != "")
         {
-            m_dragEnabled = false;
             id_promoPanel.activateExt(l_target, finishPlyFunc);
             return;
         }
@@ -324,9 +331,11 @@ Item
     function finishPlyFunc(a)
     {
         var t = m_plyInfo.transp[0];
+        var l_info = m_data.findPly(t[0], t[1], a.toLowerCase());
+        t = l_info.transp[0];
         var l_target = fieldByCoords(t[1]);
         l_target.magicSetValue(a);
-        id_timer2.singleShot(emitUserPly, m_plyInfo);
+        id_timer2.singleShot(emitUserPly, l_info);
     }
 
     function emitUserPly(a)

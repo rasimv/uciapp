@@ -212,7 +212,7 @@ Layout.prototype.clone = function ()
     return d;
 }
 
-Layout.prototype.asStringArray = function ()
+Layout.prototype.toStringArray = function ()
 {
     var h = [];
     for (var i = 0; i < 8; i++)
@@ -489,6 +489,12 @@ Layout.prototype.decodePly = function (a_notat, a_king)
     }
     var l_from = coordsFromNotation(a_notat);
     var l_to = coordsFromNotation(a_notat.substring(2));
+    var x = this.item(l_from);
+    if (x == "K" || x == "k")
+    {
+        if (l_from.c + 2 == l_to.c) return this.decodePly("0-0", a_king);
+        if (l_to.c + 2 == l_from.c) return this.decodePly("0-0-0", a_king);
+    }
     g.pushPair(l_from, l_to);
     if (a_notat.length > 4)
         g.promotion = a_king == "K" ? a_notat[4].toUpperCase() : a_notat[4].toLowerCase();
@@ -569,6 +575,8 @@ function Position()
     this.m_turnCount = 0;
 }
 
+Position.prototype.pawnCaptCount = function () { return this.m_pawnCaptCount; }
+Position.prototype.turnCount = function () { return this.m_turnCount; }
 Position.prototype.layout = function () { return this.m_layout; }
 
 Position.prototype.enPassant = function ()

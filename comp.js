@@ -1,17 +1,68 @@
 .pragma library
 
 //------------------------------------------------------------------------------
+function delim(a) { return a == ' ' || a == '\t' || a == '\r'; }
+
+function split(a)
+{
+    var q = [];
+    for (var i = 0, j = 0; ; i = j)
+    {
+        for (; i < a.length && delim(a[i]); i++);
+        j = i;
+        for (; j < a.length && !delim(a[j]); j++);
+        if (i < j) q.push(a.slice(i, j));
+        else return q;
+    }
+}
+
+//------------------------------------------------------------------------------
+var CD_MT_EMPTY = 0;
+var CD_MT_UCIOK = 1;
+var CD_MT_READYOK = 2;
+var CD_MT_BESTMOVE = 3;
+var CD_MT_UCI = 4;
+var CD_MT_ISREADY = 5;
+var CD_MT_UCINEWGAME = 6;
+var CD_MT_POSITION = 7;
+var CD_MT_GO = 8;
+
+function Message(a_type, a_arg)
+{
+    this.type = a_type;
+    if (a_type == CD_MT_BESTMOVE) this.best = a_arg;
+    else if (a_type == CD_MT_POSITION) this.fen = a_arg;
+    else if (a_type == CD_MT_GO) this.time = a_arg;
+}
+
+Message.prototype.toString = function ()
+{
+    var s = "";
+    if (this.type == CD_MT_UCI) s = "uci";
+    else if (this.type == CD_MT_ISREADY) s = "isready";
+    else if (this.type == CD_MT_UCINEWGAME) s = "ucinewgame";
+    else if (this.type == CD_MT_POSITION) s = "position fen " + this.fen;
+    else if (this.type == CD_MT_GO) s = "go movetime " + this.time;
+    return s;
+}
+
+function messageFromString(a)
+{
+    var q = this.split(a);
+    if (q.length < 1) return new Message(CD_MT_EMPTY);
+    if (q[0] == "uciok") return new Message(CD_MT_UCIOK);
+    else if (q[0] == "readyok") return new Message(CD_MT_READYOK);
+    else if (q[0] == "bestmove") return new Message(CD_MT_BESTMOVE, q[1]);
+    return new Message(CD_MT_EMPTY);
+}
+
+//------------------------------------------------------------------------------
 var CD_S_DEFAULT = 0;
 var CD_S_WAIT_FOR_ICUOK = 1;
 var CD_S_WAIT_FOR_READY = 2;
 var CD_S_WAIT_FOR_NEWGAME = 3;
 var CD_S_NEWGAME = 4;
 
-var CD_MT_UCIOK = 0;
-var CD_MT_READYOK = 1;
-var CD_MT_BESTMOVE = 2;
-
-//------------------------------------------------------------------------------
 function CompData(a_comp)
 {
     this.m_comp = a_comp;
@@ -29,6 +80,16 @@ CompData.prototype.start = function ()
     this.m_engineControl.start(this);
 }
 
+CompData.prototype.position = function (a_fen)
+{
+    this.sendMessage(new Message(CD_MT_POSITION, a_fen));
+}
+
+CompData.prototype.turn = function ()
+{
+    this.sendMessage(new Message(CD_MT_GO, 2000));
+}
+
 CompData.prototype.onStarted = function (a_this) {}
 
 CompData.prototype.onError = function (a_this) {}
@@ -38,21 +99,6 @@ CompData.prototype.onReadyRead = function (a_this)
     a_this.m_buf += a_this.m_engineControl.read();
     a_this.parse();
     while (a_this.process());
-}
-
-CompData.prototype.delim = function (a) { return a == ' ' || a == '\t' || a == '\r'; }
-
-CompData.prototype.split = function (a)
-{
-    var q = [];
-    for (var i = 0, j = 0; ; i = j)
-    {
-        for (; i < a.length && this.delim(a[i]); i++);
-        j = i;
-        for (; j < a.length && !this.delim(a[j]); j++);
-        if (i < j) q.push(a.slice(i, j));
-        else return q;
-    }
 }
 
 CompData.prototype.line = function ()
@@ -65,24 +111,9 @@ CompData.prototype.line = function ()
     return s;
 }
 
-CompData.prototype.parseSub = function (a)
-{
-    if (a.length <= 0) return;
-    var l_mesg = {};
-    if (a[0] == "uciok") l_mesg.type = CD_MT_UCIOK;
-    else if (a[0] == "readyok") l_mesg.type = CD_MT_READYOK;
-    else if (a[0] == "bestmove")
-    {
-        l_mesg.type = CD_MT_BESTMOVE;
-        l_mesg.ply = a.length < 2 ? "" : a[1];
-    }
-    else return;
-    this.m_messages.push(l_mesg);
-}
-
 CompData.prototype.parse = function ()
 {
-    for (var s = this.line(); s; s = this.line()) this.parseSub(this.split(s));
+    for (var s = this.line(); s; s = this.line()) this.m_messages.push(messageFromString(s));
 }
 
 CompData.prototype.findMessage = function (a_type)
@@ -98,7 +129,7 @@ CompData.prototype.process = function ()
     {
         this.m_state = CD_S_WAIT_FOR_ICUOK;
         this.m_messages = [];
-        this.m_engineControl.write("uci\n");
+        this.sendMessage(new Message(CD_MT_UCI));
     }
     else if (this.m_state == CD_S_WAIT_FOR_ICUOK)
     {
@@ -106,7 +137,7 @@ CompData.prototype.process = function ()
         {
             this.m_state = CD_S_WAIT_FOR_READY;
             this.m_messages = [];
-            this.m_engineControl.write("isready\n");
+            this.sendMessage(new Message(CD_MT_ISREADY));
         }
     }
     else if (this.m_state == CD_S_WAIT_FOR_READY)
@@ -115,8 +146,8 @@ CompData.prototype.process = function ()
         {
             this.m_state = CD_S_WAIT_FOR_NEWGAME;
             this.m_messages = [];
-            this.m_engineControl.write("ucinewgame\n");
-            this.m_engineControl.write("isready\n");
+            this.sendMessage(new Message(CD_MT_UCINEWGAME));
+            this.sendMessage(new Message(CD_MT_ISREADY));
         }
     }
     else if (this.m_state == CD_S_WAIT_FOR_NEWGAME)
@@ -125,8 +156,24 @@ CompData.prototype.process = function ()
         {
             this.m_state = CD_S_NEWGAME;
             this.m_messages = [];
-            console.log("new game");
+            this.m_comp.queueStarted();
+        }
+    }
+    else if (this.m_state == CD_S_NEWGAME)
+    {
+        var g = this.findMessage(CD_MT_BESTMOVE);
+        if (g >= 0)
+        {
+            var w = this.m_messages[g];
+            this.m_messages = [];
+            this.m_comp.queueCompPly(w.best);
         }
     }
     return false;
+}
+
+CompData.prototype.sendMessage = function (a)
+{
+    console.log("sendMessage: " + a);
+    this.m_engineControl.write(a + "\n");
 }

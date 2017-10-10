@@ -52,13 +52,14 @@ BoardData.prototype.coordsToIndex = function (a)
     return a.c + 8 * r;
 }
 
-BoardData.prototype.findPly = function (a_from, a_to)
+BoardData.prototype.findPly = function (a_from, a_to, a_promo)
 {
     for (var i = 0; i < this.m_legalPlies.length; i++)
     {
         var l_from = this.m_legalPlies[i].transp[0][0];
         var l_to = this.m_legalPlies[i].transp[0][1];
-        if (a_from.isEqual(l_from) && a_to.isEqual(l_to))
+        if (a_from.isEqual(l_from) && a_to.isEqual(l_to) &&
+            (typeof a_promo == "undefined" || a_promo == this.m_legalPlies[i].promotion))
             return this.m_legalPlies[i];
     }
     return null;

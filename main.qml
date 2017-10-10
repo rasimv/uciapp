@@ -79,7 +79,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //id_board.qqq0();
-                        id_logic.startNewGame();
+                        id_logic.startNewGame(id_board);
                     }
                 }
 
