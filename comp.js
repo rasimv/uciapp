@@ -80,6 +80,11 @@ CompData.prototype.start = function ()
     this.m_engineControl.start(this);
 }
 
+CompData.prototype.stop = function ()
+{
+    this.m_engineControl.readyRead.disconnect(this.onReadyRead);
+}
+
 CompData.prototype.position = function (a_fen)
 {
     this.sendMessage(new Message(CD_MT_POSITION, a_fen));

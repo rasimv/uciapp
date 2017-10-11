@@ -65,6 +65,12 @@ BoardData.prototype.findPly = function (a_from, a_to, a_promo)
     return null;
 }
 
+BoardData.prototype.reset = function (a_pos)
+{
+    this.m_board.m_dragEnabled = false;
+    this.m_state = BD_S_DEFAULT;
+}
+
 BoardData.prototype.transition = function (a_sig)
 {
     switch (this.m_state)

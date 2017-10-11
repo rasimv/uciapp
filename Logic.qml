@@ -3,31 +3,54 @@ import "chessutil.js" as ChessUtil
 
 QtObject
 {
-    function startNewGame(a_board, a_userStarts)
+    function setBoard(a)
+    {
+        if (m_board != null)
+        {
+            m_board.compPlyMade.disconnect(onPlyMade);
+            m_board.userPlyMade.disconnect(onPlyMade);
+        }
+        m_board = a;
+        if (m_board != null)
+        {
+            m_board.compPlyMade.connect(onPlyMade);
+            m_board.userPlyMade.connect(onPlyMade);
+        }
+    }
+
+    function startNewGame(a_compUser1, a_compUser2)
     {
         m_position = new ChessUtil.Position();
         if (m_player1 != null) m_player1.destroy();
         if (m_player2 != null) m_player2.destroy();
-        m_player1 = Qt.createQmlObject(a_userStarts ? "Comp {}" : "Comp {}", this, "Logic.qml");
-        m_player2 = Qt.createQmlObject(a_userStarts ? "Comp {}" : "Comp {}", this, "Logic.qml");
-        m_board = a_board;
+        m_player1 = Qt.createQmlObject(a_compUser1 ? "Comp {}" : "User {}", this, "Logic.qml");
+        m_player2 = Qt.createQmlObject(a_compUser2 ? "Comp {}" : "User {}", this, "Logic.qml");
+
         m_player1.started.connect(onStarted);
         m_player1.compPly.connect(onCompPly);
         m_player1.userPly.connect(onUserPly);
         m_player2.started.connect(onStarted);
         m_player2.compPly.connect(onCompPly);
         m_player2.userPly.connect(onUserPly);
-        m_board.compPlyMade.connect(onPlyMade);
-        m_board.userPlyMade.connect(onPlyMade);
+
         m_board.fromLayout(m_position.layout());
+
         m_startedPlayers = 0;
         m_legalPlies = m_position.legalPlies();
-        m_history.push(newHistoryRecord());
+        m_history = [newHistoryRecord()];
         m_player1.start();
         m_player2.start();
     }
 
-    signal gameOver(string a_result, string a_note);
+    function stop()
+    {
+        m_player1.stop();
+        m_player2.stop();
+        m_board.stop();
+        m_timer.singleShot(gameOver, "Stopped", "");
+    }
+
+    signal gameOver(string a_line1, string a_line2);
 
     property var m_position
     property var m_player1: null
@@ -40,6 +63,7 @@ QtObject
 
     function onStarted(a_player)
     {
+        console.log("onStarted.a_player=" + a_player);
         m_startedPlayers++;
         if (m_startedPlayers >= 2)
             m_player1.turn();
@@ -53,6 +77,7 @@ QtObject
 
     function onUserPly(a_player)
     {
+        console.log("onUserPly.a_player=" + a_player);
         m_board.userPly(m_legalPlies);
     }
 

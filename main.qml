@@ -10,7 +10,9 @@ ApplicationWindow
         id: id_logic
         onGameOver:
         {
-            console.log(a_result + " - " + a_note);
+            console.log(a_line1 + (a_line2 == "" ? "" : " - " + a_line2));
+            id_sidePanel.setStartStop(false);
+            id_sidePanel.setResult(a_line1, a_line2);
         }
     }
 
@@ -84,6 +86,7 @@ ApplicationWindow
                     onClicked:
                     {
                         //id_board.qqq0();
+                        id_logic.setBoard(id_board);
                         id_logic.startNewGame(id_board, true);
                     }
                 }
@@ -94,7 +97,8 @@ ApplicationWindow
 
                     onClicked:
                     {
-                        id_board.qqq1();
+                        //id_board.qqq1();
+                        id_sidePanel.flip = !id_sidePanel.flip;
                     }
                 }
 
@@ -151,10 +155,17 @@ ApplicationWindow
             }
         }
 
-		SidePanel
-		{
-			width: 300
-			Layout.fillHeight: true
-		}
+        SidePanel
+        {
+            id: id_sidePanel
+            width: 300
+            Layout.fillHeight: true
+
+            onFlipped: id_board.flip = a
+            onMagicStart: { id_logic.startNewGame(a_compUser1, a_compUser2); setResult("", ""); }
+            onMagicStop: id_logic.stop()
+        }
     }
+
+    Component.onCompleted: { id_logic.setBoard(id_board); }
 }

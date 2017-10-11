@@ -9,8 +9,8 @@ Item
 
 //------------------------------------------------------------------------------
     property bool flip: false
-    property var magicColors: ["#909090", "#707070"]
-    property var transfVelocity: 10    // sq/s
+    property var magicColors: ["#cfd6e5", "#4c6082"]
+    property var transfVelocity: 20    // sq/s
 
     function compPly(a_info)
     {
@@ -54,6 +54,14 @@ Item
         }
     }
 
+    function stop()
+    {
+        id_timer1.stop(); id_timer2.stop();
+        m_data.reset();
+        id_placeholders.magicHide();
+        id_repeater.magicSetMask(false);
+    }
+
 //------------------------------------------------------------------------------
     GridLayout
     {
@@ -67,6 +75,7 @@ Item
         Repeater
         {
             id: id_repeater
+            function magicSetMask(a) { for (var i = 0; i < count; i++) itemAt(i).magicSetMask(a); }
             model: 64
 
             Field
@@ -83,6 +92,7 @@ Item
     Repeater
     {
         id: id_placeholders
+        function magicHide() { for (var i = 0; i < count; i++) itemAt(i).visible = false; }
         model: BoardJS.s_imageFilepaths
 
         Placeholder

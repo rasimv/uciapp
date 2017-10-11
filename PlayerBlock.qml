@@ -4,15 +4,18 @@ import QtQuick.Controls 2.2
 
 Item
 {
+    function magicState() { return id_radioButtonComp.checked; }
+    function magicSetState(a) { id_radioButtonComp.checked = a; id_radioButtonUser.checked = !a; }
+
     function minimalHeight()
     {
-        return id_item1.height + id_text1.height + id_radioButton1.height + id_item2.height;
+        return id_spacer1.height + id_textComp.height + id_radioButtonComp.height + id_spacer2.height;
     }
 
     Rectangle
     {
         anchors.fill: parent
-        color: "green"
+        color: "#a083d1"
     }
 
     ColumnLayout
@@ -22,9 +25,9 @@ Item
 
         Item
         {
-            id: id_item1
+            id: id_spacer1
             Layout.fillWidth: true
-            height: 0.4 * id_text1.height
+            height: 0.4 * id_textComp.height
         }
 
         Item
@@ -34,9 +37,9 @@ Item
 
             Text
             {
-                id: id_text1
+                id: id_textComp
                 anchors.left: parent.left
-                width: id_radioButton1.width
+                width: id_radioButtonComp.width
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -46,9 +49,9 @@ Item
 
             Text
             {
-                id: id_text2
+                id: id_textUser
                 anchors.right: parent.right
-                width: id_radioButton2.width
+                width: id_radioButtonUser.width
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -65,24 +68,24 @@ Item
 
             RadioButton
             {
-                id: id_radioButton1
+                id: id_radioButtonComp
                 Layout.fillWidth: true
-
-                checked: true
             }
 
             RadioButton
             {
-                id: id_radioButton2
+                id: id_radioButtonUser
                 Layout.fillWidth: true
+
+                checked: true
             }
         }
 
         Item
         {
-            id: id_item2
+            id: id_spacer2
             Layout.fillWidth: true
-            height: 0.4 * id_text1.height
+            height: 0.4 * id_textComp.height
         }
     }
 }

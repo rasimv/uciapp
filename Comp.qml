@@ -4,6 +4,13 @@ import "comp.js" as CompJS
 QtObject
 {
     function start() { m_data.start(); }
+
+    function stop()
+    {
+        m_data.stop();
+        m_timer.stop();
+    }
+
     function position(a_fen) { m_data.position(a_fen); }
     function turn() { m_data.turn(); }
 

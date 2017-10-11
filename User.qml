@@ -7,6 +7,11 @@ QtObject
         m_timer.singleShot(started, this);
     }
 
+    function stop()
+    {
+        m_timer.stop();
+    }
+
     function position(a_fen)
     {
     }
