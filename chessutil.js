@@ -708,10 +708,42 @@ Position.prototype.makePly = function (a_info)
     if (x == "P" && t[0][0].r > t[0][1].r + 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r + 1);
     else if (x == "p" && t[0][0].r < t[0][1].r - 1) this.m_enPassant = new Coords(t[0][1].c, t[0][1].r - 1);
     else if (this.m_enPassant.isValid()) this.m_enPassant = new Coords(-1, -1);
-    if (this.m_castling[0] != "" && (x == "K" || t[0][0].isEqual(new Coords(7, 7)))) this.m_castling[0] = "";
-    if (this.m_castling[1] != "" && (x == "K" || t[0][0].isEqual(new Coords(0, 7)))) this.m_castling[1] = "";
-    if (this.m_castling[2] != "" && (x == "k" || t[0][0].isEqual(new Coords(7, 0)))) this.m_castling[2] = "";
-    if (this.m_castling[3] != "" && (x == "k" || t[0][0].isEqual(new Coords(0, 0)))) this.m_castling[3] = "";
+    if (this.m_castling[0] != "")
+    {
+        if (x == "K") this.m_castling[0] = "";
+        else
+        {
+            var l_rook = new Coords(7, 7);
+            if (l_rook.isEqual(t[0][0]) || l_rook.isEqual(t[0][1])) this.m_castling[0] = "";
+        }
+    }
+    if (this.m_castling[1] != "")
+    {
+        if (x == "K") this.m_castling[1] = "";
+        else
+        {
+            var l_rook = new Coords(0, 7);
+            if (l_rook.isEqual(t[0][0]) || l_rook.isEqual(t[0][1])) this.m_castling[1] = "";
+        }
+    }
+    if (this.m_castling[2] != "")
+    {
+        if (x == "k") this.m_castling[2] = "";
+        else
+        {
+            var l_rook = new Coords(7, 0);
+            if (l_rook.isEqual(t[0][0]) || l_rook.isEqual(t[0][1])) this.m_castling[2] = "";
+        }
+    }
+    if (this.m_castling[3] != "")
+    {
+        if (x == "k") this.m_castling[3] = "";
+        else
+        {
+            var l_rook = new Coords(0, 0);
+            if (l_rook.isEqual(t[0][0]) || l_rook.isEqual(t[0][1])) this.m_castling[3] = "";
+        }
+    }
     if (x == "P" || x == "p" || l_isCapture) this.m_pawnCaptCount = 0;
     else this.m_pawnCaptCount++;
     this.m_turnCount++;
