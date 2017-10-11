@@ -214,7 +214,7 @@ Item
 
     function transfer(a_from, a_to)
     {
-        m_transfFrom = a_from, m_transfTo = a_to;
+        m_transfFrom = a_from; m_transfTo = a_to;
         var l_source = fieldByCoords(m_transfFrom);
         m_placeholder = placeholderByValue(l_source.magicValue());
         m_placeholder.magicSetSize(l_source.magicSize());
