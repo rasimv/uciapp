@@ -19,7 +19,7 @@ ApplicationWindow
     visible: true
     width: 1150
     height: 900
-    title: qsTr("Uciapp")
+    title: "Uciapp"
 
     Controls14.SplitView
     {

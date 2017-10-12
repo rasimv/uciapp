@@ -2,7 +2,8 @@ QT += qml quick
 
 CONFIG += c++11
 
-SOURCES += main.cpp
+HEADERS += enginecontroller.h
+SOURCES += uciapp.cpp enginecontroller.cpp
 
 RESOURCES += qml.qrc
 

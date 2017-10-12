@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "enginecontroller.h"
+#include <QDir>
 
 EngineController::EngineController(QObject *a)
     :QObject(a)
@@ -19,7 +20,7 @@ EngineController::~EngineController()
 void EngineController::start(QVariant a_object)
 {
     m_object = a_object;
-    m_p.start("C:\\Users\\rasim\\deploy\\stockfish-8-win\\Windows\\stockfish_8_x64.exe");
+    m_p.start(QDir::currentPath() + "\\stockfish-8-win\\Windows\\stockfish_8_x64.exe");
 }
 
 QString EngineController::read()
