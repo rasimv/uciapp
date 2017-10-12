@@ -28,7 +28,6 @@ Item
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: minimalHeight()
 
         enabled: !id_startStopButton.magicState
     }
@@ -120,7 +119,6 @@ Item
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: minimalHeight()
 
         enabled: !id_startStopButton.magicState
     }

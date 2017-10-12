@@ -179,6 +179,5 @@ CompData.prototype.process = function ()
 
 CompData.prototype.sendMessage = function (a)
 {
-    console.log("sendMessage: " + a);
     this.m_engineControl.write(a + "\n");
 }

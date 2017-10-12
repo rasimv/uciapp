@@ -14,35 +14,17 @@ Item
 
     function compPly(a_info)
     {
-        console.log("compPly");
         makePly(a_info);
     }
 
     function userPly(a_legal)
     {
-        console.log("userPly");
         setLegalPlies(a_legal);
         m_dragEnabled = true;
     }
 
     signal compPlyMade(variant a_info);
     signal userPlyMade(variant a_info);
-
-    function qqq0()
-    {
-        console.log("qqq0");
-        m_dragEnabled = true;
-        //transfer(new ChessUtil.Coords(1, 7), new ChessUtil.Coords(7, 1))
-        //id_promoPanel.magicActivate(id_repeater.itemAt(1));
-    }
-
-    function qqq1()
-    {
-        console.log("qqq0");
-        id_promoPanel.pawn = id_promoPanel.pawn == "P" ? "p" : "P";
-    }
-
-    function qqq2() { console.log("qqq2"); flip = !flip; }
 
     function fromLayout(a)
     {
@@ -235,7 +217,6 @@ Item
 
     function dragStarted(a_pos)
     {
-        console.log("drag started");
         var l_field = fieldAt(a_pos);
         m_drag = m_data.indexToCoords(l_field.magicIndex);
         m_placeholder = placeholderByValue(l_field.magicValue());
@@ -246,13 +227,11 @@ Item
 
     function dragging(a_pos)
     {
-        console.log("dragging");
         m_placeholder.magicSetCenter(a_pos);
     }
 
     function drop(a_pos)
     {
-        console.log("drop");
         var l_source = fieldByCoords(m_drag);
         var l_target = fieldAt(a_pos);
         if (l_target != null && l_source != l_target)
@@ -297,7 +276,6 @@ Item
 
     function emitCompPly(a)
     {
-        console.log("emitCompPly");
         compPlyMade(a);
     }
 
@@ -347,7 +325,6 @@ Item
 
     function emitUserPly(a)
     {
-        console.log("emitUserPly");
         userPlyMade(a);
     }
 

@@ -62,7 +62,6 @@ Item
 //------------------------------------------------------------------------------
     onFlipChanged:
     {
-        console.log("onFlipChanged: " + flip);
         if (id_repeater.count < m_pieces.length) return;
         for (var i = 0; i < 4; i++)
         {
@@ -75,7 +74,6 @@ Item
 
     onPawnChanged:
     {
-        console.log("onPawnChanged");
         for (var i = 0; i < 4; i++)
         {
             var l_ofs = flip ? 4 : 0;

@@ -63,7 +63,6 @@ QtObject
 
     function onStarted(a_player)
     {
-        console.log("onStarted.a_player=" + a_player);
         m_startedPlayers++;
         if (m_startedPlayers >= 2)
             m_player1.turn();
@@ -77,13 +76,11 @@ QtObject
 
     function onUserPly(a_player)
     {
-        console.log("onUserPly.a_player=" + a_player);
         m_board.userPly(m_legalPlies);
     }
 
     function onPlyMade(a_info)
     {
-        console.log("onPlyMade");
         m_position.makePly(a_info);
 
         m_legalPlies = m_position.legalPlies();
