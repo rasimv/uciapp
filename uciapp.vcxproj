@@ -147,7 +147,7 @@
     <None Include="PlayerBlock.qml" />
     <None Include="PromoPanel.qml" />
     <None Include="qtquickcontrols2.conf" />
-    <CustomBuild Include="Release\moc_predefs.h.cbt">
+    <CustomBuild Include="moc_predefs.h.cbt">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -Bx$(QTDIR)\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zi -MDd -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E $(QTDIR)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;$(Configuration)\moc_predefs.h</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>

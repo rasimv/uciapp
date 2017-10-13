@@ -99,7 +99,7 @@
     <CustomBuild Include="qml.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="Release\moc_predefs.h.cbt">
+    <CustomBuild Include="moc_predefs.h.cbt">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="enginecontroller.h">
