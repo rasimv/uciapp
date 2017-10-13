@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "enginecontroller.h"
@@ -15,7 +14,7 @@ int main(int a_argc, char *a_argv[])
     qmlRegisterType<EngineController>("com.github.rasimv.uciapp", 1, 0, "EngineController");
 
     QQmlApplicationEngine l_engine;
-    l_engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    l_engine.load(QUrl(QLatin1String("qrc:/uciapp.qml")));
     if (l_engine.rootObjects().isEmpty())
         return -1;
 

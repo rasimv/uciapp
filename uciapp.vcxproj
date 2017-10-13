@@ -104,7 +104,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="Debug\qrc_qml.cpp">
+    <ClCompile Include="Debug\uciapp_qrc.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</ForcedIncludeFiles>
     </ClCompile>
@@ -113,7 +113,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="Release\qrc_qml.cpp">
+    <ClCompile Include="Release\uciapp_qrc.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</ForcedIncludeFiles>
     </ClCompile>
@@ -131,17 +131,16 @@
     <None Include="Comp.qml" />
     <None Include="Field.qml" />
     <None Include="Logic.qml" />
-    <None Include="main.qml" />
-    <CustomBuild Include="qml.qrc">
+    <CustomBuild Include="uciapp.qrc">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC qml.qrc</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\rcc.exe -name qml qml.qrc -o $(Configuration)\qrc_qml.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC qml.qrc</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\qrc_qml.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;main.qml;qtquickcontrols2.conf;qml.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\rcc.exe -name qml uciapp.qrc -o $(Configuration)\uciapp_qrc.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC uciapp.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\uciapp_qrc.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;uciapp.qml;qtquickcontrols2.conf;uciapp.qrc;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\rcc.exe -name qml uciapp.qrc -o $(Configuration)\uciapp_qrc.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC uciapp.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\uciapp_qrc.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">chessutil.js;board.js;comp.js;SingleShotTimer.qml;Field.qml;Placeholder.qml;PromoPanel.qml;Board.qml;User.qml;Comp.qml;Logic.qml;PlayerBlock.qml;SidePanel.qml;uciapp.qml;qtquickcontrols2.conf;uciapp.qrc;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <None Include="Placeholder.qml" />
     <None Include="PlayerBlock.qml" />
@@ -160,6 +159,7 @@
     </CustomBuild>
     <None Include="SidePanel.qml" />
     <None Include="SingleShotTimer.qml" />
+    <None Include="uciapp.qml" />
     <None Include="User.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -5,7 +5,7 @@ CONFIG += c++11
 HEADERS += enginecontroller.h
 SOURCES += uciapp.cpp enginecontroller.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += uciapp.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

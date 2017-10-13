@@ -32,10 +32,10 @@
     <ClCompile Include="uciapp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\qrc_qml.cpp">
+    <ClCompile Include="Debug\uciapp_qrc.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="Release\qrc_qml.cpp">
+    <ClCompile Include="Release\uciapp_qrc.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="enginecontroller.cpp">
@@ -49,9 +49,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="main.qml">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="qtquickcontrols2.conf">
       <Filter>Resource Files</Filter>
     </None>
@@ -94,9 +91,12 @@
     <None Include="SidePanel.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="uciapp.qml">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="qml.qrc">
+    <CustomBuild Include="uciapp.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="moc_predefs.h.cbt">
