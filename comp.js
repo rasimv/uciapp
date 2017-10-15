@@ -110,7 +110,7 @@ CompData.prototype.line = function ()
 {
     var i = 0;
     for (; i < this.m_buf.length && this.m_buf[i] != '\n'; i++);
-    if (i >= this.m_buf.length) return "";
+    if (i >= this.m_buf.length) return null;
     var s = this.m_buf.slice(0, i);
     this.m_buf = this.m_buf.slice(i + 1);
     return s;
@@ -118,7 +118,8 @@ CompData.prototype.line = function ()
 
 CompData.prototype.parse = function ()
 {
-    for (var s = this.line(); s; s = this.line()) this.m_messages.push(messageFromString(s));
+    for (var s = this.line(); s != null; s = this.line())
+        this.m_messages.push(messageFromString(s));
 }
 
 CompData.prototype.findMessage = function (a_type)
