@@ -1,3 +1,3 @@
 Uciapp is a simple UI-application for Stockfish chess engine (stockfishchess.org)
 
-Build https://drive.google.com/file/d/0B2ulp3O-I6E7Xzg2dmNOWWxXRzA/view?usp=sharing
+Build https://drive.google.com/uc?export=download&id=1JcksarfamYg6e_ULX9W7lSMrFEK1LMwz
